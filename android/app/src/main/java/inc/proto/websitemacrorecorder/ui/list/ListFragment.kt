@@ -1,13 +1,16 @@
 package inc.proto.websitemacrorecorder.ui.list
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.navigation.fragment.findNavController
 import inc.proto.websitemacrorecorder.R
+import inc.proto.websitemacrorecorder.data.Macro
+import java.util.*
 
 class ListFragment : Fragment() {
 
@@ -22,7 +25,12 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<FloatingActionButton>(R.id.button_add).setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_editUrlFragment)
+            val macro = Macro(
+                userAgent = WebView(activity).settings.userAgentString,
+                acceptLanguage = Locale.getDefault().getLanguage()
+            )
+            val action = ListFragmentDirections.actionListFragmentToEditUrlFragment(macro)
+            findNavController().navigate(action)
         }
     }
 }

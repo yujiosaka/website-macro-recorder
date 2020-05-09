@@ -1,13 +1,16 @@
 package inc.proto.websitemacrorecorder.ui.edit_advanced
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.R
 
 class EditAdvancedFragment : Fragment() {
+
+    private val _args: EditAdvancedFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
