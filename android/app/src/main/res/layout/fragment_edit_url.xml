@@ -30,6 +30,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:afterTextChanged="@{() -> vm.validate(editUrl)}"
                 android:ems="10"
                 android:hint="@string/hint_url"
                 android:inputType="textUri"
@@ -42,15 +43,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/buttonRecordMacro"
+                android:id="@+id/buttonStartRecording"
                 android:layout_width="wrap_content"
                 android:layout_height="60sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/text_record_macro"
+                android:text="@string/text_start_recording"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:enabled="@{vm.valid}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editUrl" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,13 @@
     <!-- Strings used for menu -->
     <string name="action_plan">Upgrade / Downgrade</string>
 
+    <!-- Strings used for validation -->
+    <string name="error_enter_here">Enter %1$s here</string>
+    <string name="error_format_is_invalid">%1$s format is invalid</string>
+
+    <!-- Strings used for data -->
+    <string name="url">URL</string>
+
     <!-- Strings used for navigation -->
     <string name="list_fragment_label">Macro List</string>
     <string name="edit_url_fragment_label">Enter Website URL</string>
@@ -12,6 +19,8 @@
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
+
+    <!-- Strings used for edit url fragment -->
     <string name="hint_url">Enter URL</string>
-    <string name="text_record_macro">Record macro</string>
+    <string name="text_start_recording">Start recording</string>
 </resources>
