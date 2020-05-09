@@ -1,0 +1,2 @@
+rootProject.name='Website Macro Recorder'
+include ':app'
