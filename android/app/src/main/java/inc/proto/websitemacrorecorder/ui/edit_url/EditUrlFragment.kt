@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.R
-import kotlinx.android.synthetic.main.fragment_edit_url.view.*
 
 class EditUrlFragment : Fragment() {
 

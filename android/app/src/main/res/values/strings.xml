@@ -12,4 +12,6 @@
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
+    <string name="hint_url">Enter URL</string>
+    <string name="text_next">Next</string>
 </resources>
