@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentEditUrlBinding
@@ -28,5 +29,14 @@ class EditUrlFragment : Fragment() {
         _binding.vm = _vm
         _binding.lifecycleOwner = this
         return _binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding.buttonStartRecording.setOnClickListener {
+            val action = EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(_vm.macro)
+            findNavController().navigate(action)
+        }
     }
 }
