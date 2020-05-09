@@ -1,13 +1,17 @@
 package inc.proto.websitemacrorecorder.ui.edit_url
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.R
+import kotlinx.android.synthetic.main.fragment_edit_url.view.*
 
 class EditUrlFragment : Fragment() {
+
+    private val _args: EditUrlFragmentArgs by navArgs()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,

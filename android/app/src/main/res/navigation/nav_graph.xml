@@ -37,6 +37,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
     </fragment>
     <fragment
         android:id="@+id/editRecordFragment"
@@ -50,6 +53,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
     </fragment>
     <fragment
         android:id="@+id/editFragment"
@@ -70,17 +76,28 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
     </fragment>
     <fragment
         android:id="@+id/editScheduleFragment"
         android:name="inc.proto.websitemacrorecorder.ui.edit_schedule.EditScheduleFragment"
         android:label="@string/edit_schedule_fragment_label"
-        tools:layout="@layout/fragment_edit_schedule" />
+        tools:layout="@layout/fragment_edit_schedule">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+    </fragment>
     <fragment
         android:id="@+id/editAdvancedFragment"
         android:name="inc.proto.websitemacrorecorder.ui.edit_advanced.EditAdvancedFragment"
         android:label="@string/edit_advanced_fragment_label"
-        tools:layout="@layout/fragment_edit_advanced" />
+        tools:layout="@layout/fragment_edit_advanced">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+    </fragment>
     <fragment
         android:id="@+id/planFragment"
         android:name="inc.proto.websitemacrorecorder.ui.plan.PlanFragment"
