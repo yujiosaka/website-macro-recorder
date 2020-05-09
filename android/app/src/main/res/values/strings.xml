@@ -5,13 +5,13 @@
     <string name="action_plan">Upgrade / Downgrade</string>
 
     <!-- Strings used for navigation -->
-    <string name="list_fragment_label">Your Macro List</string>
+    <string name="list_fragment_label">Macro List</string>
     <string name="edit_url_fragment_label">Enter Website URL</string>
-    <string name="edit_record_fragment_label">Record Your Macro</string>
-    <string name="edit_fragment_label">Edit Your Macro</string>
+    <string name="edit_record_fragment_label">Record Macro</string>
+    <string name="edit_fragment_label">Edit Macro</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
     <string name="hint_url">Enter URL</string>
-    <string name="text_next">Next</string>
+    <string name="text_record_macro">Record macro</string>
 </resources>

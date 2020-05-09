@@ -5,18 +5,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.R
+import inc.proto.websitemacrorecorder.databinding.FragmentEditScheduleBinding
 
 class EditScheduleFragment : Fragment() {
 
     private val _args: EditScheduleFragmentArgs by navArgs()
 
+    private lateinit var _binding: FragmentEditScheduleBinding
+    private lateinit var _vm: EditScheduleViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_edit_schedule, container, false)
+        val factory = EditScheduleViewModelFactory(_args.macro)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_schedule, container, false)
+        _vm = ViewModelProviders.of(this, factory).get(EditScheduleViewModel::class.java)
+        _binding.vm = _vm
+        _binding.lifecycleOwner = this
+        return _binding.root
     }
 
 }

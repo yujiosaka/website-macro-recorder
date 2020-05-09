@@ -1,8 +1,8 @@
 package inc.proto.websitemacrorecorder.ui.edit_advanced
 
-import androidx.lifecycle.ViewModel
 import inc.proto.websitemacrorecorder.data.Macro
+import inc.proto.websitemacrorecorder.util.ObservableViewModel
 
-class EditAdvancedViewModel(macro: Macro) : ViewModel() {
+class EditAdvancedViewModel(macro: Macro) : ObservableViewModel() {
     private var _macro = macro
 }
