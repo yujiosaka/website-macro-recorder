@@ -3,26 +3,95 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/listFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="inc.proto.websitemacrorecorder.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
+        android:id="@+id/listFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.list.ListFragment"
+        android:label="@string/list_fragment_label"
+        tools:layout="@layout/fragment_list">
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_listFragment_to_editUrlFragment"
+            app:destination="@id/editUrlFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_listFragment_to_editFragment"
+            app:destination="@id/editFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="inc.proto.websitemacrorecorder.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/editUrlFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit_url.EditUrlFragment"
+        android:label="@string/edit_url_fragment_label"
+        tools:layout="@layout/fragment_edit_url">
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_editUrlFragment_to_editRecordFragment"
+            app:destination="@id/editRecordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/editRecordFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit_record.EditRecordFragment"
+        android:label="@string/edit_record_fragment_label"
+        tools:layout="@layout/fragment_edit_record">
+        <action
+            android:id="@+id/action_editRecordFragment_to_editFragment"
+            app:destination="@id/editFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit.EditFragment"
+        android:label="@string/edit_fragment_label"
+        tools:layout="@layout/fragment_edit">
+        <action
+            android:id="@+id/action_editFragment_to_editScheduleFragment"
+            app:destination="@id/editScheduleFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_editFragment_to_editAdvancedFragment"
+            app:destination="@id/editAdvancedFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/editScheduleFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit_schedule.EditScheduleFragment"
+        android:label="@string/edit_schedule_fragment_label"
+        tools:layout="@layout/fragment_edit_schedule" />
+    <fragment
+        android:id="@+id/editAdvancedFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit_advanced.EditAdvancedFragment"
+        android:label="@string/edit_advanced_fragment_label"
+        tools:layout="@layout/fragment_edit_advanced" />
+    <fragment
+        android:id="@+id/planFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.plan.PlanFragment"
+        android:label="@string/plan_fragment_label"
+        tools:layout="@layout/fragment_plan" />
+    <action
+        android:id="@+id/action_global_planFragment"
+        app:destination="@id/planFragment"
+        app:popUpTo="@id/listFragment"
+        app:enterAnim="@anim/slide_in_top"
+        app:exitAnim="@anim/slide_out_bottom"
+        app:popEnterAnim="@anim/slide_in_bottom"
+        app:popExitAnim="@anim/slide_out_top" />
 </navigation>
