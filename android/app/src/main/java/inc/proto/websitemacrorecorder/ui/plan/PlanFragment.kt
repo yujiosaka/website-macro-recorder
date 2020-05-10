@@ -17,7 +17,7 @@ class PlanFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_plan, container, false)
         _binding.lifecycleOwner = this
         return _binding.root
     }
