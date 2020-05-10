@@ -3,6 +3,7 @@ package inc.proto.websitemacrorecorder.ui.edit_record
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
+import android.content.res.Resources
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
@@ -105,37 +106,39 @@ class EditRecordFragment : Fragment() {
     }
 
     @JavascriptInterface
-    fun onClick(value: String, xPath: String, cssSelector: String) {
-        val event = Event(name = "click", value = value, xPath = xPath, cssSelector = cssSelector)
+    fun onClick(xPath: String, targetType: String, value: String) {
+        val event = Event(name = "click", xPath = xPath, targetType = targetType, value = value)
         _vm.pushEvent(event)
         if (activity == null) return
         val root: View = activity!!.findViewById(R.id.root)
-        lateinit var text: String
-        if (value != "") {
-            text = root.resources.getString(R.string.notification_click_value, value, cssSelector)
+        val targetTypeString = _getTargetTypeString(targetType)
+        val text = if (value != "") {
+            root.resources.getString(R.string.notification_click_value, targetTypeString, value)
         } else {
-            text = root.resources.getString(R.string.notification_click, cssSelector)
+            root.resources.getString(R.string.notification_click, targetTypeString)
         }
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     @JavascriptInterface
-    fun onChange(value: String, xPath: String, cssSelector: String) {
-        val event = Event(name = "change", value = value, xPath = xPath, cssSelector = cssSelector)
+    fun onChange(xPath: String, targetType: String, value: String) {
+        val event = Event(name = "change", xPath = xPath, targetType = targetType, value = value)
         _vm.pushEvent(event)
         if (activity == null) return
         val root: View = activity!!.findViewById(R.id.root)
-        val text = root.resources.getString(R.string.notification_change_value, value, cssSelector)
+        val targetTypeString = _getTargetTypeString(targetType)
+        val text = root.resources.getString(R.string.notification_change_value, targetTypeString, value)
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     @JavascriptInterface
-    fun onSelect(value: String, xPath: String, cssSelector: String) {
-        val event = Event(name = "select", value = value, xPath = xPath, cssSelector = cssSelector)
+    fun onSelect(xPath: String, targetType: String, value: String) {
+        val event = Event(name = "select", xPath = xPath, targetType = targetType, value = value)
         _vm.pushEvent(event)
         if (activity == null) return
         val root: View = activity!!.findViewById(R.id.root)
-        val text = root.resources.getString(R.string.notification_select_value, value, cssSelector)
+        val targetTypeString = _getTargetTypeString(targetType)
+        val text = root.resources.getString(R.string.notification_select_value, targetTypeString, value)
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
@@ -156,11 +159,24 @@ class EditRecordFragment : Fragment() {
     }
 
     private fun _startRecording() {
-        if (activity == null) return
         _clearCookies(activity)
         val customHeaders: Map<String, String> = mapOf("Accept-Language" to _vm.acceptLanguage)
         _binding.webRecorder.clearCache(true);
         _binding.webRecorder.clearHistory();
         _binding.webRecorder.loadUrl(_vm.url, customHeaders)
+    }
+
+    private fun _getTargetTypeString(targetType: String): String {
+        return try {
+            resources.getString(
+                resources.getIdentifier(
+                    "text_target_type_${targetType}",
+                    "string",
+                    activity!!.packageName
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            resources.getString(R.string.text_target_type_text)
+        }
     }
 }

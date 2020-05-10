@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Event(
     var name: String = "",
-    var value: String  = "",
     var xPath: String = "",
-    var cssSelector: String = ""
+    var targetType: String = "",
+    var value: String  = ""
 ) : Parcelable
