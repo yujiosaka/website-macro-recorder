@@ -17,8 +17,8 @@
     <string name="list_fragment_label">Macro List</string>
     <string name="edit_url_fragment_label">Enter Website URL</string>
     <string name="edit_record_fragment_label">Record Macro</string>
-    <string name="edit_events_fragment_label">Edit events</string>
-    <string name="edit_fragment_label">Edit setting</string>
+    <string name="edit_events_fragment_label">Edit Events</string>
+    <string name="edit_fragment_label">Edit Setting</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
