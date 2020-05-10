@@ -46,16 +46,31 @@
         android:name="inc.proto.websitemacrorecorder.ui.edit_record.EditRecordFragment"
         android:label="@string/edit_record_fragment_label"
         tools:layout="@layout/fragment_edit_record">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
         <action
-            android:id="@+id/action_editRecordFragment_to_editFragment"
+            android:id="@+id/action_editRecordFragment_to_editEventsFragment"
+            app:destination="@id/editEventsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/editEventsFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit_events.EditEventsFragment"
+        android:label="@string/edit_events_fragment_label">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro" />
+        <action
+            android:id="@+id/action_editEventsFragment_to_editFragment"
             app:destination="@id/editFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-        <argument
-            android:name="macro"
-            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
     </fragment>
     <fragment
         android:id="@+id/editFragment"

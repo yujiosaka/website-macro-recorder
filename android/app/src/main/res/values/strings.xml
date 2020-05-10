@@ -3,6 +3,8 @@
 
     <!-- Strings used for menu -->
     <string name="action_plan">Upgrade / Downgrade</string>
+    <string name="action_replay">Replay</string>
+    <string name="action_done">Done</string>
 
     <!-- Strings used for validation -->
     <string name="error_enter_here">Enter %1$s here</string>
@@ -15,7 +17,8 @@
     <string name="list_fragment_label">Macro List</string>
     <string name="edit_url_fragment_label">Enter Website URL</string>
     <string name="edit_record_fragment_label">Record Macro</string>
-    <string name="edit_fragment_label">Edit Macro</string>
+    <string name="edit_events_fragment_label">Edit Events</string>
+    <string name="edit_fragment_label">Edit Setting</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
@@ -23,4 +26,10 @@
     <!-- Strings used for edit url fragment -->
     <string name="hint_url">Enter URL</string>
     <string name="text_start_recording">Start recording</string>
+
+    <!-- Strings used for edit record fragment -->
+    <string name="notification_click">Tapped %1$s</string>
+    <string name="notification_click_value">Tapped %1$s on %2$s</string>
+    <string name="notification_change_value">Entered %1$s on %2$s</string>
+    <string name="notification_select_value">Selected %1$s on %2$s</string>
 </resources>

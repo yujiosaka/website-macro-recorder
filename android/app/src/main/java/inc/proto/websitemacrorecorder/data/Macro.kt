@@ -14,5 +14,6 @@ data class Macro(
     var notifySuccess: Boolean = true,
     var notifyFailure: Boolean = true,
     var acceptLanguage: String = "en",
-    var userAgent: String = ""
+    var userAgent: String = "",
+    var events: ArrayList<Event> = arrayListOf()
 ) : Parcelable
