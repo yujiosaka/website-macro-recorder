@@ -14,11 +14,13 @@ class PlanFragment : Fragment() {
     private lateinit var _binding: FragmentPlanBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_plan, container, false)
         _binding.lifecycleOwner = this
+
         return _binding.root
     }
 

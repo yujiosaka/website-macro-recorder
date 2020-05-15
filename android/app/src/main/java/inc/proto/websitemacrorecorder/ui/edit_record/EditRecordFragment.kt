@@ -29,16 +29,20 @@ class EditRecordFragment : Fragment() {
     private lateinit var _vm: EditRecordViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val factory = EditRecordViewModelFactory(_args.macro)
+
         setHasOptionsMenu(true);
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_record, container, false)
+
+        _binding = FragmentEditRecordBinding.inflate(inflater, container, false)
         _vm = ViewModelProviders.of(this, factory).get(EditRecordViewModel::class.java)
         _vm.resetEvents()
         _binding.vm = _vm
         _binding.lifecycleOwner = this
+
         return _binding.root
     }
 
@@ -69,14 +73,14 @@ class EditRecordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val customHeaders: Map<String, String> = mapOf("Accept-Language" to _vm.acceptLanguage)
+
         _binding.webRecorder.settings.setAllowFileAccess(false)
         _binding.webRecorder.settings.setDomStorageEnabled(true)
         _binding.webRecorder.settings.setJavaScriptEnabled(true)
         _binding.webRecorder.settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         _binding.webRecorder.settings.setUserAgentString(_vm.userAgent)
         _binding.webRecorder.addJavascriptInterface(this, "WebsiteMacroRecorder")
-
-        val customHeaders: Map<String, String> = mapOf("Accept-Language" to _vm.acceptLanguage)
         _binding.webRecorder.webViewClient = object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {

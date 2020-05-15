@@ -1,41 +1,49 @@
 package inc.proto.websitemacrorecorder.ui.edit_events
 
-import android.graphics.*
+import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import inc.proto.websitemacrorecorder.R
+import inc.proto.websitemacrorecorder.data.Event
+import inc.proto.websitemacrorecorder.ui.edit_events_dialog.EditEventsDialog
 import kotlinx.android.synthetic.main.fragment_edit_events.*
 
-class EditEventsFragment : Fragment() {
+
+class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
 
     private val _args: EditEventsFragmentArgs by navArgs()
 
+    private lateinit var _adapter: EditEventsAdapter
     private lateinit var _itemTouchHelper: ItemTouchHelper
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
+
         return inflater.inflate(R.layout.fragment_edit_events, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-         recycler_events.setHasFixedSize(true)
+        _adapter = EditEventsAdapter(this, _args.macro.events)
+
+        recycler_events.setHasFixedSize(true)
         recycler_events.layoutManager = LinearLayoutManager(activity)
-        recycler_events.adapter = EditEventsAdapter(this, _args.macro.events)
+        recycler_events.adapter = _adapter
 
         _itemTouchHelper = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(
@@ -115,7 +123,8 @@ class EditEventsFragment : Fragment() {
                 }
 
                 private fun _drawBackground(view: View, dX: Float): Drawable {
-                    val background = ColorDrawable(resources.getColor(R.color.colorDelete))
+                    val color = ContextCompat.getColor(context!!, R.color.colorDelete)
+                    val background = ColorDrawable(color)
 
                     background.setBounds(view.left, view.top,view.left + dX.toInt(), view.bottom)
 
@@ -140,7 +149,51 @@ class EditEventsFragment : Fragment() {
         _itemTouchHelper.attachToRecyclerView(recycler_events)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_events, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add_timer -> {
+                val dialog = EditEventsDialog()
+                dialog.setListener(this)
+                dialog.show(fragmentManager!!, "edit_events_dialog")
+                true
+            }
+            R.id.action_done -> {
+                val action = EditEventsFragmentDirections.actionEditEventsFragmentToEditFragment(_args.macro)
+                findNavController().navigate(action)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     fun startDragging(viewHolder: RecyclerView.ViewHolder) {
         _itemTouchHelper.startDrag(viewHolder)
+    }
+
+    override fun onAddTimer(value: String) {
+        val event = Event(name = "wait", value = value)
+        if (_adapter.itemCount >= 1) {
+            val lastEvent = _adapter.itemAt(_adapter.itemCount - 1)
+            if (lastEvent.name == "wait") {
+                val lastValue = Integer.parseInt(lastEvent.value)
+                val value = Integer.parseInt(event.value)
+                var totalValue = lastValue + value
+                if (totalValue >= Event.MAX_WAIT_VALUE) {
+                    totalValue = Event.MAX_WAIT_VALUE
+                }
+                lastEvent.value = totalValue.toString()
+                _adapter.notifyItemChanged(_adapter.itemCount - 1, lastEvent)
+                return
+            }
+        }
+        _adapter.addItem(event)
+        _adapter.notifyItemInserted(_adapter.itemCount)
     }
 }

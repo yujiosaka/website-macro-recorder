@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="inc.proto.websitemacrorecorder.MainActivity">
+    <item
+        android:id="@+id/action_add_timer"
+        android:icon="@drawable/ic_timer_white_24dp"
+        android:title="@string/action_replay"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_done"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/action_done"
+        app:showAsAction="always" />
+</menu>
