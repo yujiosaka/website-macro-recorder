@@ -29,8 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
             android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shimmer_duration="1500">
 
@@ -47,9 +48,6 @@
 
                 <include layout="@layout/loading_item_placeholder" />
 
-                <include layout="@layout/loading_item_placeholder" />
-
-                <include layout="@layout/loading_item_placeholder" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 

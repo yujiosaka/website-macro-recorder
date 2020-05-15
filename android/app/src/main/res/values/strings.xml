@@ -37,6 +37,7 @@
     <string name="text_name_click">Tap</string>
     <string name="text_name_change">Change</string>
     <string name="text_name_select">Select</string>
+    <string name="text_name_wait">Wait</string>
     <string name="text_target_type_image">Image</string>
     <string name="text_target_type_link">Link</string>
     <string name="text_target_type_frame">Frame</string>
@@ -46,5 +47,15 @@
     <string name="text_target_type_button">Button</string>
     <string name="text_target_type_select">Select box</string>
     <string name="text_target_type_text">Text</string>
+    <string name="text_target_type_timer">Timer</string>
+    <string name="text_value_seconds">%1$s seconds</string>
     <string name="text_value_empty">No text</string>
+
+    <!-- Strings used for edit events dialog fragment -->
+    <string name="text_add_timer">Add timer</string>
+    <string name="text_add">Add</string>
+    <string name="text_close">Close</string>
+    <string name="text_seconds">Seconds</string>
+    <string name="text_wait">Wait</string>
+    <string name="hint_seconds">1</string>
 </resources>

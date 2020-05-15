@@ -17,11 +17,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
         _navController = findNavController(R.id.nav_host_fragment)
-
         val appBarConfiguration = AppBarConfiguration(_navController.graph)
         setupActionBarWithNavController(_navController, appBarConfiguration)
     }

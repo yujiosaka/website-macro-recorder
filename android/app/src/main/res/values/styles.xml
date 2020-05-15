@@ -1,12 +1,14 @@
 <resources>
-
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorOnSecondary">@android:color/white</item>
+        <item name="snackbarTextViewStyle">@style/Snackbar.TextView</item>
+    </style>
+
+    <style name="Snackbar.TextView" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textSize">18dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -17,5 +19,4 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
 </resources>

@@ -9,4 +9,9 @@ data class Event(
     var xPath: String = "",
     var targetType: String = "",
     var value: String  = ""
-) : Parcelable
+) : Parcelable {
+    companion object {
+        const val MIN_WAIT_VALUE = 1
+        const val MAX_WAIT_VALUE = 30
+    }
+}

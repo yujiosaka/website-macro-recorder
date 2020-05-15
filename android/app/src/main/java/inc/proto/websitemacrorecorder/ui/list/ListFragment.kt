@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentListBinding
 import java.util.*
@@ -18,11 +16,13 @@ class ListFragment : Fragment() {
     private lateinit var _binding: FragmentListBinding
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+        _binding = FragmentListBinding.inflate(inflater, container, false)
         _binding.lifecycleOwner = this
+
         return _binding.root
     }
 
@@ -32,7 +32,7 @@ class ListFragment : Fragment() {
         _binding.buttonAdd.setOnClickListener {
             val macro = Macro(
                 userAgent = WebView(activity).settings.userAgentString,
-                acceptLanguage = Locale.getDefault().getLanguage()
+                acceptLanguage = Locale.getDefault().language
             )
             val action = ListFragmentDirections.actionListFragmentToEditUrlFragment(macro)
             findNavController().navigate(action)

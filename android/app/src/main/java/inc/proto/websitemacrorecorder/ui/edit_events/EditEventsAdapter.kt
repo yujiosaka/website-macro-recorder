@@ -48,28 +48,40 @@ class EditEventsAdapter(
                 holder.imageName.setImageResource(R.drawable.ic_keyboard_white_24dp)
                 holder.textName.text = _context.resources.getString(R.string.text_name_change)
             }
+            "wait" -> {
+                holder.imageName.setImageResource(R.drawable.ic_timer_white_24dp)
+                holder.textName.text = _context.resources.getString(R.string.text_name_wait)
+            }
         }
 
-        holder.textTargetType.text = try {
-            _context.resources.getString(
-                _context.resources.getIdentifier(
-                    "text_target_type_${_events[position].targetType}",
-                    "string",
-                    _context.packageName
-                )
-            )
-        } catch (e: Resources.NotFoundException) {
-            _context.resources.getString(R.string.text_target_type_text)
-        }
-
-        holder.textValue.text = if (_events[position].value != "") {
-            _events[position].value
+        if (_events[position].name == "wait") {
+            holder.textTargetType.text = _context.resources.getString(R.string.text_target_type_timer)
+            holder.textValue.text = _context.resources.getString(R.string.text_value_seconds, _events[position].value)
         } else {
-            _context.resources.getString(R.string.text_value_empty)
+            holder.textTargetType.text = try {
+                _context.resources.getString(
+                    _context.resources.getIdentifier(
+                        "text_target_type_${_events[position].targetType}",
+                        "string",
+                        _context.packageName
+                    )
+                )
+            } catch (e: Resources.NotFoundException) {
+                _context.resources.getString(R.string.text_target_type_text)
+            }
+            holder.textValue.text = if (_events[position].value != "") {
+                _events[position].value
+            } else {
+                _context.resources.getString(R.string.text_value_empty)
+            }
         }
     }
 
     override fun getItemCount() = _events.size
+
+    fun itemAt(position: Int): Event {
+        return _events[position]
+    }
 
     fun moveItem(from: Int, to: Int) {
         Collections.swap(_events, from, to);
@@ -77,5 +89,9 @@ class EditEventsAdapter(
 
     fun removeItem(position: Int) {
         _events.removeAt(position)
+    }
+
+    fun addItem(event: Event) {
+        _events.add(event)
     }
 }
