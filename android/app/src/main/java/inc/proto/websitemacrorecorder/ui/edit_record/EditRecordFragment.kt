@@ -42,7 +42,7 @@ class EditRecordFragment : Fragment() {
         return _binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_record, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }

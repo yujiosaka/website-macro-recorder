@@ -7,12 +7,12 @@
 
     <View
         android:id="@+id/thumbnail"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorBackground"
+        android:background="@color/colorPlaceholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,20 +20,20 @@
 
     <View
         android:id="@+id/title"
-        android:layout_width="100sp"
-        android:layout_height="8sp"
+        android:layout_width="100dp"
+        android:layout_height="8dp"
         android:layout_marginStart="16dp"
-        android:background="@color/colorBackground"
+        android:background="@color/colorPlaceholder"
         app:layout_constraintStart_toEndOf="@+id/thumbnail"
         app:layout_constraintTop_toTopOf="@+id/thumbnail" />
 
     <View
         android:id="@+id/description"
-        android:layout_width="30sp"
-        android:layout_height="8sp"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorBackground"
+        android:background="@color/colorPlaceholder"
         app:layout_constraintStart_toEndOf="@+id/thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
