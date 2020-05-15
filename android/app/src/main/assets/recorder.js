@@ -1,12 +1,4 @@
 (function() {
-  var MAX_CLICK_VALUE_LENGTH = 10;
-  var MAX_ID_LENGTH = 10;
-  var MAX_CLASS_LENGTH = 10;
-  var MAX_NAME_LENGTH = 10;
-  var MAX_TYPE_LENGTH = 10;
-  var MAX_HREF_LENGTH = 20;
-  var MAX_SRC_LENGTH = 20;
-  var MAX_ALT_LENGTH = 20;
   var INPUT_TYPES_CLICK = [
     'submit',
     'reset',
@@ -36,39 +28,53 @@
   ];
   var INPUT_TYPES_CHANGE = INPUT_TYPES_TEXT.concat(INPUT_TYPES_SELECT);
 
-  document.addEventListener('click', function(event) {
-    var target = event.target;
-    var type = target.type;
-    var tag = target.localName.toLowerCase();
-    if (tag === 'textarea') return;
-    if (tag === 'input' && INPUT_TYPES_CLICK.indexOf(type) === -1) return;
-    var value = truncate(target.innerText, MAX_CLICK_VALUE_LENGTH);
-    var xPath = getXpath(target);
-    var cssSelector = getCssSelector(target);
-    WebsiteMacroRecorder.onClick(value, xPath, cssSelector);
+  var clickedTimeStamps = {};
+  var changedTimeStamps = {};
+
+  setOnClickListener(document);
+  setOnChangeListener(document);
+  document.querySelectorAll('*').forEach(function(element) {
+    setOnClickListener(element);
+    setOnChangeListener(element);
   });
 
-  document.addEventListener('change', function(event) {
-    var target = event.target;
-    var type = target.type;
-    var tag = target.localName.toLowerCase();
-    if (tag !== 'input' && tag !== 'textarea') return;
-    if (tag === 'input' && INPUT_TYPES_CHANGE.indexOf(type) === -1) return;
-    var value = target.value;
-    var xPath = getXpath(target);
-    var cssSelector = getCssSelector(target);
-    if (tag === 'textarea' || INPUT_TYPES_TEXT.indexOf(type) >= 0) {
-      WebsiteMacroRecorder.onChange(value, xPath, cssSelector);
-    } else {
-      WebsiteMacroRecorder.onSelect(value, xPath, cssSelector);
-    }
-  });
+  function setOnClickListener(element) {
+    element.addEventListener('click', function(event) {
+      if (clickedTimeStamps[event.timeStamp]) return;
+      var target = event.target;
+      var type = target.type;
+      var tag = target.localName.toLowerCase();
+      if (tag === 'textarea') return;
+      if (tag === 'select') return;
+      if (tag === 'input' && INPUT_TYPES_CLICK.indexOf(type) === -1) return;
+      var targetType = getTargetType(target);
+      if (!targetType) return;
+      var xPath = getXpath(target);
+      var value = target.innerText || target.href || target.src || '';
+      WebsiteMacroRecorder.onClick(xPath, targetType, value);
+      clickedTimeStamps[event.timeStamp] = true;
+    });
+  }
 
-  function truncate(str, length) {
-    str = str || '';
-    return ( str.length > length )
-           ? str.substr(0, length - 1) + '…'
-           : str;
+  function setOnChangeListener(element) {
+    element.addEventListener('change', function(event) {
+      if (changedTimeStamps[event.timeStamp]) return;
+      var target = event.target;
+      var type = target.type;
+      var tag = target.localName.toLowerCase();
+      if (tag !== 'input' && tag !== 'textarea' && tag !== 'select') return;
+      if (tag === 'input' && INPUT_TYPES_CHANGE.indexOf(type) === -1) return;
+      var targetType = getTargetType(target);
+      if (!targetType) return;
+      var xPath = getXpath(target);
+      var value = target.value;
+      if (tag === 'textarea' || INPUT_TYPES_TEXT.indexOf(type) >= 0) {
+        WebsiteMacroRecorder.onChange(xPath, targetType, value);
+      } else {
+        WebsiteMacroRecorder.onSelect(xPath, targetType, value);
+      }
+      changedTimeStamps[event.timeStamp] = true;
+    });
   }
 
   function escape(str) {
@@ -78,18 +84,18 @@
   function $x(path, element) {
     element = element || document;
     var result = document.evaluate(path, element, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-    var node = result.iterateNext();
-    var nodes = [];
-    while (node) {
-      nodes.push(node);
-      node = result.iterateNext();
+    var item = result.iterateNext();
+    var items = [];
+    while (item) {
+      items.push(item);
+      item = result.iterateNext();
     }
-    return nodes;
+    return items;
   }
 
-  function getXpath(node, path) {
+  function getXpath(element, path) {
     path = path || '';
-    if (!node) {
+    if (!element) {
       return '/' + path;
     }
     if (path) {
@@ -97,22 +103,22 @@
       var unique = $x(relativePath, document).length === 1;
       if (unique) return relativePath;
     }
-    var currentPath = node.localName.toLowerCase();
-    if (node.id) {
-      currentPath += "[@id='" + escape(node.id) + "']";
+    var currentPath = element.localName.toLowerCase();
+    if (element.id) {
+      currentPath += "[@id='" + escape(element.id) + "']";
     }
-    if (node.className) {
-      currentPath += "[@class='" + escape(node.className) + "']";
+    if (element.className) {
+      currentPath += "[@class='" + escape(element.className) + "']";
     }
-    if (node.type) {
-      currentPath += "[@type='" + escape(node.type) + "']";
+    if (element.type) {
+      currentPath += "[@type='" + escape(element.type) + "']";
     }
-    if (node.name) {
-      currentPath += "[@name='" + escape(node.name) + "']";
+    if (element.name) {
+      currentPath += "[@name='" + escape(element.name) + "']";
     }
-    var siblings = $x(currentPath, node.parentElement);
+    var siblings = $x(currentPath, element.parentElement);
     if (siblings.length >= 2) {
-      var index = Array.prototype.indexOf.call(siblings, node) + 1;
+      var index = Array.prototype.indexOf.call(siblings, element) + 1;
       currentPath += '[' + index + ']';
     }
     if (path) {
@@ -120,18 +126,42 @@
     } else {
       path = currentPath;
     }
-    return getXpath(node.parentElement, path);
+    return getXpath(element.parentElement, path);
   }
 
-  function getCssSelector(node, path) {
-    var selector = node.localName.toLowerCase();
-    if (node.id) selector += "[id='" + escape(node.id) + "']";
-    if (node.className) selector += "[class='" + escape(truncate(node.className, MAX_CLASS_LENGTH)) + "']";
-    if (node.type) selector += "[type='" + escape(truncate(node.type, MAX_TYPE_LENGTH)) + "']";
-    if (node.name) selector += "[name='" + escape(truncate(node.name, MAX_NAME_LENGTH)) + "']";
-    if (node.href) selector += "[href='" + escape(truncate(node.href, MAX_HREF_LENGTH)) + "']";
-    if (node.src) selector += "[src='" + escape(truncate(node.src, MAX_SRC_LENGTH)) + "']";
-    if (node.alt) selector += "[alt='" + escape(truncate(node.alt, MAX_ALT_LENGTH)) + "']";
-    return selector;
+  function getTargetType(element) {
+    var tag = element.localName.toLowerCase();
+    var type = element.type;
+    switch (tag) {
+      case 'video':
+      case 'canvas':
+        return null;
+      case 'img':
+      case 'area':
+        return 'image';
+      case 'a':
+        return 'link';
+      case 'iframe':
+        return 'frame';
+      case 'textarea':
+        return 'input';
+      case 'input':
+        switch (type) {
+          case 'checkbox':
+            return 'checkbox';
+          case 'radio':
+            return 'radio';
+          case 'submit', 'reset', 'button', 'image':
+            return 'button';
+          default:
+            return 'input';
+        }
+      case 'button':
+        return 'button';
+      case 'select':
+        return 'selectbox';
+      default:
+        return 'text';
+    }
   }
 })();

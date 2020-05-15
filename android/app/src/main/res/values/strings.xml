@@ -29,7 +29,22 @@
 
     <!-- Strings used for edit record fragment -->
     <string name="notification_click">Tapped %1$s</string>
-    <string name="notification_click_value">Tapped %1$s on %2$s</string>
-    <string name="notification_change_value">Entered %1$s on %2$s</string>
-    <string name="notification_select_value">Selected %1$s on %2$s</string>
+    <string name="notification_click_value">Tapped %1$s\n%2$s</string>
+    <string name="notification_change_value">Entered %1$s\n%2$s</string>
+    <string name="notification_select_value">Selected %1$s\n%2$s</string>
+
+    <!-- Strings used for edit events fragment -->
+    <string name="text_name_click">Tap</string>
+    <string name="text_name_change">Change</string>
+    <string name="text_name_select">Select</string>
+    <string name="text_target_type_image">Image</string>
+    <string name="text_target_type_link">Link</string>
+    <string name="text_target_type_frame">Frame</string>
+    <string name="text_target_type_input">Input</string>
+    <string name="text_target_type_checkbox">Checkbox</string>
+    <string name="text_target_type_radio">Radio button</string>
+    <string name="text_target_type_button">Button</string>
+    <string name="text_target_type_select">Select box</string>
+    <string name="text_target_type_text">Text</string>
+    <string name="text_value_empty">No text</string>
 </resources>
