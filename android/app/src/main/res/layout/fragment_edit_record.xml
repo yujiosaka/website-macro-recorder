@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16sp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:shimmer_duration="1500">

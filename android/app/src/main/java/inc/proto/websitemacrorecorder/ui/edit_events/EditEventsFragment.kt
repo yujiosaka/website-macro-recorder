@@ -53,7 +53,7 @@ class EditEventsFragment : Fragment() {
                     super.onSelectedChanged(viewHolder, actionState)
 
                     if (actionState == ACTION_STATE_DRAG) {
-                        viewHolder!!.itemView!!.alpha = 0.5f
+                        viewHolder!!.itemView.alpha = 0.5f
                     }
                 }
 
@@ -63,7 +63,7 @@ class EditEventsFragment : Fragment() {
                 ) {
                     super.clearView(recyclerView, viewHolder)
 
-                    viewHolder!!.itemView!!.alpha = 1.0f
+                    viewHolder.itemView.alpha = 1.0f
                 }
 
                 override fun onMove(

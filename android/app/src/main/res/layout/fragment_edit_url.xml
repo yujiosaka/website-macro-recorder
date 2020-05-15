@@ -25,7 +25,7 @@
             <EditText
                 android:id="@+id/edit_url"
                 android:layout_width="0dp"
-                android:layout_height="60sp"
+                android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -34,8 +34,7 @@
                 android:hint="@string/hint_url"
                 android:inputType="textUri"
                 android:text="@={vm.url}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="18sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -43,21 +42,18 @@
             <Button
                 android:id="@+id/button_start_recording"
                 android:layout_width="wrap_content"
-                android:layout_height="60sp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/shape_button_primary"
                 android:enabled="@{vm.valid}"
-                android:padding="16sp"
                 android:text="@string/text_start_recording"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="?android:attr/textColorPrimaryInverse"
-                android:textSize="18sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_url" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
