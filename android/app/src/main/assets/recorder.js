@@ -28,53 +28,79 @@
   ];
   var INPUT_TYPES_CHANGE = INPUT_TYPES_TEXT.concat(INPUT_TYPES_SELECT);
 
+  var elements = [];
   var clickedTimeStamps = {};
   var changedTimeStamps = {};
 
-  setOnClickListener(document);
-  setOnChangeListener(document);
-  document.querySelectorAll('*').forEach(function(element) {
-    setOnClickListener(element);
-    setOnChangeListener(element);
-  });
+  document.addEventListener('click', onClickListener);
+  document.addEventListener('change', onChangeListener);
+  window.addEventListener("hashchange", resetAllListeners);
+  window.addEventListener("popstate", resetAllListeners);
+  listenPushState();
+  addAllListeners();
 
-  function setOnClickListener(element) {
-    element.addEventListener('click', function(event) {
-      if (clickedTimeStamps[event.timeStamp]) return;
-      var target = event.target;
-      var type = target.type;
-      var tag = target.localName.toLowerCase();
-      if (tag === 'textarea') return;
-      if (tag === 'select') return;
-      if (tag === 'input' && INPUT_TYPES_CLICK.indexOf(type) === -1) return;
-      var targetType = getTargetType(target);
-      if (!targetType) return;
-      var xPath = getXpath(target);
-      var value = target.innerText || target.href || target.src || '';
-      WebsiteMacroRecorder.onClick(xPath, targetType, value);
-      clickedTimeStamps[event.timeStamp] = true;
+  function listenPushState() {
+    var oldPushState = window.history.pushState;
+    window.history.pushState = function(state) {
+      oldPushState.apply(window.history, arguments);
+      resetAllListeners();
+    };
+  }
+
+  function addAllListeners() {
+    document.querySelectorAll('*').forEach(function(element) {
+      element.addEventListener('click', onClickListener);
+      element.addEventListener('change', onChangeListener);
+      elements.push(element);
     });
   }
 
-  function setOnChangeListener(element) {
-    element.addEventListener('change', function(event) {
-      if (changedTimeStamps[event.timeStamp]) return;
-      var target = event.target;
-      var type = target.type;
-      var tag = target.localName.toLowerCase();
-      if (tag !== 'input' && tag !== 'textarea' && tag !== 'select') return;
-      if (tag === 'input' && INPUT_TYPES_CHANGE.indexOf(type) === -1) return;
-      var targetType = getTargetType(target);
-      if (!targetType) return;
-      var xPath = getXpath(target);
-      var value = target.value;
-      if (tag === 'textarea' || INPUT_TYPES_TEXT.indexOf(type) >= 0) {
-        WebsiteMacroRecorder.onChange(xPath, targetType, value);
-      } else {
-        WebsiteMacroRecorder.onSelect(xPath, targetType, value);
-      }
-      changedTimeStamps[event.timeStamp] = true;
+  function removeAllListeners() {
+    elements.forEach(function(element) {
+      element.removeEventListener('click', onClickListener);
+      element.removeEventListener('change', onChangeListener);
     });
+    elements = [];
+  }
+
+  function resetAllListeners() {
+    removeAllListeners();
+    addAllListeners();
+  }
+
+  function onClickListener(event) {
+    if (clickedTimeStamps[event.timeStamp]) return;
+    var target = event.target;
+    var type = target.type;
+    var tag = target.localName.toLowerCase();
+    if (tag === 'textarea') return;
+    if (tag === 'select') return;
+    if (tag === 'input' && INPUT_TYPES_CLICK.indexOf(type) === -1) return;
+    var targetType = getTargetType(target);
+    if (!targetType) return;
+    var xPath = getXpath(target);
+    var value = target.innerText || target.href || target.src || '';
+    WebsiteMacroRecorder.onClick(xPath, targetType, value);
+    clickedTimeStamps[event.timeStamp] = true;
+  }
+
+  function onChangeListener(event) {
+    if (changedTimeStamps[event.timeStamp]) return;
+    var target = event.target;
+    var type = target.type;
+    var tag = target.localName.toLowerCase();
+    if (tag !== 'input' && tag !== 'textarea' && tag !== 'select') return;
+    if (tag === 'input' && INPUT_TYPES_CHANGE.indexOf(type) === -1) return;
+    var targetType = getTargetType(target);
+    if (!targetType) return;
+    var xPath = getXpath(target);
+    var value = target.value;
+    if (tag === 'textarea' || INPUT_TYPES_TEXT.indexOf(type) >= 0) {
+      WebsiteMacroRecorder.onChange(xPath, targetType, value);
+    } else {
+      WebsiteMacroRecorder.onSelect(xPath, targetType, value);
+    }
+    changedTimeStamps[event.timeStamp] = true;
   }
 
   function escape(str) {
