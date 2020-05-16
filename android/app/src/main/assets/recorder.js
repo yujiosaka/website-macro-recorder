@@ -34,8 +34,8 @@
 
   document.addEventListener('click', onClickListener);
   document.addEventListener('change', onChangeListener);
-  window.addEventListener("hashchange", resetAllListeners);
-  window.addEventListener("popstate", resetAllListeners);
+  window.addEventListener('hashchange', resetAllListeners);
+  window.addEventListener('popstate', resetAllListeners);
   listenPushState();
   addAllListeners();
 
