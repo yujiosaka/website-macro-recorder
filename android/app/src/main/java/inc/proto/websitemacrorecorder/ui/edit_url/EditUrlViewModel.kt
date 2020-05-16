@@ -56,5 +56,4 @@ class EditUrlViewModel(macro: Macro) : ObservableViewModel() {
         }
         notifyPropertyChanged(BR.valid)
     }
-
 }

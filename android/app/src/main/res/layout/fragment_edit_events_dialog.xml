@@ -21,7 +21,7 @@
             android:ems="10"
             android:hint="@string/hint_seconds"
             android:inputType="number"
-            android:text="@={vm.seconds}"
+            android:text="@={ vm.seconds }"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textStyle="bold"

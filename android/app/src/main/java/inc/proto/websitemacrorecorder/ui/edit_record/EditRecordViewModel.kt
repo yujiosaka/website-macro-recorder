@@ -28,6 +28,14 @@ class EditRecordViewModel(macro: Macro) : ObservableViewModel() {
         }
 
     @get:Bindable
+    var name
+        get() = _macro.name
+        set(value) {
+            _macro.name = value
+            notifyPropertyChanged(BR.name)
+        }
+
+    @get:Bindable
     var acceptLanguage
         get() = _macro.acceptLanguage
         set(value) {

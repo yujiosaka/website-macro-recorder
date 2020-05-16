@@ -35,6 +35,9 @@ class EditUrlFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (_vm.url !== "https://") {
+            _vm.validate(_binding.editUrl)
+        }
         _binding.buttonStartRecording.setOnClickListener {
             val action = EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(_vm.macro)
             findNavController().navigate(action)

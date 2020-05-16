@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.webkit.*
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -92,6 +91,9 @@ class EditRecordFragment : Fragment() {
                 return true
             }
             override fun onPageFinished(view: WebView, url: String) {
+                if (_vm.name == "") {
+                    _vm.name = _binding.webRecorder.title
+                }
                 _binding.webRecorder.visibility = View.VISIBLE
                 _binding.shimmerLayout.stopShimmer()
                 _binding.shimmerLayout.visibility = View.GONE
