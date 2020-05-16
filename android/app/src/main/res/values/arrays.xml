@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="text_frequency_array">
+        <item>Not scheduled</item>
+        <item>Scheduled every day</item>
+        <item>Scheduled every hour</item>
+    </string-array>
+</resources>

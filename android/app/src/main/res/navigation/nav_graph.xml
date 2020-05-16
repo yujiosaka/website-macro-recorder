@@ -85,8 +85,8 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
-            android:id="@+id/action_editFragment_to_editAdvancedFragment"
-            app:destination="@id/editAdvancedFragment"
+            android:id="@+id/action_editFragment_to_editUrlFragment"
+            app:destination="@id/editUrlFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -94,6 +94,13 @@
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+        <action
+            android:id="@+id/action_editFragment_to_listFragment"
+            app:destination="@id/listFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/editScheduleFragment"
@@ -103,15 +110,13 @@
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
-    </fragment>
-    <fragment
-        android:id="@+id/editAdvancedFragment"
-        android:name="inc.proto.websitemacrorecorder.ui.edit_advanced.EditAdvancedFragment"
-        android:label="@string/edit_advanced_fragment_label"
-        tools:layout="@layout/fragment_edit_advanced">
-        <argument
-            android:name="macro"
-            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+        <action
+            android:id="@+id/action_editScheduleFragment_to_editFragment"
+            app:destination="@id/editFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/planFragment"
