@@ -81,6 +81,7 @@
     var xPath = getXpath(target);
     var value = target.innerText || target.href || target.src || '';
     WebsiteMacroRecorder.onClick(xPath, targetType, value);
+    clickedTimeStamps = {};
     clickedTimeStamps[event.timeStamp] = true;
   }
 
@@ -100,6 +101,7 @@
     } else {
       WebsiteMacroRecorder.onSelect(xPath, targetType, value);
     }
+    changedTimeStamps = {};
     changedTimeStamps[event.timeStamp] = true;
   }
 
