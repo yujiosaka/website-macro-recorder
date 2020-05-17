@@ -34,16 +34,6 @@ class EditViewModel(macro: Macro) : ObservableViewModel() {
         }
 
     @get:Bindable
-    var schedule: String
-        get() = "%1$01d:%2$02d".format(_macro.scheduleHour, _macro.scheduleMinute)
-        set(value) {
-            val pair = value.split(":").map { it.toInt() }
-            _macro.scheduleHour = pair[0]
-            _macro.scheduleMinute = pair[1]
-            notifyPropertyChanged(BR.schedule)
-        }
-
-    @get:Bindable
     var notifySuccess
         get() = _macro.notifySuccess
         set(value) {
@@ -57,5 +47,15 @@ class EditViewModel(macro: Macro) : ObservableViewModel() {
         set(value) {
             _macro.notifyFailure = value
             notifyPropertyChanged(BR.notifyFailure)
+        }
+
+    @get:Bindable
+    var schedule: String
+        get() = "%1$01d:%2$02d".format(_macro.scheduleHour, _macro.scheduleMinute)
+        set(value) {
+            val pair = value.split(":").map { it.toInt() }
+            _macro.scheduleHour = pair[0]
+            _macro.scheduleMinute = pair[1]
+            notifyPropertyChanged(BR.schedule)
         }
 }
