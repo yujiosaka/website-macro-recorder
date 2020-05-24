@@ -1,0 +1,40 @@
+{
+  "name": "website-macro-recorder",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Record macros on website",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon -r dotenv-flow/config src/index.js",
+    "prd": "NODE_ENV=production node -r dotenv-flow/config src/index.js",
+    "jest": "NODE_ENV=test jest --coverage --reporters=default --reporters=jest-junit",
+    "lint": "eslint --quiet -f codeframe . || eslint .",
+    "test": "npm run tsc && npm run lint && npm run jest",
+    "tsc": "tsc -p ."
+  },
+  "author": "Yuji Isobe",
+  "engines": {
+    "node": ">=12.16.3"
+  },
+  "dependencies": {
+    "@types/node": "14.0.1",
+    "body-parser": "1.19.0",
+    "boom": "7.3.0",
+    "cors": "2.8.5",
+    "dotenv-flow": "3.1.0",
+    "express": "4.17.1",
+    "lodash": "4.17.15",
+    "mongoose": "5.9.15",
+    "winston": "3.2.1"
+  },
+  "devDependencies": {
+    "axios": "0.19.2",
+    "eslint": "7.0.0",
+    "eslint-config-airbnb": "18.1.0",
+    "eslint-plugin-import": "2.20.2",
+    "jest": "26.0.1",
+    "jest-junit": "10.0.0",
+    "nodemon": "2.0.4",
+    "typescript": "3.9.2"
+  }
+}
