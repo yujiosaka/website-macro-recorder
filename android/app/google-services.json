@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "389873482155",
+    "firebase_url": "https://website-macro-recorder.firebaseio.com",
+    "project_id": "website-macro-recorder",
+    "storage_bucket": "website-macro-recorder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389873482155:android:f2e89cce8ce445b702faee",
+        "android_client_info": {
+          "package_name": "inc.proto.websitemacrorecorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389873482155-k60t6ennvp5c66t7oqd0lgm48929s3bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_3A53WPGOCgfDAiDshAIdF3rq3o1kehk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389873482155-k60t6ennvp5c66t7oqd0lgm48929s3bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
