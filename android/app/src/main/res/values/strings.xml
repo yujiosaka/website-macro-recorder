@@ -3,6 +3,7 @@
 
     <!-- Strings used for menu -->
     <string name="action_plan">Upgrade / Downgrade</string>
+    <string name="action_sign_out">Sign out</string>
     <string name="action_replay">Replay</string>
     <string name="action_done">Done</string>
 

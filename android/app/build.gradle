@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:19.0.0'
     implementation 'com.google.firebase:firebase-storage:18.0.0'
 
+    implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
+
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.google.android.material:material:1.2.0-beta01'
     implementation 'commons-validator:commons-validator:1.6'

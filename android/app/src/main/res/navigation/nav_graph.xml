@@ -124,6 +124,9 @@
         android:label="@string/plan_fragment_label"
         tools:layout="@layout/fragment_plan" />
     <action
+        android:id="@+id/action_global_listFragment"
+        app:destination="@id/listFragment" />
+    <action
         android:id="@+id/action_global_planFragment"
         app:destination="@id/planFragment"
         app:popUpTo="@id/listFragment"
