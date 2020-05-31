@@ -40,7 +40,7 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
         _binding.editSchedule.setOnClickListener {
             val dialog = TimePickerDialogFragment()
             dialog.init(this, _vm.scheduleHour, _vm.scheduleMinute)
-            dialog.show(activity!!.supportFragmentManager, "time_picker")
+            dialog.show(requireActivity().supportFragmentManager, "time_picker")
         }
         _binding.editScheduleFrequency.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {

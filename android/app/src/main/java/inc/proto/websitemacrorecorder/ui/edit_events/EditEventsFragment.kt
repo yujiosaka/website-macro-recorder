@@ -13,18 +13,26 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.functions.FirebaseFunctionsException
+import com.google.firebase.functions.HttpsCallableReference
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import inc.proto.websitemacrorecorder.R
-import inc.proto.websitemacrorecorder.data.Event
+import inc.proto.websitemacrorecorder.data.MacroEvent
 import inc.proto.websitemacrorecorder.ui.edit_events_dialog.EditEventsDialog
 import kotlinx.android.synthetic.main.fragment_edit_events.*
 
-
 class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
 
+    private var _loading = false
+    private val _gson = Gson()
     private val _args: EditEventsFragmentArgs by navArgs()
 
     private lateinit var _adapter: EditEventsAdapter
     private lateinit var _itemTouchHelper: ItemTouchHelper
+    private lateinit var _screenshot: HttpsCallableReference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +50,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
         _adapter = EditEventsAdapter(this, _args.macro.events)
 
         recycler_events.setHasFixedSize(true)
-        recycler_events.layoutManager = LinearLayoutManager(activity)
+        recycler_events.layoutManager = LinearLayoutManager(requireActivity())
         recycler_events.adapter = _adapter
 
         _itemTouchHelper = ItemTouchHelper(
@@ -123,7 +131,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
                 }
 
                 private fun _drawBackground(view: View, dX: Float): Drawable {
-                    val color = ContextCompat.getColor(context!!, R.color.colorDelete)
+                    val color = ContextCompat.getColor(requireContext(), R.color.colorDelete)
                     val background = ColorDrawable(color)
 
                     background.setBounds(view.left, view.top,view.left + dX.toInt(), view.bottom)
@@ -147,6 +155,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
             }
         )
         _itemTouchHelper.attachToRecyclerView(recycler_events)
+        _screenshot = FirebaseFunctions.getInstance().getHttpsCallable("screenshot")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -155,16 +164,35 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (_loading) return false
         return when (item.itemId) {
             R.id.action_add_timer -> {
                 val dialog = EditEventsDialog()
                 dialog.setListener(this)
-                dialog.show(fragmentManager!!, "edit_events_dialog")
+                dialog.show(requireFragmentManager(), "edit_events_dialog")
                 true
             }
             R.id.action_done -> {
-                val action = EditEventsFragmentDirections.actionEditEventsFragmentToEditFragment(_args.macro)
-                findNavController().navigate(action)
+                val json = _gson.toJson(_args.macro)
+                val map: Map<String, Any> =_gson.fromJson(json, object : TypeToken<Map<String, Any>>() {}.type)
+                _startLoading()
+                _screenshot.call(map).addOnCompleteListener { task->
+                    _finishLoading()
+                    if (!task.isSuccessful) {
+                        val exception = task.exception as FirebaseFunctionsException
+                        val root: View = requireActivity().findViewById(R.id.root)
+                        val text = when (exception.code) {
+                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> root.resources.getString(R.string.error_deadline_exceeded)
+                            FirebaseFunctionsException.Code.UNAUTHENTICATED -> root.resources.getString(R.string.error_unauthenticated)
+                            else -> root.resources.getString(R.string.error_unknown)
+                        }
+                        Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
+                        return@addOnCompleteListener
+                    }
+                    _args.macro.screenshotUrl = task.result!!.data as String
+                    val action = EditEventsFragmentDirections.actionEditEventsFragmentToConfirmFragment(_args.macro)
+                    findNavController().navigate(action)
+                }
                 true
             }
             else -> {
@@ -178,15 +206,15 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     }
 
     override fun onAddTimer(value: String) {
-        val event = Event(name = "wait", value = value)
+        val event = MacroEvent(name = "wait", value = value)
         if (_adapter.itemCount >= 1) {
             val lastEvent = _adapter.itemAt(_adapter.itemCount - 1)
             if (lastEvent.name == "wait") {
                 val lastValue = Integer.parseInt(lastEvent.value)
                 val value = Integer.parseInt(event.value)
                 var totalValue = lastValue + value
-                if (totalValue >= Event.MAX_WAIT_VALUE) {
-                    totalValue = Event.MAX_WAIT_VALUE
+                if (totalValue >= MacroEvent.MAX_WAIT_VALUE) {
+                    totalValue = MacroEvent.MAX_WAIT_VALUE
                 }
                 lastEvent.value = totalValue.toString()
                 _adapter.notifyItemChanged(_adapter.itemCount - 1, lastEvent)
@@ -195,5 +223,19 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
         }
         _adapter.addItem(event)
         _adapter.notifyItemInserted(_adapter.itemCount)
+    }
+
+    fun _startLoading() {
+        _loading = true
+        filter.visibility = View.VISIBLE
+        loading.visibility = View.VISIBLE
+        _itemTouchHelper.attachToRecyclerView(null)
+    }
+
+    fun _finishLoading() {
+        _itemTouchHelper.attachToRecyclerView(recycler_events)
+        loading.visibility = View.GONE
+        filter.visibility = View.GONE
+        _loading = false
     }
 }

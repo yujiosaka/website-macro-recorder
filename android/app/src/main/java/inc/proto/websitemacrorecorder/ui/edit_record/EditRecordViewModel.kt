@@ -2,7 +2,7 @@ package inc.proto.websitemacrorecorder.ui.edit_record
 
 import androidx.databinding.Bindable
 import inc.proto.websitemacrorecorder.BR
-import inc.proto.websitemacrorecorder.data.Event
+import inc.proto.websitemacrorecorder.data.MacroEvent
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.util.ObservableViewModel
 
@@ -52,6 +52,22 @@ class EditRecordViewModel(macro: Macro) : ObservableViewModel() {
         }
 
     @get:Bindable
+    var height
+        get() = _macro.height
+        set(value) {
+            _macro.height = value
+            notifyPropertyChanged(BR.height)
+        }
+
+    @get:Bindable
+    var width
+        get() = _macro.width
+        set(value) {
+            _macro.width = value
+            notifyPropertyChanged(BR.width)
+        }
+
+    @get:Bindable
     var valid
         get() = _valid
         set(value) {
@@ -59,7 +75,7 @@ class EditRecordViewModel(macro: Macro) : ObservableViewModel() {
             notifyPropertyChanged(BR.valid)
         }
 
-    fun pushEvent(event: Event) {
+    fun pushEvent(event: MacroEvent) {
         _macro.events.add(event)
     }
 

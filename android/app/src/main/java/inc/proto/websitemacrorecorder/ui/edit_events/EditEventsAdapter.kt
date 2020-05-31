@@ -7,13 +7,13 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import inc.proto.websitemacrorecorder.R
-import inc.proto.websitemacrorecorder.data.Event
+import inc.proto.websitemacrorecorder.data.MacroEvent
 import java.util.*
 import kotlin.collections.ArrayList
 
 class EditEventsAdapter(
     private val fragment: EditEventsFragment,
-    private val _events: ArrayList<Event>
+    private val _events: ArrayList<MacroEvent>
 ) : RecyclerView.Adapter<EditEventsViewHolder>() {
 
     private lateinit var _context: Context
@@ -79,7 +79,7 @@ class EditEventsAdapter(
 
     override fun getItemCount() = _events.size
 
-    fun itemAt(position: Int): Event {
+    fun itemAt(position: Int): MacroEvent {
         return _events[position]
     }
 
@@ -91,7 +91,7 @@ class EditEventsAdapter(
         _events.removeAt(position)
     }
 
-    fun addItem(event: Event) {
+    fun addItem(event: MacroEvent) {
         _events.add(event)
     }
 }
