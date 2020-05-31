@@ -26,7 +26,7 @@ class EditEventsDialog : DialogFragment() {
         _binding.vm = _vm
         _binding.lifecycleOwner = this
 
-        return AlertDialog.Builder(context!!)
+        return AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.text_add_timer))
             .setView(_binding.root)
             .setPositiveButton(getString(R.string.text_add)) { _, _ ->

@@ -6,10 +6,14 @@
     <string name="action_sign_out">Sign out</string>
     <string name="action_replay">Replay</string>
     <string name="action_done">Done</string>
+    <string name="action_save">Save</string>
 
     <!-- Strings used for validation -->
     <string name="error_enter_here">Enter %1$s here</string>
     <string name="error_format_is_invalid">%1$s format is invalid</string>
+    <string name="error_deadline_exceeded">Timeout error occurred\nKeep the execution time within 1 minute</string>
+    <string name="error_unauthenticated">User is not authenticated\nRetry again after login</string>
+    <string name="error_unknown">Unknown error occurred\nRetry again later</string>
 
     <!-- Strings used for data -->
     <string name="url">URL</string>
@@ -19,6 +23,7 @@
     <string name="edit_url_fragment_label">Enter Website URL</string>
     <string name="edit_record_fragment_label">Record Macro</string>
     <string name="edit_events_fragment_label">Edit Events</string>
+    <string name="confirm_fragment_label">Confirm macro</string>
     <string name="edit_fragment_label">Edit Setting</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>

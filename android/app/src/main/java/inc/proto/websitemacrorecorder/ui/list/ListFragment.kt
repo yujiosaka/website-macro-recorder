@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
 import androidx.navigation.fragment.findNavController
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentListBinding
@@ -31,8 +30,8 @@ class ListFragment : Fragment() {
 
         _binding.buttonAdd.setOnClickListener {
             val macro = Macro(
-                userAgent = WebView(activity).settings.userAgentString,
-                acceptLanguage = Locale.getDefault().language
+                acceptLanguage = Locale.getDefault().language,
+                deviceScaleFactor = requireContext().resources.displayMetrics.density
             )
             val action = ListFragmentDirections.actionListFragmentToEditUrlFragment(macro)
             findNavController().navigate(action)

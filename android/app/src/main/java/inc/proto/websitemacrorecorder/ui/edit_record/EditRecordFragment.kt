@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import inc.proto.websitemacrorecorder.R
-import inc.proto.websitemacrorecorder.data.Event
+import inc.proto.websitemacrorecorder.data.MacroEvent
 import inc.proto.websitemacrorecorder.databinding.FragmentEditRecordBinding
 import inc.proto.websitemacrorecorder.util.Helper
 
@@ -58,6 +58,9 @@ class EditRecordFragment : Fragment() {
                 true
             }
             R.id.action_done -> {
+                _vm.userAgent = _binding.webRecorder.settings.userAgentString
+                _vm.height = _binding.webRecorder.height
+                _vm.width = _binding.webRecorder.width
                 val action = EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(_vm.macro)
                 findNavController().navigate(action)
                 true
@@ -78,7 +81,6 @@ class EditRecordFragment : Fragment() {
         _binding.webRecorder.settings.setDomStorageEnabled(true)
         _binding.webRecorder.settings.setJavaScriptEnabled(true)
         _binding.webRecorder.settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        _binding.webRecorder.settings.setUserAgentString(_vm.userAgent)
         _binding.webRecorder.addJavascriptInterface(this, "WebsiteMacroRecorder")
         _binding.webRecorder.webViewClient = object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -98,7 +100,7 @@ class EditRecordFragment : Fragment() {
                 _binding.shimmerLayout.stopShimmer()
                 _binding.shimmerLayout.visibility = View.GONE
                 if (activity == null) return
-                val stream = activity!!.assets.open("recorder.js")
+                val stream = requireActivity().assets.open("recorder.js")
                 val text = Helper.inputStreamToString(stream)
                 _binding.webRecorder.evaluateJavascript(text, null)
 
@@ -113,10 +115,10 @@ class EditRecordFragment : Fragment() {
 
     @JavascriptInterface
     fun onClick(xPath: String, targetType: String, value: String) {
-        val event = Event(name = "click", xPath = xPath, targetType = targetType, value = value)
+        val event = MacroEvent(name = "click", xPath = xPath, targetType = targetType, value = value)
         _vm.pushEvent(event)
         if (activity == null) return
-        val root: View = activity!!.findViewById(R.id.root)
+        val root: View = requireActivity().findViewById(R.id.root)
         val targetTypeString = _getTargetTypeString(targetType)
         val text = if (value != "") {
             root.resources.getString(R.string.notification_click_value, targetTypeString, value)
@@ -128,10 +130,10 @@ class EditRecordFragment : Fragment() {
 
     @JavascriptInterface
     fun onChange(xPath: String, targetType: String, value: String) {
-        val event = Event(name = "change", xPath = xPath, targetType = targetType, value = value)
+        val event = MacroEvent(name = "change", xPath = xPath, targetType = targetType, value = value)
         _vm.pushEvent(event)
         if (activity == null) return
-        val root: View = activity!!.findViewById(R.id.root)
+        val root: View = requireActivity().findViewById(R.id.root)
         val targetTypeString = _getTargetTypeString(targetType)
         val text = root.resources.getString(R.string.notification_change_value, targetTypeString, value)
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
@@ -139,10 +141,10 @@ class EditRecordFragment : Fragment() {
 
     @JavascriptInterface
     fun onSelect(xPath: String, targetType: String, value: String) {
-        val event = Event(name = "select", xPath = xPath, targetType = targetType, value = value)
+        val event = MacroEvent(name = "select", xPath = xPath, targetType = targetType, value = value)
         _vm.pushEvent(event)
         if (activity == null) return
-        val root: View = activity!!.findViewById(R.id.root)
+        val root: View = requireActivity().findViewById(R.id.root)
         val targetTypeString = _getTargetTypeString(targetType)
         val text = root.resources.getString(R.string.notification_select_value, targetTypeString, value)
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
@@ -178,7 +180,7 @@ class EditRecordFragment : Fragment() {
                 resources.getIdentifier(
                     "text_target_type_${targetType}",
                     "string",
-                    activity!!.packageName
+                    requireActivity().packageName
                 )
             )
         } catch (e: Resources.NotFoundException) {

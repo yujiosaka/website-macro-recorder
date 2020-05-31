@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Event(
+data class MacroEvent(
     var name: String = "",
     var xPath: String = "",
     var targetType: String = "",
