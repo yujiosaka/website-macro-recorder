@@ -6,3 +6,4 @@ admin.initializeApp({
 });
 
 export * from './screenshot';
+export * from './save';

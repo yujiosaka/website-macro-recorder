@@ -1,18 +1,14 @@
-import * as path from 'path';
-import * as os from 'os';
+import { join } from 'path';
+import { tmpdir } from 'os';
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
 import * as puppeteer from 'puppeteer';
-import * as moment from 'moment';
-import * as helper from './helper'
+import { delay, upload } from './helper'
 
 const ARGS = ['--no-sandbox', '--ignore-certificate-errors'];
 const TIMEOUT = 3000;
 
-const storage = admin.storage();
-
 function getTmpPath(filename: string) {
-  return path.join(os.tmpdir(), filename);
+  return join(tmpdir(), filename);
 }
 
 function getDevice(macro: Macro) {
@@ -31,7 +27,7 @@ function getDevice(macro: Macro) {
 async function triggerEvent(page: puppeteer.Page, event: MacroEvent) {
   if (event.name === 'wait') {
     const milliseconds = parseInt(event.value);
-    await helper.delay(milliseconds);
+    await delay(milliseconds);
     return;
   }
   const element = await page.waitForXPath(event.xPath);
@@ -50,6 +46,7 @@ async function triggerEvent(page: puppeteer.Page, event: MacroEvent) {
     await page.waitForNavigation({ timeout: TIMEOUT });
   } catch (error) {
     if (error instanceof puppeteer.errors.TimeoutError) return;
+    console.warn(error);
     throw new functions.https.HttpsError(
       'unknown',
       'Unknown error occurred',
@@ -61,7 +58,7 @@ async function saveScreenshot(macro: Macro, context: functions.https.CallableCon
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
-      'User is not authenticated',
+      'Not authenticated',
     );
   }
   try {
@@ -83,6 +80,7 @@ async function saveScreenshot(macro: Macro, context: functions.https.CallableCon
         'Timeout error occurred',
       );
     }
+    console.warn(error);
     throw new functions.https.HttpsError(
       'unknown',
       'Unknown error occurred',
@@ -94,17 +92,15 @@ async function uploadScreenshot(context: functions.https.CallableContext) {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
-      'User is not authenticated',
+      'Not authenticated',
     );
   }
   const tmpPath = getTmpPath(`${context.auth.uid}.png`);
   const destination = `screenshots/${context.auth.uid}/tmp.png`;
-  const expires = moment().add(1, 'hour').toDate();
   try {
-    const [file] = await storage.bucket().upload(tmpPath, { destination });
-    const [signedUrl] = await file.getSignedUrl({ action: 'read', expires });
-    return signedUrl;
+    return await upload(tmpPath, destination);
   } catch (error) {
+    console.warn(error);
     throw new functions.https.HttpsError(
       'unknown',
       'Unknown error occurred',

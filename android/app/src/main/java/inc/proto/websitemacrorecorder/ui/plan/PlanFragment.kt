@@ -10,18 +10,15 @@ import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentPlanBinding
 
 class PlanFragment : Fragment() {
-
-    private lateinit var _binding: FragmentPlanBinding
+    private lateinit var binding: FragmentPlanBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_plan, container, false)
-        _binding.lifecycleOwner = this
-
-        return _binding.root
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_plan, container, false)
+        binding.lifecycleOwner = this
+        return binding.root
     }
-
 }

@@ -30,6 +30,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:entries="@array/text_frequency_array"
+                android:selectedItemPosition="@={ vm.macro.scheduleFrequency }"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,11 +41,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:ems="10"
-                android:visibility="@{ vm.scheduleFrequency == 1 ? View.VISIBLE : View.GONE }"
+                android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.GONE }"
                 android:focusable="false"
                 android:gravity="center_horizontal"
                 android:inputType="textPersonName"
-                android:text="@{ vm.schedule }"
+                android:text="@{ vm.macro.schedule }"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_schedule_frequency"
                 app:layout_constraintEnd_toEndOf="parent"

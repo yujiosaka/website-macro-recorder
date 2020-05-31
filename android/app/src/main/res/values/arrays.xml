@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="text_date_array">
+        <item>Sort by recently updated</item>
+        <item>Sort by least recently updated</item>
+        <item>Sort by newest</item>
+        <item>Sort by oldest</item>
+    </string-array>
+
     <string-array name="text_frequency_array">
         <item>Not scheduled</item>
         <item>Scheduled every day</item>

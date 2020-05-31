@@ -6,43 +6,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.firebase.firestore.FieldValue
 import inc.proto.websitemacrorecorder.databinding.FragmentEditScheduleBinding
-import inc.proto.websitemacrorecorder.ui.time_picker_dialog.TimePickerDialogFragment
+import inc.proto.websitemacrorecorder.repository.MacroRepository
+import inc.proto.websitemacrorecorder.ui.dialog.time_picker_dialog.TimePickerDialogFragment
 
 class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
-
-    private val _args: EditScheduleFragmentArgs by navArgs()
-
-    private lateinit var _binding: FragmentEditScheduleBinding
-    private lateinit var _vm: EditScheduleViewModel
+    private val vm: EditScheduleViewModel by lazy {
+        ViewModelProvider(this, EditScheduleViewModelFactory(args.macro)).get(EditScheduleViewModel::class.java)
+    }
+    private val args: EditScheduleFragmentArgs by navArgs()
+    private val macroRepository = MacroRepository()
+    private lateinit var binding: FragmentEditScheduleBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val factory = EditScheduleViewModelFactory(_args.macro)
-
-        _binding = FragmentEditScheduleBinding.inflate(inflater, container, false)
-        _vm = ViewModelProviders.of(this, factory).get(EditScheduleViewModel::class.java)
-        _binding.vm = _vm
-        _binding.lifecycleOwner = this
-
-        return _binding.root
+        binding = FragmentEditScheduleBinding.inflate(inflater, container, false)
+        binding.vm = vm
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding.editSchedule.setOnClickListener {
+        binding.editSchedule.setOnClickListener {
+            if (activity == null) return@setOnClickListener
             val dialog = TimePickerDialogFragment()
-            dialog.init(this, _vm.scheduleHour, _vm.scheduleMinute)
+            dialog.init(this, vm.macro.value!!.scheduleHour, vm.macro.value!!.scheduleMinute)
             dialog.show(requireActivity().supportFragmentManager, "time_picker")
         }
-        _binding.editScheduleFrequency.onItemSelectedListener =
+        binding.editScheduleFrequency.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -50,20 +50,25 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
                     position: Int,
                     id: Long
                 ) {
-                    _vm.scheduleFrequency = position
+                    vm.macro.value!!.scheduleFrequency = position
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-        _binding.buttonSave.setOnClickListener {
-            val action = EditScheduleFragmentDirections.actionEditScheduleFragmentToEditFragment(_vm.macro)
-            findNavController().navigate(action)
+        binding.buttonSave.setOnClickListener {
+            macroRepository.update(vm.macro.value!!.id, mapOf(
+                "scheduleFrequency" to vm.macro.value!!.scheduleFrequency,
+                "scheduleHour" to vm.macro.value!!.scheduleHour,
+                "scheduleMinute" to vm.macro.value!!.scheduleMinute,
+                "updatedAt" to FieldValue.serverTimestamp()
+            ))
+            findNavController().popBackStack()
         }
     }
 
     override fun onSelectedTime(hourOfDay: Int, minute: Int) {
-        _vm.scheduleHour = hourOfDay
-        _vm.scheduleMinute = minute
+        vm.macro.value!!.scheduleHour = hourOfDay
+        vm.macro.value!!.scheduleMinute = minute
     }
 
 }

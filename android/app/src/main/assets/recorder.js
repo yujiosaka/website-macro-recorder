@@ -97,7 +97,7 @@
     var xPath = getXpath(target);
     var value = target.value;
     if (tag === 'textarea' || INPUT_TYPES_TEXT.indexOf(type) >= 0) {
-      WebsiteMacroRecorder.onChange(xPath, targetType, value);
+      WebsiteMacroRecorder.onType(xPath, targetType, value);
     } else {
       WebsiteMacroRecorder.onSelect(xPath, targetType, value);
     }

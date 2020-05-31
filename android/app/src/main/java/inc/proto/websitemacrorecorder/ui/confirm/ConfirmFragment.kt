@@ -3,18 +3,27 @@ package inc.proto.websitemacrorecorder.ui.confirm
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.functions.FirebaseFunctionsException
 import inc.proto.websitemacrorecorder.R
+import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentConfirmBinding
+import inc.proto.websitemacrorecorder.repository.MacroRepository
+import inc.proto.websitemacrorecorder.util.Helper.mapToObject
+import inc.proto.websitemacrorecorder.util.Helper.objectToMap
 
 class ConfirmFragment : Fragment() {
-    private val _args: ConfirmFragmentArgs by navArgs()
-
-    private lateinit var _binding: FragmentConfirmBinding
-    private lateinit var _vm: ConfirmViewModel
+    private val vm: ConfirmViewModel by lazy {
+        ViewModelProvider(this, ConfirmViewModelFactory(args.macro)).get(ConfirmViewModel::class.java)
+    }
+    private val args: ConfirmFragmentArgs by navArgs()
+    private val macroRepository = MacroRepository()
+    private var loading = false
+    private lateinit var binding: FragmentConfirmBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,21 +31,15 @@ class ConfirmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-
-        val factory = ConfirmViewModelFactory(_args.macro)
-
-        _binding = FragmentConfirmBinding.inflate(inflater, container, false)
-        _vm = ViewModelProviders.of(this, factory).get(ConfirmViewModel::class.java)
-        _binding.vm = _vm
-        _binding.lifecycleOwner = this
-
-        return _binding.root
+        binding = FragmentConfirmBinding.inflate(inflater, container, false)
+        binding.vm = vm
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Glide.with(this).load(_args.macro.screenshotUrl).into(_binding.screenshot);
+        Glide.with(this).load(vm.macro.value!!.screenshotUrl).into(binding.imageScreenshot)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -47,8 +50,29 @@ class ConfirmFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
-                val action = ConfirmFragmentDirections.actionConfirmFragmentToEditFragment(_args.macro)
-                findNavController().navigate(action)
+                if (loading || activity == null) return false
+                loading = true
+                binding.progress.visibility = View.VISIBLE
+                val macro = objectToMap(vm.macro.value!!)
+                macroRepository.save(macro).addOnCompleteListener(requireActivity()) {
+                    binding.progress.visibility = View.GONE
+                    loading = false
+                    if (!it.isSuccessful) {
+                        if (activity == null) return@addOnCompleteListener
+                        val exception = it.exception as FirebaseFunctionsException
+                        val root: View = requireActivity().findViewById(R.id.root)
+                        val text = when (exception.code) {
+                            FirebaseFunctionsException.Code.INVALID_ARGUMENT -> root.resources.getString(R.string.error_invalid_argument)
+                            FirebaseFunctionsException.Code.UNAUTHENTICATED -> root.resources.getString(R.string.error_unauthenticated)
+                            else -> root.resources.getString(R.string.error_unknown)
+                        }
+                        Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
+                        return@addOnCompleteListener
+                    }
+                    val data = it.result!!.data as HashMap<String, Any?>
+                    val action = ConfirmFragmentDirections.actionConfirmFragmentToEditFragment(mapToObject(data))
+                    findNavController().navigate(action)
+                }
                 true
             }
             else -> {
