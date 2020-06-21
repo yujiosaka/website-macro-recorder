@@ -1,4 +1,4 @@
-package inc.proto.websitemacrorecorder.ui.time_picker_dialog
+package inc.proto.websitemacrorecorder.ui.dialog.time_picker_dialog
 
 import android.app.Dialog
 import android.app.TimePickerDialog
@@ -11,21 +11,21 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
         fun onSelectedTime(hourOfDay: Int, minute: Int)
     }
 
-    private lateinit var _listener: Listener
-    private var _hourOfDay: Int? = null
-    private var _minute: Int? = null
+    private lateinit var listener: Listener
+    private var hourOfDay: Int? = null
+    private var minute: Int? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return TimePickerDialog(context, this, _hourOfDay!!, _minute!!, true)
+        return TimePickerDialog(context, this, hourOfDay!!, minute!!, true)
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        _listener.onSelectedTime(hourOfDay, minute)
+        listener.onSelectedTime(hourOfDay, minute)
     }
 
-    fun init(listener: Listener, checkHour: Int, checkMinute: Int) {
-        _listener = listener
-        _hourOfDay = checkHour
-        _minute = checkMinute
+    fun init(_listener: Listener, _checkHour: Int, _checkMinute: Int) {
+        listener = _listener
+        hourOfDay = _checkHour
+        minute = _checkMinute
     }
 }

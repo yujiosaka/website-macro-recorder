@@ -1,8 +1,83 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    match /macros/{macroId} {
+
+      function validate() {
+        return resource.data.id == macroId &&
+               validateUrl() &&
+               validateScreenshotUrl() &&
+               validateScheduleFrequency() &&
+               validateScheduleHour() &&
+               validateScheduleMinute() &&
+               validateHeight() &&
+               validateWidth() &&
+               validateDeviceScaleFactor() &&
+               validateAcceptLanguage() &&
+               validateUserAgent() &&
+               request.resource.data.name is string &&
+               request.resource.data.enableSchedule is bool &&
+               request.resource.data.notifySuccess is bool &&
+               request.resource.data.notifyFailure is bool &&
+               request.resource.data.isFailure is bool
+      }
+
+      function validateUrl() {
+        return request.resource.data.url is string &&
+               request.resource.data.url.size() >= 1;
+      }
+
+      function validateScreenshotUrl() {
+        return request.resource.data.screenshotUrl is string &&
+               request.resource.data.screenshotUrl.size() >= 1;
+      }
+
+      function validateScheduleFrequency() {
+        return request.resource.data.scheduleFrequency is number &&
+               request.resource.data.scheduleFrequency in [0, 1, 2];
+      }
+
+      function validateScheduleHour() {
+        return request.resource.data.scheduleHour is number &&
+               request.resource.data.scheduleHour >= 0 &&
+               request.resource.data.scheduleHour < 24;
+      }
+
+      function validateScheduleMinute() {
+        return request.resource.data.scheduleMinute is number &&
+               request.resource.data.scheduleMinute >= 0 &&
+               request.resource.data.scheduleMinute < 60;
+      }
+
+      function validateHeight() {
+        return request.resource.data.height is number &&
+               request.resource.data.height > 0;
+      }
+
+      function validateWidth() {
+        return request.resource.data.width is number &&
+               request.resource.data.width > 0;
+      }
+
+      function validateDeviceScaleFactor() {
+        return request.resource.data.deviceScaleFactor is number &&
+               request.resource.data.deviceScaleFactor >= 1;
+      }
+
+      function validateAcceptLanguage() {
+        return request.resource.data.acceptLanguage is string &&
+               request.resource.data.acceptLanguage.size() >= 1;
+      }
+
+      function validateUserAgent() {
+        return request.resource.data.userAgent is string &&
+               request.resource.data.userAgent.size() >= 1;
+      }
+
+      allow get: if request.auth.uid == resource.data.uid;
+      allow list: if request.auth.uid == resource.data.uid;
+      allow update: if request.auth.uid == resource.data.uid && validate();
+      allow delete: if request.auth.uid == resource.data.uid;
     }
   }
 }

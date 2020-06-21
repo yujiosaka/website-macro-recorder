@@ -83,6 +83,7 @@
         <action
             android:id="@+id/action_confirmFragment_to_editFragment"
             app:destination="@id/editFragment"
+            app:popUpTo="@id/listFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -126,13 +127,6 @@
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
-        <action
-            android:id="@+id/action_editScheduleFragment_to_editFragment"
-            app:destination="@id/editFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/planFragment"

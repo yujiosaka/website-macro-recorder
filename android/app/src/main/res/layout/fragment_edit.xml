@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="vm"
             type="inc.proto.websitemacrorecorder.ui.edit.EditViewModel" />
@@ -27,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/text_name_title"
+            android:id="@+id/text_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -40,21 +41,22 @@
             app:layout_constraintTop_toBottomOf="@+id/text_back" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edit_name"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:afterTextChanged="@{ () -> vm.validateName(editName) }"
             android:ems="10"
             android:hint="@string/hint_name"
             android:inputType="textPersonName"
-            android:text="@={ vm.name }"
+            android:text="@{ vm.macro.name }"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_name_title" />
+            app:layout_constraintTop_toBottomOf="@+id/text_name" />
 
         <TextView
             android:id="@+id/text_macro_title"
@@ -63,11 +65,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/text_macro_title"
+            android:text="@string/text_record"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_name" />
 
         <TextView
             android:id="@+id/text_url"
@@ -78,7 +80,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="@{ vm.url }"
+            android:text="@{ vm.macro.url }"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -110,9 +112,22 @@
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            android:text="@{ vm.schedule }"
+            app:layout_constraintEnd_toStartOf="@+id/edit_enable_schedule"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_schedule_title" />
+
+        <Switch
+            android:id="@+id/edit_enable_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:checked="@{ vm.macro.enableSchedule }"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.GONE }"
+            app:layout_constraintBottom_toBottomOf="@+id/text_schedule"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_schedule_title" />
 
         <TextView
@@ -143,7 +158,7 @@
                 android:id="@+id/edit_notify_success"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@={ vm.notifySuccess }"
+                android:checked="@{ vm.macro.notifySuccess }"
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -176,7 +191,7 @@
                 android:id="@+id/edit_notify_failure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@={ vm.notifyFailure }"
+                android:checked="@{ vm.macro.notifyFailure }"
                 android:scaleX="1.2"
                 android:scaleY="1.2"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -194,6 +209,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/colorDelete"
+            android:text="@string/button_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

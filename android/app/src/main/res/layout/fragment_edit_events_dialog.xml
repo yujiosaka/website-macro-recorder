@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="inc.proto.websitemacrorecorder.ui.edit_events_dialog.EditEventsDialogViewModel" />
+            type="inc.proto.websitemacrorecorder.ui.dialog.edit_events_dialog.EditEventsDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

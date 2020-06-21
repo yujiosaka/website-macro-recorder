@@ -3,14 +3,13 @@ package inc.proto.websitemacrorecorder.ui.edit_record
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
-import android.content.res.Resources
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.webkit.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -19,30 +18,27 @@ import inc.proto.websitemacrorecorder.data.MacroEvent
 import inc.proto.websitemacrorecorder.databinding.FragmentEditRecordBinding
 import inc.proto.websitemacrorecorder.util.Helper
 
-
 class EditRecordFragment : Fragment() {
-
-    private val _args: EditRecordFragmentArgs by navArgs()
-
-    private lateinit var _binding: FragmentEditRecordBinding
-    private lateinit var _vm: EditRecordViewModel
+    private val vm: EditRecordViewModel by lazy {
+        val factory = EditRecordViewModelFactory(args.macro)
+        ViewModelProvider(this, factory).get(EditRecordViewModel::class.java)
+    }
+    private val args: EditRecordFragmentArgs by navArgs()
+    private val cookieManager = CookieManager.getInstance()
+    private var loading = true
+    private lateinit var binding: FragmentEditRecordBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val factory = EditRecordViewModelFactory(_args.macro)
-
         setHasOptionsMenu(true);
-
-        _binding = FragmentEditRecordBinding.inflate(inflater, container, false)
-        _vm = ViewModelProviders.of(this, factory).get(EditRecordViewModel::class.java)
-        _vm.resetEvents()
-        _binding.vm = _vm
-        _binding.lifecycleOwner = this
-
-        return _binding.root
+        vm.resetEvents()
+        binding = FragmentEditRecordBinding.inflate(inflater, container, false)
+        binding.vm = vm
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -53,15 +49,20 @@ class EditRecordFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_replay -> {
-                _vm.resetEvents()
-                _startRecording()
+                vm.resetEvents()
+                startRecording()
+                if (activity == null) return false
+                val root: View = requireActivity().findViewById(R.id.root)
+                val text = root.resources.getString(R.string.notification_restart_recording)
+                Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
                 true
             }
             R.id.action_done -> {
-                _vm.userAgent = _binding.webRecorder.settings.userAgentString
-                _vm.height = _binding.webRecorder.height
-                _vm.width = _binding.webRecorder.width
-                val action = EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(_vm.macro)
+                if (loading) return false
+                vm.macro.value!!.userAgent = binding.webRecorder.settings.userAgentString
+                vm.macro.value!!.height = binding.webRecorder.height
+                vm.macro.value!!.width = binding.webRecorder.width
+                val action = EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(vm.macro.value!!)
                 findNavController().navigate(action)
                 true
             }
@@ -74,85 +75,90 @@ class EditRecordFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val customHeaders: Map<String, String> = mapOf("Accept-Language" to _vm.acceptLanguage)
-
-        _binding.webRecorder.settings.setAllowFileAccess(false)
-        _binding.webRecorder.settings.setDomStorageEnabled(true)
-        _binding.webRecorder.settings.setJavaScriptEnabled(true)
-        _binding.webRecorder.settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        _binding.webRecorder.addJavascriptInterface(this, "WebsiteMacroRecorder")
-        _binding.webRecorder.webViewClient = object : WebViewClient() {
+        binding.webRecorder.settings.allowFileAccess = false
+        binding.webRecorder.settings.domStorageEnabled = true
+        binding.webRecorder.settings.javaScriptEnabled = true
+        binding.webRecorder.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        binding.webRecorder.addJavascriptInterface(this, "WebsiteMacroRecorder")
+        binding.webRecorder.webViewClient = object : WebViewClient() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                view.loadUrl(request.url.toString(), customHeaders)
+                view.loadUrl(request.url.toString(), mapOf("Accept-Language" to vm.macro.value!!.acceptLanguage))
                 return true
             }
+
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
-                view.loadUrl(url, customHeaders)
+                view.loadUrl(url, mapOf("Accept-Language" to vm.macro.value!!.acceptLanguage))
                 return true
             }
+
             override fun onPageFinished(view: WebView, url: String) {
-                if (_vm.name == "") {
-                    _vm.name = _binding.webRecorder.title
+                finishLoading()
+                if (vm.macro.value!!.name == "" && binding.webRecorder.title != "") {
+                    vm.macro.value!!.name = binding.webRecorder.title
                 }
-                _binding.webRecorder.visibility = View.VISIBLE
-                _binding.shimmerLayout.stopShimmer()
-                _binding.shimmerLayout.visibility = View.GONE
                 if (activity == null) return
                 val stream = requireActivity().assets.open("recorder.js")
                 val text = Helper.inputStreamToString(stream)
-                _binding.webRecorder.evaluateJavascript(text, null)
-
+                binding.webRecorder.evaluateJavascript(text, null)
             }
+
             override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError?) {
                 handler.proceed()
             }
         }
+        startRecording()
+    }
 
-        _startRecording()
+    private fun startRecording() {
+        loading = true
+        binding.webRecorder.clearCache(true);
+        binding.webRecorder.clearHistory();
+        binding.webRecorder.loadUrl(vm.macro.value!!.url, mapOf("Accept-Language" to vm.macro.value!!.acceptLanguage))
+        if (activity == null) return
+        clearCookies(requireActivity())
+    }
+
+    private fun finishLoading() {
+        binding.webRecorder.visibility = View.VISIBLE
+        binding.shimmerLayout.visibility = View.GONE
+        binding.shimmerLayout.stopShimmer()
+        loading = false
     }
 
     @JavascriptInterface
     fun onClick(xPath: String, targetType: String, value: String) {
-        val event = MacroEvent(name = "click", xPath = xPath, targetType = targetType, value = value)
-        _vm.pushEvent(event)
+        vm.pushEvent(MacroEvent(name = "click", xPath = xPath, targetType = targetType, value = value))
         if (activity == null) return
         val root: View = requireActivity().findViewById(R.id.root)
-        val targetTypeString = _getTargetTypeString(targetType)
         val text = if (value != "") {
-            root.resources.getString(R.string.notification_click_value, targetTypeString, value)
+            root.resources.getString(R.string.notification_click_value, getTargetTypeString(targetType), value)
         } else {
-            root.resources.getString(R.string.notification_click, targetTypeString)
+            root.resources.getString(R.string.notification_click, getTargetTypeString(targetType))
         }
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     @JavascriptInterface
-    fun onChange(xPath: String, targetType: String, value: String) {
-        val event = MacroEvent(name = "change", xPath = xPath, targetType = targetType, value = value)
-        _vm.pushEvent(event)
+    fun onType(xPath: String, targetType: String, value: String) {
+        vm.pushEvent(MacroEvent(name = "type", xPath = xPath, targetType = targetType, value = value))
         if (activity == null) return
         val root: View = requireActivity().findViewById(R.id.root)
-        val targetTypeString = _getTargetTypeString(targetType)
-        val text = root.resources.getString(R.string.notification_change_value, targetTypeString, value)
+        val text = root.resources.getString(R.string.notification_type_value, getTargetTypeString(targetType), value)
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     @JavascriptInterface
     fun onSelect(xPath: String, targetType: String, value: String) {
-        val event = MacroEvent(name = "select", xPath = xPath, targetType = targetType, value = value)
-        _vm.pushEvent(event)
+        vm.pushEvent(MacroEvent(name = "select", xPath = xPath, targetType = targetType, value = value))
         if (activity == null) return
         val root: View = requireActivity().findViewById(R.id.root)
-        val targetTypeString = _getTargetTypeString(targetType)
-        val text = root.resources.getString(R.string.notification_select_value, targetTypeString, value)
+        val text = root.resources.getString(R.string.notification_select_value, getTargetTypeString(targetType), value)
         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
     }
 
     @Suppress("DEPRECATION")
-    private fun _clearCookies(context: Context?) {
-        val cookieManager = CookieManager.getInstance()
+    private fun clearCookies(context: Context?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             cookieManager.removeAllCookies(null)
             cookieManager.flush()
@@ -166,25 +172,20 @@ class EditRecordFragment : Fragment() {
         }
     }
 
-    private fun _startRecording() {
-        _clearCookies(activity)
-        val customHeaders: Map<String, String> = mapOf("Accept-Language" to _vm.acceptLanguage)
-        _binding.webRecorder.clearCache(true);
-        _binding.webRecorder.clearHistory();
-        _binding.webRecorder.loadUrl(_vm.url, customHeaders)
-    }
-
-    private fun _getTargetTypeString(targetType: String): String {
-        return try {
-            resources.getString(
-                resources.getIdentifier(
-                    "text_target_type_${targetType}",
-                    "string",
-                    requireActivity().packageName
-                )
-            )
-        } catch (e: Resources.NotFoundException) {
-            resources.getString(R.string.text_target_type_text)
+    private fun getTargetTypeString(targetType: String): String {
+        val resId = when (targetType) {
+            "image" -> R.string.text_target_type_image
+            "link" -> R.string.text_target_type_link
+            "frame" -> R.string.text_target_type_frame
+            "input" -> R.string.text_target_type_input
+            "checkbox" -> R.string.text_target_type_checkbox
+            "radio" -> R.string.text_target_type_radio
+            "button" -> R.string.text_target_type_button
+            "select" -> R.string.text_target_type_select
+            "text" -> R.string.text_target_type_text
+            "timer" -> R.string.text_target_type_timer
+            else -> R.string.text_target_type_text
         }
+        return resources.getString(resId)
     }
 }

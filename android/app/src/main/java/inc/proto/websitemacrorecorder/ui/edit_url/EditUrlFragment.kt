@@ -5,41 +5,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.databinding.FragmentEditUrlBinding
 
 class EditUrlFragment : Fragment() {
-
-    private val _args: EditUrlFragmentArgs by navArgs()
-
-    private lateinit var _binding: FragmentEditUrlBinding
-    private lateinit var _vm: EditUrlViewModel
+    private val vm: EditUrlViewModel by lazy {
+        ViewModelProvider(this, EditUrlViewModelFactory(args.macro)).get(EditUrlViewModel::class.java)
+    }
+    private val args: EditUrlFragmentArgs by navArgs()
+    private lateinit var binding: FragmentEditUrlBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val factory = EditUrlViewModelFactory(_args.macro)
-
-        _binding = FragmentEditUrlBinding.inflate(inflater, container, false)
-        _vm = ViewModelProviders.of(this, factory).get(EditUrlViewModel::class.java)
-        _binding.vm = _vm
-        _binding.lifecycleOwner = this
-
-        return _binding.root
+        binding = FragmentEditUrlBinding.inflate(inflater, container, false)
+        binding.vm = vm
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (_vm.url !== "https://") {
-            _vm.validate(_binding.editUrl)
-        }
-        _binding.buttonStartRecording.setOnClickListener {
-            val action = EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(_vm.macro)
+        binding.buttonStartRecording.setOnClickListener {
+            val action = EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!)
             findNavController().navigate(action)
         }
     }

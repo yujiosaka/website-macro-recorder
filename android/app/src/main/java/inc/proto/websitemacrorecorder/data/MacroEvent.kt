@@ -1,17 +1,47 @@
 package inc.proto.websitemacrorecorder.data
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import inc.proto.websitemacrorecorder.BR
+import java.io.Serializable
 
-@Parcelize
-data class MacroEvent(
-    var name: String = "",
-    var xPath: String = "",
-    var targetType: String = "",
-    var value: String  = ""
-) : Parcelable {
+class MacroEvent(
+    name: String = "",
+    xPath: String = "",
+    targetType: String = "",
+    value: String  = ""
+) : Serializable, BaseObservable() {
     companion object {
+        const val DEFAULT_WAIT_VALUE = 3
         const val MIN_WAIT_VALUE = 1
         const val MAX_WAIT_VALUE = 30
     }
+
+    @Bindable
+    var name = name
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.name)
+        }
+
+    @Bindable
+    var xPath = xPath
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.xPath)
+        }
+
+    @Bindable
+    var targetType = targetType
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.targetType)
+        }
+
+    @Bindable
+    var value = value
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.value)
+        }
 }

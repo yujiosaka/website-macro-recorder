@@ -1,85 +1,23 @@
 package inc.proto.websitemacrorecorder.ui.edit_record
 
-import androidx.databinding.Bindable
-import inc.proto.websitemacrorecorder.BR
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import inc.proto.websitemacrorecorder.data.MacroEvent
 import inc.proto.websitemacrorecorder.data.Macro
-import inc.proto.websitemacrorecorder.util.ObservableViewModel
+import inc.proto.websitemacrorecorder.util.ObservableMutableLiveData
 
-class EditRecordViewModel(macro: Macro) : ObservableViewModel() {
+class EditRecordViewModel(macro: Macro) : ViewModel() {
+    private val _macro = ObservableMutableLiveData<Macro>().also {
+        it.value = macro
+    }
 
-    private var _macro = macro
-    private var _valid = false
-
-    @get:Bindable
-    var macro
-        get() = _macro
-        set(value) {
-            _macro = value
-            notifyPropertyChanged(BR.macro)
-        }
-
-    @get:Bindable
-    var url
-        get() = _macro.url
-        set(value) {
-            _macro.url = value
-            notifyPropertyChanged(BR.url)
-        }
-
-    @get:Bindable
-    var name
-        get() = _macro.name
-        set(value) {
-            _macro.name = value
-            notifyPropertyChanged(BR.name)
-        }
-
-    @get:Bindable
-    var acceptLanguage
-        get() = _macro.acceptLanguage
-        set(value) {
-            _macro.acceptLanguage = value
-            notifyPropertyChanged(BR.acceptLanguage)
-        }
-
-    @get:Bindable
-    var userAgent
-        get() = _macro.userAgent
-        set(value) {
-            _macro.userAgent = value
-            notifyPropertyChanged(BR.userAgent)
-        }
-
-    @get:Bindable
-    var height
-        get() = _macro.height
-        set(value) {
-            _macro.height = value
-            notifyPropertyChanged(BR.height)
-        }
-
-    @get:Bindable
-    var width
-        get() = _macro.width
-        set(value) {
-            _macro.width = value
-            notifyPropertyChanged(BR.width)
-        }
-
-    @get:Bindable
-    var valid
-        get() = _valid
-        set(value) {
-            _valid = value
-            notifyPropertyChanged(BR.valid)
-        }
+    val macro: LiveData<Macro> = _macro
 
     fun pushEvent(event: MacroEvent) {
-        _macro.events.add(event)
+        macro.value!!.events.add(event)
     }
 
     fun resetEvents() {
-        _macro.events = arrayListOf()
+        macro.value!!.events = arrayListOf()
     }
 }

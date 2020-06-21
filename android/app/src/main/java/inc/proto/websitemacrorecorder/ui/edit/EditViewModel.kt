@@ -1,61 +1,46 @@
 package inc.proto.websitemacrorecorder.ui.edit
 
-import androidx.databinding.Bindable
-import inc.proto.websitemacrorecorder.BR
+import android.widget.EditText
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
-import inc.proto.websitemacrorecorder.util.ObservableViewModel
+import inc.proto.websitemacrorecorder.util.ObservableMutableLiveData
 
-class EditViewModel(macro: Macro) : ObservableViewModel() {
-    private var _macro = macro
+class EditViewModel(macro: Macro) : ViewModel() {
+    private val _macro = ObservableMutableLiveData<Macro>().also {
+        it.value = macro
+    }
+    val macro: LiveData<Macro> = _macro
 
-    @get:Bindable
-    var name
-        get() = _macro.name
-        set(value) {
-            _macro.name = value
-            notifyPropertyChanged(BR.name)
+    val showSchedule: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleFrequency == 1
+    }
+
+    val schedule: LiveData<String> = Transformations.map(_macro) {
+        val frequencies = App.context.resources.getStringArray(R.array.text_frequency_array)
+        val schedule = frequencies[it.scheduleFrequency]
+        if (it.scheduleFrequency == 1) {
+            App.context.resources.getString(R.string.text_schedule, schedule, it.schedule)
+        } else {
+            schedule
         }
+    }
 
-    @get:Bindable
-    var url
-        get() = _macro.url
-        set(value) {
-            _macro.url = value
-            notifyPropertyChanged(BR.url)
+    fun validateName(editText: EditText) {
+        if (_macro.value?.name == "") {
+            editText.error = editText.resources.getString(
+                R.string.error_enter_here,
+                editText.resources.getString(R.string.name)
+            )
+        } else {
+            editText.error = null
         }
+    }
 
-    @get:Bindable
-    var scheduleFrequency
-        get() = _macro.scheduleFrequency
-        set(value) {
-            _macro.scheduleFrequency = value
-            notifyPropertyChanged(BR.scheduleFrequency)
-        }
-
-    @get:Bindable
-    var notifySuccess
-        get() = _macro.notifySuccess
-        set(value) {
-            _macro.notifySuccess = value
-            notifyPropertyChanged(BR.notifySuccess)
-        }
-
-    @get:Bindable
-    var notifyFailure
-        get() = _macro.notifyFailure
-        set(value) {
-            _macro.notifyFailure = value
-            notifyPropertyChanged(BR.notifyFailure)
-        }
-
-    @get:Bindable
-    var schedule: String
-        get() = "%1$01d:%2$02d".format(_macro.scheduleHour, _macro.scheduleMinute)
-        set(value) {
-            val pair = value.split(":").map { it.toInt() }
-            _macro.scheduleHour = pair[0]
-            _macro.scheduleMinute = pair[1]
-            notifyPropertyChanged(BR.schedule)
-        }
+    fun resetMacro(macro: Macro) {
+        _macro.value = macro
+    }
 }
