@@ -27,7 +27,7 @@ class ListFragment : Fragment() {
         ViewModelProvider(this).get(ListViewModel::class.java)
     }
     private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(requireContext())
+        PreferenceManager.getDefaultSharedPreferences(context)
     }
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val macroRepository = MacroRepository()
@@ -69,7 +69,7 @@ class ListFragment : Fragment() {
         val order = sharedPreferences.getInt("ORDER", 0)
         val adapter = ListAdapter(this, buildOptions(macroRepository.getAll(firebaseAuth.currentUser!!.uid).orderBy(order)))
         binding.recyclerMacros.adapter = adapter
-        binding.recyclerMacros.layoutManager = LinearLayoutManager(requireActivity())
+        binding.recyclerMacros.layoutManager = LinearLayoutManager(activity)
         vm.order.value = order
         vm.order.observe(viewLifecycleOwner, Observer { currentOrder ->
             val previousOrder = sharedPreferences.getInt("ORDER", 0)

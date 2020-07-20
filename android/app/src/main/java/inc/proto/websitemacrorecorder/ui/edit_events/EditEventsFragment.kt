@@ -137,7 +137,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_events.setHasFixedSize(true)
-        recycler_events.layoutManager = LinearLayoutManager(requireActivity())
+        recycler_events.layoutManager = LinearLayoutManager(activity)
         recycler_events.adapter = adapter
         itemTouchHelper.attachToRecyclerView(recycler_events)
     }
