@@ -24,7 +24,6 @@ class EditRecordFragment : Fragment() {
         ViewModelProvider(this, factory).get(EditRecordViewModel::class.java)
     }
     private val args: EditRecordFragmentArgs by navArgs()
-    private val webStorage = WebStorage.getInstance()
     private val cookieManager = CookieManager.getInstance()
     private var loading = true
     private lateinit var binding: FragmentEditRecordBinding
@@ -113,13 +112,11 @@ class EditRecordFragment : Fragment() {
 
     private fun startRecording() {
         loading = true
-        webStorage.deleteAllData()
-        if (activity != null) {
-            clearCookies(activity)
-        }
-        binding.webRecorder.clearCache(true)
-        binding.webRecorder.clearHistory()
+        binding.webRecorder.clearCache(true);
+        binding.webRecorder.clearHistory();
         binding.webRecorder.loadUrl(vm.macro.value!!.url, mapOf("Accept-Language" to vm.macro.value!!.acceptLanguage))
+        if (activity == null) return
+        clearCookies(requireActivity())
     }
 
     private fun finishLoading() {
