@@ -58,7 +58,7 @@ class EditFragment : Fragment() {
         }
         binding.buttonDelete.setOnClickListener {
             if (context == null) return@setOnClickListener
-            AlertDialog.Builder(requireContext())
+            AlertDialog.Builder(context)
                 .setMessage(resources.getString(R.string.message_delete))
                 .setPositiveButton(R.string.message_yes) { _, _ ->
                     macroRepository.delete(vm.macro.value!!.id)
