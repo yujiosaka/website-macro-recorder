@@ -103,9 +103,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
     override fun onDataChanged() {
         super.onDataChanged()
         if (fragment.view == null) return
-        val view = fragment.requireView()
-        view.findViewById<ProgressBar>(R.id.progress).visibility = View.GONE
-        view.findViewById<TextView>(R.id.text_empty).visibility = if (itemCount == 0) {
+        fragment.requireView().findViewById<TextView>(R.id.text_empty).visibility = if (itemCount == 0) {
             View.VISIBLE
         } else {
             View.GONE
