@@ -4,6 +4,7 @@ import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.util.ObservableMutableLiveData
@@ -24,9 +25,9 @@ class EditUrlViewModel(macro: Macro) : ViewModel() {
 
     fun validateUrl(editText: EditText) {
         if (!urlValidator.isValid(_macro.value?.url)) {
-            editText.error = editText.resources.getString(
+            editText.error = App.context.resources.getString(
                 R.string.error_format_is_invalid,
-                editText.resources.getString(R.string.url)
+                App.context.resources.getString(R.string.url)
             )
         } else {
             editText.error = null

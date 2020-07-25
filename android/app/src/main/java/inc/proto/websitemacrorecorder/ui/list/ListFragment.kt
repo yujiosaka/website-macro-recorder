@@ -21,7 +21,6 @@ import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentListBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
-import java.util.*
 
 class ListFragment : Fragment() {
     private val vm: ListViewModel by lazy {
@@ -58,11 +57,7 @@ class ListFragment : Fragment() {
         )
         binding.buttonAdd.setOnSingleClickListener {
             if (context == null) return@setOnSingleClickListener
-            val macro = Macro(
-                id = macroRepository.getId(),
-                acceptLanguage = Locale.getDefault().language,
-                deviceScaleFactor = requireContext().resources.displayMetrics.density
-            )
+            val macro = Macro()
             val action = ListFragmentDirections.actionListFragmentToEditUrlFragment(macro)
             findNavController().navigate(action)
         }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Website Macro Recorder</string>
+    <string name="intent_name">Record Macro</string>
 
     <!-- Strings used for menu -->
     <string name="action_plan">Upgrade / Downgrade</string>

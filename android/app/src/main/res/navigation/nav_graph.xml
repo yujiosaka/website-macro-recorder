@@ -137,6 +137,9 @@
         android:id="@+id/action_global_listFragment"
         app:destination="@id/listFragment" />
     <action
+        android:id="@+id/action_global_editUrlFragment"
+        app:destination="@id/editUrlFragment" />
+    <action
         android:id="@+id/action_global_planFragment"
         app:destination="@id/planFragment"
         app:popUpTo="@id/listFragment"
