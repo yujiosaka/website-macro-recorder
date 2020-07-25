@@ -52,6 +52,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         } else {
             View.VISIBLE
         }
+        holder.editEnableSchedule.setOnCheckedChangeListener(null)
         holder.editEnableSchedule.isChecked = model.enableSchedule
         holder.editEnableSchedule.setOnCheckedChangeListener { _, isChecked ->
             macroRepository.update(model.id, mapOf(
