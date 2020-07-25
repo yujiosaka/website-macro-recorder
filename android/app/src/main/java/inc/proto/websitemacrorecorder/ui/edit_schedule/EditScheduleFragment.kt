@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FieldValue
 import inc.proto.websitemacrorecorder.databinding.FragmentEditScheduleBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.ui.dialog.time_picker_dialog.TimePickerDialogFragment
+import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
     private val vm: EditScheduleViewModel by lazy {
@@ -36,8 +37,8 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.editSchedule.setOnClickListener {
-            if (activity == null) return@setOnClickListener
+        binding.editSchedule.setOnSingleClickListener {
+            if (activity == null) return@setOnSingleClickListener
             val dialog = TimePickerDialogFragment()
             dialog.init(this, vm.macro.value!!.scheduleHour, vm.macro.value!!.scheduleMinute)
             dialog.show(requireActivity().supportFragmentManager, "time_picker")
@@ -55,7 +56,7 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-        binding.buttonSave.setOnClickListener {
+        binding.buttonSave.setOnSingleClickListener {
             macroRepository.update(vm.macro.value!!.id, mapOf(
                 "scheduleFrequency" to vm.macro.value!!.scheduleFrequency,
                 "scheduleHour" to vm.macro.value!!.scheduleHour,

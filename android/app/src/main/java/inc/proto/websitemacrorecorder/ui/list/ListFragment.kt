@@ -20,6 +20,7 @@ import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentListBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
+import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 import java.util.*
 
 class ListFragment : Fragment() {
@@ -55,8 +56,8 @@ class ListFragment : Fragment() {
             R.array.text_date_array,
             R.layout.item_order
         )
-        binding.buttonAdd.setOnClickListener {
-            if (context == null) return@setOnClickListener
+        binding.buttonAdd.setOnSingleClickListener {
+            if (context == null) return@setOnSingleClickListener
             val macro = Macro(
                 id = macroRepository.getId(),
                 acceptLanguage = Locale.getDefault().language,
