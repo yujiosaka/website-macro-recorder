@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import inc.proto.websitemacrorecorder.databinding.FragmentEditUrlBinding
+import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class EditUrlFragment : Fragment() {
     private val vm: EditUrlViewModel by lazy {
@@ -30,7 +31,7 @@ class EditUrlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonStartRecording.setOnClickListener {
+        binding.buttonStartRecording.setOnSingleClickListener {
             val action = EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!)
             findNavController().navigate(action)
         }

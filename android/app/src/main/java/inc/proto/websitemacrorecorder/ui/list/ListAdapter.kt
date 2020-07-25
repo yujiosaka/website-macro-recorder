@@ -18,6 +18,7 @@ import android.text.format.DateFormat
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.preference.PreferenceManager
+import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
     companion object {
@@ -79,7 +80,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         } else {
             View.GONE
         }
-        holder.card.setOnClickListener {
+        holder.card.setOnSingleClickListener {
             holder.card.setOnCreateContextMenuListener { menu, _, _ ->
                 menu.setHeaderTitle(model.name)
                 menu.add(Menu.NONE, ACTION_RUN_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))

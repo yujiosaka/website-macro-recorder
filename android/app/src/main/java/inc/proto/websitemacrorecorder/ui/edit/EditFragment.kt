@@ -19,6 +19,7 @@ import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentEditBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.util.Helper
+import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class EditFragment : Fragment() {
     private val vm: EditViewModel by lazy {
@@ -43,21 +44,21 @@ class EditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textBack.paintFlags = binding.textBack.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        binding.textBack.setOnClickListener {
+        binding.textBack.setOnSingleClickListener {
             findNavController().navigate(R.id.action_editFragment_to_listFragment)
         }
         binding.textUrl.paintFlags = binding.textBack.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        binding.textUrl.setOnClickListener {
+        binding.textUrl.setOnSingleClickListener {
             val action = EditFragmentDirections.actionEditFragmentToEditUrlFragment(vm.macro.value!!)
             findNavController().navigate(action)
         }
         binding.textSchedule.paintFlags = binding.textBack.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        binding.textSchedule.setOnClickListener {
+        binding.textSchedule.setOnSingleClickListener {
             val action = EditFragmentDirections.actionEditFragmentToEditScheduleFragment(vm.macro.value!!)
             findNavController().navigate(action)
         }
-        binding.buttonDelete.setOnClickListener {
-            if (context == null) return@setOnClickListener
+        binding.buttonDelete.setOnSingleClickListener {
+            if (context == null) return@setOnSingleClickListener
             AlertDialog.Builder(context)
                 .setMessage(resources.getString(R.string.message_delete))
                 .setPositiveButton(R.string.message_yes) { _, _ ->
