@@ -49,6 +49,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
                 ) {
                     super.clearView(recyclerView, viewHolder)
                     viewHolder.itemView.alpha = 1.0f
+                    if (viewHolder.adapterPosition == -1) return
                     adapter.mergeItem(viewHolder.adapterPosition)
                 }
 
