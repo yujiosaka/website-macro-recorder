@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.functions.FirebaseFunctionsException
 import inc.proto.websitemacrorecorder.R
-import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentConfirmBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.util.Helper.mapToObject

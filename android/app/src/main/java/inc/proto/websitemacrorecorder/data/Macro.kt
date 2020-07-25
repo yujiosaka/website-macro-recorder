@@ -3,11 +3,15 @@ package inc.proto.websitemacrorecorder.data
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.google.firebase.Timestamp
+import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.BR
+import inc.proto.websitemacrorecorder.repository.MacroRepository
 import java.io.Serializable
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Macro(
-    id: String = "",
+    id: String = MacroRepository().getId(),
     name: String = "",
     url: String = "https://",
     screenshotUrl: String = "",
@@ -18,11 +22,11 @@ class Macro(
     notifySuccess: Boolean = true,
     notifyFailure: Boolean = true,
     isFailure: Boolean = false,
-    acceptLanguage: String = "en",
+    acceptLanguage: String = Locale.getDefault().language,
     userAgent: String = "",
     height: Int = 0,
     width: Int = 0,
-    deviceScaleFactor: Float = 1f,
+    deviceScaleFactor: Float = App.context.resources.displayMetrics.density,
     events: ArrayList<MacroEvent> = arrayListOf(),
     createdAt: Timestamp? = null,
     updatedAt: Timestamp? = null

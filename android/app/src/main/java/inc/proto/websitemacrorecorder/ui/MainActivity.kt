@@ -13,7 +13,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.*
 import com.google.firebase.auth.FirebaseAuth
+import inc.proto.websitemacrorecorder.NavGraphDirections
 import inc.proto.websitemacrorecorder.R
+import inc.proto.websitemacrorecorder.data.Macro
+import inc.proto.websitemacrorecorder.repository.MacroRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         private const val RC_SIGN_IN = 1
     }
 
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val macroRepository = MacroRepository()
     private val authStateListener: FirebaseAuth.AuthStateListener by lazy {
         FirebaseAuth.AuthStateListener {
             val user = it.currentUser
@@ -44,6 +48,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+        if (intent.action != Intent.ACTION_SEND) return
+        val macro = Macro(url = intent.getStringExtra(Intent.EXTRA_TEXT))
+        val action = NavGraphDirections.actionGlobalEditUrlFragment(macro)
+        navController.navigate(action)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
