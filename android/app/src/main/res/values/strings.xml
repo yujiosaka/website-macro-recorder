@@ -7,6 +7,7 @@
     <string name="action_sign_out">Sign out</string>
     <string name="action_replay">Replay</string>
     <string name="action_done">Done</string>
+    <string name="action_add_timer">Add timer</string>
     <string name="action_save">Save</string>
     <string name="action_run_macro">Run this macro</string>
     <string name="action_edit_macro">Edit this macro</string>
@@ -40,7 +41,6 @@
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
 
     <!-- Strings used for list fragment -->
-    <string name="text_empty_macros">You can record your routine works on any websites by creating your own macros.\n\nPlease press the (+) button on the bottom right corner to start recording your routines.\n\nOnce you successfully create a macro, you can run it by pressing it or by schedule.\n\n\nHave a good day!</string>
     <string name="text_error">Error</string>
     <string name="text_date_latest">...</string>
 
