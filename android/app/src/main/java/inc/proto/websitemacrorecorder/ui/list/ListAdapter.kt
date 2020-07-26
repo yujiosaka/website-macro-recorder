@@ -15,8 +15,6 @@ import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import android.text.format.DateFormat
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.preference.PreferenceManager
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
@@ -97,16 +95,6 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
             }
             holder.card.showContextMenu()
             holder.card.setOnCreateContextMenuListener(null)
-        }
-    }
-
-    override fun onDataChanged() {
-        super.onDataChanged()
-        if (fragment.view == null) return
-        fragment.requireView().findViewById<TextView>(R.id.text_empty).visibility = if (itemCount == 0) {
-            View.VISIBLE
-        } else {
-            View.GONE
         }
     }
 }
