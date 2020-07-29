@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">Website Macro Recorder</string>
-    <string name="intent_name">Record Macro</string>
+    <string name="app_name">Web Macro Cloud</string>
+    <string name="intent_name">Record</string>
 
     <!-- Strings used for menu -->
     <string name="action_plan">Upgrade / Downgrade</string>
     <string name="action_sign_out">Sign out</string>
+    <string name="action_tutorial">Tutorial</string>
     <string name="action_replay">Replay</string>
     <string name="action_done">Done</string>
     <string name="action_add_timer">Add timer</string>
@@ -40,13 +41,22 @@
     <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
 
+    <!-- Strings used for tutorial fragment -->
+    <string name="button_continue">Continue</string>
+    <string name="button_start">Start</string>
+    <string name="text_tutorial1">Save your precious time\nand your phone\&apos;s battery</string>
+    <string name="text_tutorial2">Start recording your macro\nby entering the target site URL</string>
+    <string name="text_tutorial3">You can also start recording\nyour macro from Chrome\&apos; share</string>
+    <string name="text_tutorial4">You can edit your record by sorting\nand removing events and add timers</string>
+
+
     <!-- Strings used for list fragment -->
     <string name="text_error">Error</string>
     <string name="text_date_latest">...</string>
 
     <!-- Strings used for edit url fragment -->
     <string name="hint_url">Enter URL</string>
-    <string name="text_start_recording">Start recording</string>
+    <string name="button_start_recording">Start recording</string>
 
     <!-- Strings used for edit record fragment -->
     <string name="notification_click">Tapped %1$s</string>

@@ -5,6 +5,20 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/listFragment">
 
+    <action
+        android:id="@+id/action_global_listFragment"
+        app:destination="@id/listFragment" />
+    <action
+        android:id="@+id/action_global_editUrlFragment"
+        app:destination="@id/editUrlFragment" />
+    <action
+        android:id="@+id/action_global_planFragment"
+        app:destination="@id/planFragment"
+        app:popUpTo="@id/listFragment"
+        app:enterAnim="@anim/slide_in_top"
+        app:exitAnim="@anim/slide_out_bottom"
+        app:popEnterAnim="@anim/slide_in_bottom"
+        app:popExitAnim="@anim/slide_out_top" />
     <fragment
         android:id="@+id/listFragment"
         android:name="inc.proto.websitemacrorecorder.ui.list.ListFragment"
@@ -24,6 +38,22 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_listFragment_to_tutorial1Fragment"
+            app:destination="@id/tutorial1Fragment"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top" />
+        <action
+            android:id="@+id/action_listFragment_to_tutorial1Fragment_without_history"
+            app:destination="@id/tutorial1Fragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top" />
     </fragment>
     <fragment
         android:id="@+id/editUrlFragment"
@@ -129,22 +159,62 @@
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
     </fragment>
     <fragment
+        android:id="@+id/tutorial1Fragment"
+        android:name="inc.proto.websitemacrorecorder.ui.tutorial1.Tutorial1Fragment"
+        android:label="fragment_tutorial1"
+        tools:layout="@layout/fragment_tutorial1" >
+        <action
+            android:id="@+id/action_tutorial1Fragment_to_tutorial2Fragment"
+            app:destination="@id/tutorial2Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/tutorial2Fragment"
+        android:name="inc.proto.websitemacrorecorder.ui.tutorial2.Tutorial2Fragment"
+        android:label="fragment_tutorial2"
+        tools:layout="@layout/fragment_tutorial2" >
+        <action
+            android:id="@+id/action_tutorial2Fragment_to_tutorial3Fragment"
+            app:destination="@id/tutorial3Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/tutorial3Fragment"
+        android:name="inc.proto.websitemacrorecorder.ui.tutorial3.Tutorial3Fragment"
+        android:label="fragment_tutorial3"
+        tools:layout="@layout/fragment_tutorial3" >
+        <action
+            android:id="@+id/action_tutorial3Fragment_to_tutorial4Fragment"
+            app:destination="@id/tutorial4Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/tutorial4Fragment"
+        android:name="inc.proto.websitemacrorecorder.ui.tutorial4.Tutorial4Fragment"
+        android:label="fragment_tutorial4"
+        tools:layout="@layout/fragment_tutorial4" >
+        <action
+            android:id="@+id/action_tutorial4Fragment_to_listFragment_without_history"
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
+    </fragment>
+    <fragment
         android:id="@+id/planFragment"
         android:name="inc.proto.websitemacrorecorder.ui.plan.PlanFragment"
         android:label="@string/plan_fragment_label"
         tools:layout="@layout/fragment_plan" />
-    <action
-        android:id="@+id/action_global_listFragment"
-        app:destination="@id/listFragment" />
-    <action
-        android:id="@+id/action_global_editUrlFragment"
-        app:destination="@id/editUrlFragment" />
-    <action
-        android:id="@+id/action_global_planFragment"
-        app:destination="@id/planFragment"
-        app:popUpTo="@id/listFragment"
-        app:enterAnim="@anim/slide_in_top"
-        app:exitAnim="@anim/slide_out_bottom"
-        app:popEnterAnim="@anim/slide_in_bottom"
-        app:popExitAnim="@anim/slide_out_top" />
 </navigation>

@@ -2,10 +2,9 @@ package inc.proto.websitemacrorecorder.ui.list
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -38,14 +37,40 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true);
         binding = FragmentListBinding.inflate(inflater, container, false)
         binding.vm = vm
         binding.lifecycleOwner = this
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_list, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_tutorial -> {
+                val action = ListFragmentDirections.actionListFragmentToTutorial1Fragment()
+                findNavController().navigate(action)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showActionBar()
+        val viewedTutorial = sharedPreferences.getBoolean("VIEWED_TUTORIAL", false)
+        if (!viewedTutorial) {
+            val action = ListFragmentDirections.actionListFragmentToTutorial1FragmentWithoutHistory()
+            findNavController().navigate(action)
+            return
+        }
         bindViewModel()
     }
 
@@ -73,6 +98,10 @@ class ListFragment : Fragment() {
             sharedPreferences.edit { putInt("ORDER", currentOrder) }
             adapter.updateOptions(buildOptions(macroRepository.getAll(firebaseAuth.currentUser!!.uid).orderBy(currentOrder)))
         })
+    }
+
+    private fun showActionBar() {
+        (activity as AppCompatActivity?)?.supportActionBar?.show()
     }
 
     private fun buildOptions(query: Query): FirestoreRecyclerOptions<Macro> {
