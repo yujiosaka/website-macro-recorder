@@ -102,7 +102,7 @@
     <string name="text_notification_title">Notification</string>
     <string name="text_notify_success">Send app notification on success</string>
     <string name="text_notify_failure">Send app notification on error</string>
-    <string name="text_back">≪ Back to your macro list</string>
+    <string name="text_back_to_macro_list">≪ Back to your macro list</string>
     <string name="button_save">Save</string>
     <string name="button_delete">Delete this macro</string>
     <string name="message_delete">Do you really want to delete this macro?</string>
@@ -110,5 +110,5 @@
     <string name="message_no">No</string>
 
     <!-- Strings used for edit schedule fragment -->
-    <string name="text_save_schedule">Save schedule</string>
+    <string name="text_back_to_macro_edit">≪ Back to your macro edit</string>
 </resources>

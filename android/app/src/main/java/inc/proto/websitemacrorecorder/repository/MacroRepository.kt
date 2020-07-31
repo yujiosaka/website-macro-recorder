@@ -31,10 +31,6 @@ class MacroRepository {
         return documentReference.update(macro)
     }
 
-    fun get(id: String): DocumentReference {
-        return db.collection(COLLECTION_NAME).document(id)
-    }
-
     fun getAll(uid: String): Query {
         return db.collection(COLLECTION_NAME).whereEqualTo(UID_NAME, uid)
     }

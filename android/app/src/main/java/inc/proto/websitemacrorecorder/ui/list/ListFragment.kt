@@ -52,8 +52,7 @@ class ListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_tutorial -> {
-                val action = ListFragmentDirections.actionListFragmentToTutorial1Fragment()
-                findNavController().navigate(action)
+                findNavController().navigate(ListFragmentDirections.actionListFragmentToTutorial1Fragment())
                 true
             }
             else -> {
@@ -67,24 +66,17 @@ class ListFragment : Fragment() {
         showActionBar()
         val viewedTutorial = sharedPreferences.getBoolean("VIEWED_TUTORIAL", false)
         if (!viewedTutorial) {
-            val action = ListFragmentDirections.actionListFragmentToTutorial1FragmentWithoutHistory()
-            findNavController().navigate(action)
+            findNavController().navigate(ListFragmentDirections.actionListFragmentToTutorial1FragmentWithoutHistory())
             return
         }
         bindViewModel()
     }
 
     private fun bindViewModel() {
-        binding.editOrder.adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.text_date_array,
-            R.layout.item_order
-        )
+        if (context == null) return
+        binding.editOrder.adapter = ArrayAdapter.createFromResource(requireContext(), R.array.text_date_array, R.layout.item_order)
         binding.buttonAdd.setOnSingleClickListener {
-            if (context == null) return@setOnSingleClickListener
-            val macro = Macro()
-            val action = ListFragmentDirections.actionListFragmentToEditUrlFragment(macro)
-            findNavController().navigate(action)
+            findNavController().navigate(ListFragmentDirections.actionListFragmentToEditUrlFragment(Macro()))
         }
         if (firebaseAuth.currentUser == null) return
         val order = sharedPreferences.getInt("ORDER", 0)
@@ -105,10 +97,7 @@ class ListFragment : Fragment() {
     }
 
     private fun buildOptions(query: Query): FirestoreRecyclerOptions<Macro> {
-        return FirestoreRecyclerOptions.Builder<Macro>()
-            .setQuery(query, Macro::class.java)
-            .setLifecycleOwner(this)
-            .build()
+        return FirestoreRecyclerOptions.Builder<Macro>().setQuery(query, Macro::class.java).setLifecycleOwner(this).build()
     }
 
     private fun Query.orderBy(order: Int): Query {

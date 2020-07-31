@@ -31,9 +31,12 @@ class EditUrlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindViewModel()
+    }
+
+    private fun bindViewModel() {
         binding.buttonStartRecording.setOnSingleClickListener {
-            val action = EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!)
-            findNavController().navigate(action)
+            findNavController().navigate(EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!))
         }
     }
 }

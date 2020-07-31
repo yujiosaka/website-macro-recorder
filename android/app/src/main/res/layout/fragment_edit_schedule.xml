@@ -13,56 +13,47 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.edit_schedule.EditScheduleFragment" >
+        tools:context=".ui.edit_schedule.EditScheduleFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/text_back_to_macro_edit"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/text_back_to_macro_edit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/edit_schedule_frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:entries="@array/text_frequency_array"
+            android:selectedItemPosition="@{ vm.macro.scheduleFrequency }"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edit_schedule"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:inputType="textPersonName"
+            android:text="@{ vm.macro.schedule }"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.GONE }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toEndOf="@+id/edit_schedule_frequency"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/edit_schedule_frequency"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:entries="@array/text_frequency_array"
-                android:selectedItemPosition="@={ vm.macro.scheduleFrequency }"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/edit_schedule"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.GONE }"
-                android:focusable="false"
-                android:gravity="center_horizontal"
-                android:inputType="textPersonName"
-                android:text="@{ vm.macro.schedule }"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_schedule_frequency"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/edit_schedule_frequency"
-                app:layout_constraintTop_toTopOf="@+id/edit_schedule_frequency" />
-
-            <Button
-                android:id="@+id/button_save"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/text_save_schedule"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_schedule_frequency" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
