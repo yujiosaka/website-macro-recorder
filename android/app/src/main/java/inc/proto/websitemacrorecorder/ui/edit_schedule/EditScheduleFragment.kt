@@ -1,5 +1,6 @@
 package inc.proto.websitemacrorecorder.ui.edit_schedule
 
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,6 +37,24 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindViewModel()
+    }
+
+    override fun onSelectedTime(hourOfDay: Int, minute: Int) {
+        vm.macro.value!!.scheduleHour = hourOfDay
+        vm.macro.value!!.scheduleMinute = minute
+        macroRepository.update(vm.macro.value!!.id, mapOf(
+            "scheduleHour" to vm.macro.value!!.scheduleHour,
+            "scheduleMinute" to vm.macro.value!!.scheduleMinute,
+            "updatedAt" to FieldValue.serverTimestamp()
+        ))
+    }
+
+    private fun bindViewModel() {
+        binding.textBackToMacroEdit.paintFlags = binding.textBackToMacroEdit.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding.textBackToMacroEdit.setOnSingleClickListener {
+            findNavController().popBackStack()
+        }
 
         binding.editSchedule.setOnSingleClickListener {
             if (activity == null) return@setOnSingleClickListener
@@ -51,25 +70,16 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
                     position: Int,
                     id: Long
                 ) {
+                    if (vm.macro.value!!.scheduleFrequency == position) return
                     vm.macro.value!!.scheduleFrequency = position
+                    macroRepository.update(vm.macro.value!!.id, mapOf(
+                        "scheduleFrequency" to vm.macro.value!!.scheduleFrequency,
+                        "updatedAt" to FieldValue.serverTimestamp()
+                    ))
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-        binding.buttonSave.setOnSingleClickListener {
-            macroRepository.update(vm.macro.value!!.id, mapOf(
-                "scheduleFrequency" to vm.macro.value!!.scheduleFrequency,
-                "scheduleHour" to vm.macro.value!!.scheduleHour,
-                "scheduleMinute" to vm.macro.value!!.scheduleMinute,
-                "updatedAt" to FieldValue.serverTimestamp()
-            ))
-            findNavController().popBackStack()
-        }
-    }
-
-    override fun onSelectedTime(hourOfDay: Int, minute: Int) {
-        vm.macro.value!!.scheduleHour = hourOfDay
-        vm.macro.value!!.scheduleMinute = minute
     }
 
 }

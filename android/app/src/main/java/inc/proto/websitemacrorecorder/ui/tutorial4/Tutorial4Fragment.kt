@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import inc.proto.websitemacrorecorder.R
+import inc.proto.websitemacrorecorder.databinding.FragmentTutorial4Binding
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
-import kotlinx.android.synthetic.main.fragment_tutorial4.*
 
 class Tutorial4Fragment : Fragment() {
+    private lateinit var binding: FragmentTutorial4Binding
+
     private val sharedPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(context)
     }
@@ -24,21 +27,26 @@ class Tutorial4Fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_tutorial4, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tutorial4, container, false)
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideActionBar()
-        Glide.with(this).load(R.raw.image_tutorial4).into(image_tutorial4)
-        button_start.setOnSingleClickListener {
-            sharedPreferences.edit { putBoolean("VIEWED_TUTORIAL", true) }
-            val action = Tutorial4FragmentDirections.actionTutorial4FragmentToListFragmentWithoutHistory()
-            findNavController().navigate(action)
-        }
+        bindViewModel()
     }
 
     private fun hideActionBar() {
         (activity as AppCompatActivity?)?.supportActionBar?.hide()
+    }
+
+    private fun bindViewModel() {
+        Glide.with(this).load(R.raw.image_tutorial4).into(binding.imageTutorial4)
+        binding.buttonStart.setOnSingleClickListener {
+            sharedPreferences.edit { putBoolean("VIEWED_TUTORIAL", true) }
+            findNavController().navigate(Tutorial4FragmentDirections.actionTutorial4FragmentToListFragmentWithoutHistory())
+        }
     }
 }

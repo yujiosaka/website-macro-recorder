@@ -63,8 +63,7 @@ class EditRecordFragment : Fragment() {
                 vm.macro.value!!.userAgent = binding.webRecorder.settings.userAgentString
                 vm.macro.value!!.height = binding.webRecorder.height
                 vm.macro.value!!.width = binding.webRecorder.width
-                val action = EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(vm.macro.value!!)
-                findNavController().navigate(action)
+                findNavController().navigate(EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(vm.macro.value!!))
                 true
             }
             else -> {
@@ -76,6 +75,10 @@ class EditRecordFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindViewModel()
+    }
+
+    private fun bindViewModel() {
         binding.webRecorder.settings.allowFileAccess = false
         binding.webRecorder.settings.domStorageEnabled = true
         binding.webRecorder.settings.javaScriptEnabled = true
@@ -114,9 +117,7 @@ class EditRecordFragment : Fragment() {
     private fun startRecording() {
         loading = true
         webStorage.deleteAllData()
-        if (activity != null) {
-            clearCookies(activity)
-        }
+        clearCookies(activity)
         binding.webRecorder.clearCache(true)
         binding.webRecorder.clearHistory()
         binding.webRecorder.loadUrl(vm.macro.value!!.url, mapOf("Accept-Language" to vm.macro.value!!.acceptLanguage))

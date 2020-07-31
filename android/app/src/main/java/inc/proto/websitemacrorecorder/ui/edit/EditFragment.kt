@@ -11,14 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestoreException
 import inc.proto.websitemacrorecorder.R
-import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.databinding.FragmentEditBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
-import inc.proto.websitemacrorecorder.util.Helper
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class EditFragment : Fragment() {
@@ -42,23 +38,23 @@ class EditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindViewModel()
+    }
 
-        binding.textBack.paintFlags = binding.textBack.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        binding.textBack.setOnSingleClickListener {
+    private fun bindViewModel() {
+        binding.textBackToMacroList.paintFlags = binding.textBackToMacroList.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding.textBackToMacroList.setOnSingleClickListener {
             findNavController().navigate(R.id.action_editFragment_to_listFragment)
         }
-        binding.textUrl.paintFlags = binding.textBack.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding.textUrl.paintFlags = binding.textUrl.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textUrl.setOnSingleClickListener {
-            val action = EditFragmentDirections.actionEditFragmentToEditUrlFragment(vm.macro.value!!)
-            findNavController().navigate(action)
+            findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditUrlFragment(vm.macro.value!!))
         }
-        binding.textSchedule.paintFlags = binding.textBack.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding.textSchedule.paintFlags = binding.textSchedule.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textSchedule.setOnSingleClickListener {
-            val action = EditFragmentDirections.actionEditFragmentToEditScheduleFragment(vm.macro.value!!)
-            findNavController().navigate(action)
+            findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditScheduleFragment(vm.macro.value!!))
         }
         binding.buttonDelete.setOnSingleClickListener {
-            if (context == null) return@setOnSingleClickListener
             AlertDialog.Builder(context)
                 .setMessage(resources.getString(R.string.message_delete))
                 .setPositiveButton(R.string.message_yes) { _, _ ->
@@ -69,6 +65,7 @@ class EditFragment : Fragment() {
                 .show()
         }
         binding.editName.doAfterTextChanged {
+            if (vm.macro.value!!.name == it.toString()) return@doAfterTextChanged
             vm.macro.value!!.name = it.toString()
             macroRepository.update(vm.macro.value!!.id, mapOf(
                 "name" to vm.macro.value!!.name,
@@ -98,22 +95,6 @@ class EditFragment : Fragment() {
                 "notifyFailure" to vm.macro.value!!.notifyFailure,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
-        }
-
-        macroRepository.get(vm.macro.value!!.id).get().addOnCompleteListener {
-            if (!it.isSuccessful) {
-                if (activity == null) return@addOnCompleteListener
-                val exception = it.exception as FirebaseFirestoreException
-                val root: View = requireActivity().findViewById(R.id.root)
-                val text = when (exception.code) {
-                    FirebaseFirestoreException.Code.PERMISSION_DENIED -> root.resources.getString(R.string.error_permission_denied)
-                    else -> root.resources.getString(R.string.error_unknown)
-                }
-                Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
-                return@addOnCompleteListener
-            }
-            val macro = Helper.mapToObject<Macro>(it.result!!.data!!)
-            vm.resetMacro(macro)
         }
     }
 }
