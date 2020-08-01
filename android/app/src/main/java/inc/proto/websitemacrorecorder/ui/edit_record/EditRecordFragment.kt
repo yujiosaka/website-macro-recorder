@@ -97,6 +97,10 @@ class EditRecordFragment : Fragment() {
             }
 
             override fun onPageFinished(view: WebView, url: String) {
+                if (view.progress != 100) return
+                if (!loading) {
+                    vm.pushEvent(MacroEvent(name = "navigation", value = url))
+                }
                 finishLoading()
                 if (vm.macro.value!!.name == "" && binding.webRecorder.title != "") {
                     vm.macro.value!!.name = binding.webRecorder.title
@@ -187,7 +191,6 @@ class EditRecordFragment : Fragment() {
             "button" -> R.string.text_target_type_button
             "select" -> R.string.text_target_type_select
             "text" -> R.string.text_target_type_text
-            "timer" -> R.string.text_target_type_timer
             else -> R.string.text_target_type_text
         }
         return resources.getString(resId)

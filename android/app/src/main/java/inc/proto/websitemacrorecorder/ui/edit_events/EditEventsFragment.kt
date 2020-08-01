@@ -25,9 +25,18 @@ import kotlinx.android.synthetic.main.fragment_edit_events.*
 class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     private val itemTouchHelper: ItemTouchHelper by lazy {
         ItemTouchHelper(
-            object : ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-                ItemTouchHelper.RIGHT) {
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun getDragDirs(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ): Int {
+                    val event = args.macro.events[viewHolder.adapterPosition]
+                    return if (event != null && event.name == "timer") {
+                        ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                    } else {
+                        0
+                    }
+                }
 
                 override fun isItemViewSwipeEnabled(): Boolean {
                     return true
@@ -171,8 +180,20 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
                         val exception = it.exception as FirebaseFunctionsException
                         val root: View = requireActivity().findViewById(R.id.root)
                         val text = when (exception.code) {
-                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> root.resources.getString(R.string.error_deadline_exceeded)
+                            FirebaseFunctionsException.Code.INVALID_ARGUMENT -> root.resources.getString(R.string.error_invalid_argument)
                             FirebaseFunctionsException.Code.UNAUTHENTICATED -> root.resources.getString(R.string.error_unauthenticated)
+                            FirebaseFunctionsException.Code.UNAVAILABLE -> root.resources.getString(R.string.error_unavailable)
+                            FirebaseFunctionsException.Code.INTERNAL -> root.resources.getString(R.string.error_internal)
+                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> {
+                                val result = "^Timeout error occurred position: (\\d+)$".toRegex().find(exception.message.toString())
+                                if (result != null) {
+                                    val (position) = result.destructured
+                                    adapter.setError(position.toInt())
+                                    root.resources.getString(R.string.error_timeout)
+                                } else {
+                                    root.resources.getString(R.string.error_deadline_exceeded)
+                                }
+                            }
                             else -> root.resources.getString(R.string.error_unknown)
                         }
                         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
@@ -194,6 +215,6 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     }
 
     override fun onAddTimer(value: String) {
-        adapter.addItem(MacroEvent(name = "wait", value = value))
+        adapter.addItem(MacroEvent(name = "timer", value = value))
     }
 }
