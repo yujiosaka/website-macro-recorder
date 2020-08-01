@@ -1,7 +1,10 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { isString, isNumber, isBoolean, isEmpty, includes } from 'lodash';
-import { isUrl, move } from './helper'
+import { isUrl, move } from './helper';
+
+const RUNTIME_TIMEOUT_SECONDS = 30;
+const RUNTIME_MEMORY = '256MB';
 
 const firestore = admin.firestore();
 
@@ -23,7 +26,10 @@ function validate(macro: Macro) {
          isNumber(macro.deviceScaleFactor) && macro.deviceScaleFactor >= 1;
 }
 
-export const save = functions.https.onCall(async (data, context) => {
+export const save = functions.runWith({
+  timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
+  memory: RUNTIME_MEMORY,
+}).https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',

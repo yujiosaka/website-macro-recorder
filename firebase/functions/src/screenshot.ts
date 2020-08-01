@@ -5,7 +5,9 @@ import * as puppeteer from 'puppeteer';
 import { delay, upload } from './helper'
 
 const ARGS = ['--no-sandbox', '--ignore-certificate-errors'];
-const TIMEOUT = 3000;
+const NAVIGATION_TIMEOUT_MILLISECONDS = 3000;
+const RUNTIME_TIMEOUT_SECONDS = 300;
+const RUNTIME_MEMORY = '2GB';
 
 function getTmpPath(filename: string) {
   return join(tmpdir(), filename);
@@ -43,7 +45,7 @@ async function triggerEvent(page: puppeteer.Page, event: MacroEvent) {
       break;
   }
   try {
-    await page.waitForNavigation({ timeout: TIMEOUT });
+    await page.waitForNavigation({ timeout: NAVIGATION_TIMEOUT_MILLISECONDS });
   } catch (error) {
     if (error instanceof puppeteer.errors.TimeoutError) return;
     console.warn(error);
@@ -108,7 +110,10 @@ async function uploadScreenshot(context: functions.https.CallableContext) {
   }
 }
 
-export const screenshot = functions.https.onCall(async (data, context) => {
+export const screenshot = functions.runWith({
+  timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
+  memory: RUNTIME_MEMORY,
+}).https.onCall(async (data, context) => {
   await saveScreenshot(data, context);
   return uploadScreenshot(context);
 });
