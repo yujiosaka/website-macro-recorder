@@ -179,8 +179,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
                         return@addOnCompleteListener
                     }
                     args.macro.screenshotUrl = it.result!!.data as String
-                    val action = EditEventsFragmentDirections.actionEditEventsFragmentToConfirmFragment(args.macro)
-                    findNavController().navigate(action)
+                    findNavController().navigate(EditEventsFragmentDirections.actionEditEventsFragmentToConfirmFragment(args.macro))
                 }
                 true
             }
@@ -195,7 +194,6 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     }
 
     override fun onAddTimer(value: String) {
-        val event = MacroEvent(name = "wait", value = value)
-        adapter.addItem(event)
+        adapter.addItem(MacroEvent(name = "wait", value = value))
     }
 }
