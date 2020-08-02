@@ -99,7 +99,7 @@ class EditRecordFragment : Fragment() {
             override fun onPageFinished(view: WebView, url: String) {
                 if (view.progress != 100) return
                 if (!loading) {
-                    vm.pushEvent(MacroEvent(name = "navigation", value = url))
+                    vm.pushEvent(MacroEvent(name = "page", value = url))
                 }
                 finishLoading()
                 if (vm.macro.value!!.name == "" && binding.webRecorder.title != "") {

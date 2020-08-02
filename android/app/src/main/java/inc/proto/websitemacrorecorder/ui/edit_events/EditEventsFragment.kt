@@ -133,6 +133,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     }
     private val args: EditEventsFragmentArgs by navArgs()
     private val macroRepository = MacroRepository()
+    private val pattern = "^Timeout error occurred position: (\\d+)$".toRegex()
     private var loading = false
 
     override fun onCreateView(
@@ -184,17 +185,14 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
                             FirebaseFunctionsException.Code.UNAUTHENTICATED -> root.resources.getString(R.string.error_unauthenticated)
                             FirebaseFunctionsException.Code.UNAVAILABLE -> root.resources.getString(R.string.error_unavailable)
                             FirebaseFunctionsException.Code.INTERNAL -> root.resources.getString(R.string.error_internal)
-                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> {
-                                val result = "^Timeout error occurred position: (\\d+)$".toRegex().find(exception.message.toString())
-                                if (result != null) {
-                                    val (position) = result.destructured
-                                    adapter.setError(position.toInt())
-                                    root.resources.getString(R.string.error_timeout)
-                                } else {
-                                    root.resources.getString(R.string.error_deadline_exceeded)
-                                }
-                            }
+                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> root.resources.getString(R.string.error_deadline_exceeded)
                             else -> root.resources.getString(R.string.error_unknown)
+                        }
+                        val result = pattern.find(exception.message.toString())
+                        if (result != null) {
+                            val (position) = result.destructured
+                            val message = root.resources.getString(R.string.error_timeout)
+                            adapter.setMessage(position.toInt(), message)
                         }
                         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
                         return@addOnCompleteListener

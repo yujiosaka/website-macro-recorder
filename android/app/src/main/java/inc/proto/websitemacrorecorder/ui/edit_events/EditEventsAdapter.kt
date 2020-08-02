@@ -39,11 +39,6 @@ class EditEventsAdapter(
 
     override fun onBindViewHolder(holder: EditEventsViewHolder, position: Int) {
         val event = events[position]
-        if (event.isError) {
-            holder.layoutEvent.setBackgroundColor(context.resources.getColor(R.color.design_default_color_error))
-        } else {
-            holder.layoutEvent.setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
-        }
         when (event.name) {
             "click" -> {
                 holder.imageName.setImageResource(R.drawable.ic_touch_app_white_24dp)
@@ -99,6 +94,13 @@ class EditEventsAdapter(
                 }
             }
         }
+        if (event.message != "") {
+            holder.textMessage.text = event.message
+            holder.imageWarning.visibility = View.VISIBLE
+        } else {
+            holder.textMessage.text = ""
+            holder.imageWarning.visibility = View.INVISIBLE
+        }
     }
 
     override fun getItemCount() = events.size
@@ -149,11 +151,11 @@ class EditEventsAdapter(
         switchTips()
     }
 
-    fun setError(position: Int) {
+    fun setMessage(position: Int, message: String) {
         for (event in events) {
-            event.isError = false
+            event.message = ""
         }
-        itemAt(position).isError = true
+        itemAt(position).message = message
         notifyDataSetChanged()
     }
 

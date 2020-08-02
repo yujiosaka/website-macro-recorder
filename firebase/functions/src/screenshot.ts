@@ -32,7 +32,7 @@ async function triggerEvents(page: puppeteer.Page, events: MacroEvent[]) {
   const serialEvents: MacroEvent[] = [];
   for (let i = 0; i < events.length; i++) {
     var event = events[i];
-    if (event.name !== 'navigation') {
+    if (event.name !== 'page') {
       await triggerEventSeries(page, serialEvents);
       serialEvents.splice(0); // Reset array
     }
@@ -46,15 +46,15 @@ async function triggerEvents(page: puppeteer.Page, events: MacroEvent[]) {
 // Serieal events are ordered in the following way
 // serialEvents = [
 //   { name: 'click', ... },
-//   { name: 'navigation', ... },
+//   { name: 'page', ... },
 // ]
 // Nedd to reverse the order because Promise needs to be resolved in the following order
 // await Promise.all([
-//   triggerEvent(page, { name: 'navigation', ... }),
+//   triggerEvent(page, { name: 'page', ... }),
 //   triggerEvent(page, { name: 'click', ... }),
 // ])
-// Otherwise, navigation may be completed when the click event is triggered
-// and it keeps waiting for the navigation event
+// Otherwise, page may be completed when the click event is triggered
+// and it keeps waiting for the page event
 async function triggerEventSeries(page: puppeteer.Page, serialEvents: MacroEvent[]) {
   if (serialEvents.length === 0) return;
   const events = serialEvents.reverse();
@@ -69,7 +69,7 @@ async function triggerEvent(page: puppeteer.Page, event: MacroEvent) {
       await page.waitFor(parseInt(event.value) * 1000);
       return;
     }
-    if (event.name === 'navigation') {
+    if (event.name === 'page') {
       await page.waitForNavigation({ timeout: EVENT_TIMEOUT_MILLISECONDS });
       return;
     }
@@ -91,12 +91,17 @@ async function triggerEvent(page: puppeteer.Page, event: MacroEvent) {
         );
     }
   } catch (error) {
+    if (error instanceof functions.https.HttpsError) throw error;
     if (error instanceof puppeteer.errors.TimeoutError) {
       throw new functions.https.HttpsError(
         'deadline-exceeded',
         `Timeout error occurred position: ${event.position}`,
       );
     }
+    throw new functions.https.HttpsError(
+      'unknown',
+      'Unknown error occurred',
+    );
   }
 }
 
@@ -138,7 +143,6 @@ async function uploadScreenshot(context: functions.https.CallableContext) {
   try {
     return await upload(tmpPath, destination);
   } catch (error) {
-    console.warn(error);
     throw new functions.https.HttpsError(
       'unknown',
       'Unknown error occurred',

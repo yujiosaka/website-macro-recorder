@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_event.view.*
 
 class EditEventsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val layoutEvent: ConstraintLayout = view.layout_event
     var imageName: ImageView = view.image_name
     var textName: TextView = view.text_name
     var textTargetType: TextView = view.text_target_type
     var textValue: TextView = view.text_value
+    var imageWarning: ImageView = view.image_warning
+    var textMessage: TextView = view.text_message
     var imageReorder: ImageView = view.image_reorder
 }
