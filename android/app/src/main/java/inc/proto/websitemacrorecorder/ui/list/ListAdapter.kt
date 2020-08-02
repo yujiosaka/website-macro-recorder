@@ -46,7 +46,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
             schedule
         }
         holder.editEnableSchedule.visibility = if (model.scheduleFrequency == 0) {
-            View.GONE
+            View.INVISIBLE
         } else {
             View.VISIBLE
         }
@@ -77,7 +77,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         holder.textError.visibility = if (model.isFailure) {
             View.VISIBLE
         } else {
-            View.GONE
+            View.INVISIBLE
         }
         holder.card.setOnSingleClickListener {
             holder.card.setOnCreateContextMenuListener { menu, _, _ ->

@@ -38,53 +38,70 @@ class EditEventsAdapter(
     }
 
     override fun onBindViewHolder(holder: EditEventsViewHolder, position: Int) {
-        when (events[position].name) {
+        val event = events[position]
+        if (event.isError) {
+            holder.layoutEvent.setBackgroundColor(context.resources.getColor(R.color.design_default_color_error))
+        } else {
+            holder.layoutEvent.setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
+        }
+        when (event.name) {
             "click" -> {
                 holder.imageName.setImageResource(R.drawable.ic_touch_app_white_24dp)
                 holder.textName.text = context.resources.getString(R.string.text_name_click)
+                holder.imageReorder.visibility = View.INVISIBLE
             }
             "select" -> {
                 holder.imageName.setImageResource(R.drawable.ic_touch_app_white_24dp)
                 holder.textName.text = context.resources.getString(R.string.text_name_select)
+                holder.imageReorder.visibility = View.INVISIBLE
             }
             "type" -> {
                 holder.imageName.setImageResource(R.drawable.ic_keyboard_white_24dp)
                 holder.textName.text = context.resources.getString(R.string.text_name_type)
+                holder.imageReorder.visibility = View.INVISIBLE
             }
-            "wait" -> {
+            "navigation" -> {
+                holder.imageName.setImageResource(R.drawable.ic_history_white_24dp)
+                holder.textName.text = context.resources.getString(R.string.text_name_page)
+                holder.imageReorder.visibility = View.INVISIBLE
+            }
+            "timer" -> {
                 holder.imageName.setImageResource(R.drawable.ic_timer_white_24dp)
-                holder.textName.text = context.resources.getString(R.string.text_name_wait)
+                holder.textName.text = context.resources.getString(R.string.text_name_timer)
+                holder.imageReorder.visibility = View.VISIBLE
             }
         }
-
-        if (events[position].name == "wait") {
-            holder.textTargetType.text = context.resources.getString(R.string.text_target_type_timer)
-            holder.textValue.text = context.resources.getString(R.string.text_value_seconds, events[position].value)
-        } else {
-            holder.textTargetType.text = try {
-                context.resources.getString(
-                    context.resources.getIdentifier(
-                        "text_target_type_${events[position].targetType}",
-                        "string",
-                        context.packageName
-                    )
-                )
-            } catch (e: Resources.NotFoundException) {
-                context.resources.getString(R.string.text_target_type_text)
+        when (event.name) {
+            "timer" -> {
+                holder.textTargetType.text = context.resources.getString(R.string.text_target_type_wait_for_timer)
+                holder.textValue.text = context.resources.getString(R.string.text_value_seconds, event.value)
             }
-            holder.textValue.text = if (events[position].value != "") {
-                events[position].value
-            } else {
-                context.resources.getString(R.string.text_value_empty)
+            "navigation" -> {
+                holder.textTargetType.text = context.resources.getString(R.string.text_target_type_wait_for_navigation)
+                holder.textValue.text = event.value
+            }
+            else -> {
+                holder.textTargetType.text = try {
+                    context.resources.getString(
+                        context.resources.getIdentifier(
+                            "text_target_type_${event.targetType}",
+                            "string",
+                            context.packageName
+                        )
+                    )
+                } catch (e: Resources.NotFoundException) {
+                    context.resources.getString(R.string.text_target_type_text)
+                }
+                holder.textValue.text = if (event.value != "") {
+                    event.value
+                } else {
+                    context.resources.getString(R.string.text_value_empty)
+                }
             }
         }
     }
 
     override fun getItemCount() = events.size
-
-    fun itemAt(position: Int): MacroEvent {
-        return events[position]
-    }
 
     fun moveItem(from: Int, to: Int) {
         Collections.swap(events, from, to)
@@ -95,7 +112,7 @@ class EditEventsAdapter(
         if (position == 0) return
         val lastEvent = itemAt(position - 1)
         val event = itemAt(position)
-        if (lastEvent.name != "wait" || event.name != "wait") return
+        if (lastEvent.name != "timer" || event.name != "timer") return
         val lastValue = Integer.parseInt(lastEvent.value)
         var totalValue = lastValue + Integer.parseInt(event.value)
         if (totalValue >= MacroEvent.MAX_WAIT_VALUE) {
@@ -116,7 +133,7 @@ class EditEventsAdapter(
     fun addItem(event: MacroEvent) {
         if (itemCount >= 1) {
             val lastEvent = itemAt(itemCount - 1)
-            if (lastEvent.name == "wait" && event.name == "wait") {
+            if (lastEvent.name == "timer" && event.name == "timer") {
                 val lastValue = Integer.parseInt(lastEvent.value)
                 var totalValue = lastValue + Integer.parseInt(event.value)
                 if (totalValue >= MacroEvent.MAX_WAIT_VALUE) {
@@ -130,6 +147,18 @@ class EditEventsAdapter(
         events.add(event)
         notifyItemInserted(itemCount)
         switchTips()
+    }
+
+    fun setError(position: Int) {
+        for (event in events) {
+            event.isError = false
+        }
+        itemAt(position).isError = true
+        notifyDataSetChanged()
+    }
+
+    private fun itemAt(position: Int): MacroEvent {
+        return events[position]
     }
 
     private fun switchTips() {

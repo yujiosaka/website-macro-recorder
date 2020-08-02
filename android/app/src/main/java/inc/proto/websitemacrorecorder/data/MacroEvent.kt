@@ -9,7 +9,8 @@ class MacroEvent(
     name: String = "",
     xPath: String = "",
     targetType: String = "",
-    value: String  = ""
+    value: String  = "",
+    isError: Boolean = false
 ) : Serializable, BaseObservable() {
     companion object {
         const val DEFAULT_WAIT_VALUE = 3
@@ -43,5 +44,12 @@ class MacroEvent(
         set(value) {
             field = value
             notifyPropertyChanged(BR.value)
+        }
+
+    @Bindable
+    var isError = isError
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.isError)
         }
 }

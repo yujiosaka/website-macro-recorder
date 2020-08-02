@@ -79,7 +79,7 @@
     var targetType = getTargetType(target);
     if (!targetType) return;
     var xPath = getXpath(target);
-    var value = target.innerText || target.href || target.src || '';
+    var value = getValue(target);
     WebsiteMacroRecorder.onClick(xPath, targetType, value);
     clickedTimeStamps = {};
     clickedTimeStamps[event.timeStamp] = true;
@@ -106,7 +106,15 @@
   }
 
   function escape(str) {
+    if (str instanceof SVGAnimatedString) {
+      str = str.baseVal;
+    }
     return str.replace(/\\/g, '\\\\').replace(/'/g, '\\\'');
+  }
+
+  function trim(str) {
+    if (!str) return str;
+    return str.trim();
   }
 
   function $x(path, element) {
@@ -157,6 +165,12 @@
     return getXpath(element.parentElement, path);
   }
 
+  function getValue(element) {
+    var tag = element.localName.toLowerCase();
+    if (tag === 'svg') return 'SVG';
+    return trim(element.innerText) || trim(element.href) || trim(element.src) || '';
+  }
+
   function getTargetType(element) {
     var tag = element.localName.toLowerCase();
     var type = element.type;
@@ -165,6 +179,7 @@
       case 'canvas':
         return null;
       case 'img':
+      case 'svg':
       case 'area':
         return 'image';
       case 'a':
@@ -187,7 +202,7 @@
       case 'button':
         return 'button';
       case 'select':
-        return 'selectbox';
+        return 'select';
       default:
         return 'text';
     }

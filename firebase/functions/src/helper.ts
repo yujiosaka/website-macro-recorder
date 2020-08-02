@@ -3,10 +3,6 @@ import { URL } from 'url';
 
 const storage = admin.storage();
 
-export function delay(milliseconds: number) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
-
 export function isUrl(url: string) {
   try {
     const { protocol } = new URL(url);

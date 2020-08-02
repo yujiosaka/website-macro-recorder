@@ -19,7 +19,11 @@
     <!-- Strings used for validation -->
     <string name="error_enter_here">Enter %1$s here</string>
     <string name="error_format_is_invalid">%1$s format is invalid</string>
-    <string name="error_deadline_exceeded">Timeout error occurred\nKeep the execution time within 1 minute</string>
+    <string name="error_deadline_exceeded">Timeout error occurred\nKeep the execution time within 3 minute</string>
+    <string name="error_timeout">Event is not executed within 30 seconds</string>
+    <string name="error_unavailable">Out of memory error occurred</string>
+    <string name="error_internal">Network error occurred</string>
+
     <string name="error_unauthenticated">Not authenticated</string>
     <string name="error_unknown">Unknown error occurred</string>
     <string name="error_invalid_argument">Argument is invalid</string>
@@ -70,7 +74,8 @@
     <string name="text_name_click">Tap</string>
     <string name="text_name_type">Type</string>
     <string name="text_name_select">Select</string>
-    <string name="text_name_wait">Wait</string>
+    <string name="text_name_timer">Timer</string>
+    <string name="text_name_page">Page</string>
     <string name="text_target_type_image">Image</string>
     <string name="text_target_type_link">Link</string>
     <string name="text_target_type_frame">Frame</string>
@@ -80,7 +85,8 @@
     <string name="text_target_type_button">Button</string>
     <string name="text_target_type_select">Select box</string>
     <string name="text_target_type_text">Text</string>
-    <string name="text_target_type_timer">Timer</string>
+    <string name="text_target_type_wait_for_navigation">Wait for navigation</string>
+    <string name="text_target_type_wait_for_timer">Wait for timer</string>
     <string name="text_value_seconds">%1$s seconds</string>
     <string name="text_value_empty">No text</string>
 

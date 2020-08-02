@@ -63,6 +63,9 @@ class ConfirmFragment : Fragment() {
                         val text = when (exception.code) {
                             FirebaseFunctionsException.Code.INVALID_ARGUMENT -> root.resources.getString(R.string.error_invalid_argument)
                             FirebaseFunctionsException.Code.UNAUTHENTICATED -> root.resources.getString(R.string.error_unauthenticated)
+                            FirebaseFunctionsException.Code.UNAVAILABLE -> root.resources.getString(R.string.error_unavailable)
+                            FirebaseFunctionsException.Code.INTERNAL -> root.resources.getString(R.string.error_internal)
+                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> root.resources.getString(R.string.error_deadline_exceeded)
                             else -> root.resources.getString(R.string.error_unknown)
                         }
                         Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()

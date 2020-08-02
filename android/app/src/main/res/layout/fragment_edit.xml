@@ -11,9 +11,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.edit.EditFragment" >
+        tools:context=".ui.edit.EditFragment">
 
         <TextView
             android:id="@+id/text_back_to_macro_list"
@@ -110,9 +111,9 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:singleLine="true"
+            android:text="@{ vm.schedule }"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold"
-            android:text="@{ vm.schedule }"
             app:layout_constraintEnd_toStartOf="@+id/edit_enable_schedule"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_schedule_title" />
@@ -125,7 +126,7 @@
             android:checked="@{ vm.macro.enableSchedule }"
             android:scaleX="1.2"
             android:scaleY="1.2"
-            android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.GONE }"
+            android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.INVISIBLE }"
             app:layout_constraintBottom_toBottomOf="@+id/text_schedule"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_schedule_title" />

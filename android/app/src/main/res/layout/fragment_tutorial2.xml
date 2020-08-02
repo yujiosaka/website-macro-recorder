@@ -9,6 +9,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_tutorial2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.tutorial2.Tutorial2Fragment">

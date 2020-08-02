@@ -1,12 +1,13 @@
+import { map } from 'lodash';
 import { join } from 'path';
 import { tmpdir } from 'os';
 import * as functions from 'firebase-functions';
 import * as puppeteer from 'puppeteer';
-import { delay, upload } from './helper'
+import { upload } from './helper'
 
 const ARGS = ['--no-sandbox', '--ignore-certificate-errors'];
-const NAVIGATION_TIMEOUT_MILLISECONDS = 3000;
-const RUNTIME_TIMEOUT_SECONDS = 300;
+const EVENT_TIMEOUT_MILLISECONDS = 30000;
+const RUNTIME_TIMEOUT_SECONDS = 180;
 const RUNTIME_MEMORY = '2GB';
 
 function getTmpPath(filename: string) {
@@ -26,33 +27,76 @@ function getDevice(macro: Macro) {
   };
 }
 
+async function triggerEvents(page: puppeteer.Page, events: MacroEvent[]) {
+  if (events.length === 0) return;
+  const serialEvents: MacroEvent[] = [];
+  for (let i = 0; i < events.length; i++) {
+    var event = events[i];
+    if (event.name !== 'navigation') {
+      await triggerEventSeries(page, serialEvents);
+      serialEvents.splice(0); // Reset array
+    }
+    event.position = i;
+    serialEvents.push(event);
+  }
+  await triggerEventSeries(page, serialEvents);
+}
+
+// NOTE:
+// Serieal events are ordered in the following way
+// serialEvents = [
+//   { name: 'click', ... },
+//   { name: 'navigation', ... },
+// ]
+// Nedd to reverse the order because Promise needs to be resolved in the following order
+// await Promise.all([
+//   triggerEvent(page, { name: 'navigation', ... }),
+//   triggerEvent(page, { name: 'click', ... }),
+// ])
+// Otherwise, navigation may be completed when the click event is triggered
+// and it keeps waiting for the navigation event
+async function triggerEventSeries(page: puppeteer.Page, serialEvents: MacroEvent[]) {
+  if (serialEvents.length === 0) return;
+  const events = serialEvents.reverse();
+  await Promise.all(map(events, async event => {
+    await triggerEvent(page, event);
+  }));
+}
+
 async function triggerEvent(page: puppeteer.Page, event: MacroEvent) {
-  if (event.name === 'wait') {
-    const milliseconds = parseInt(event.value);
-    await delay(milliseconds);
-    return;
-  }
-  const element = await page.waitForXPath(event.xPath);
-  switch(event.name) {
-    case 'click':
-      await element.click();
-      break;
-    case 'select':
-      await element.select(event.value);
-      break;
-    case 'change':
-      await element.type(event.value);
-      break;
-  }
   try {
-    await page.waitForNavigation({ timeout: NAVIGATION_TIMEOUT_MILLISECONDS });
+    if (event.name === 'timer') {
+      await page.waitFor(parseInt(event.value) * 1000);
+      return;
+    }
+    if (event.name === 'navigation') {
+      await page.waitForNavigation({ timeout: EVENT_TIMEOUT_MILLISECONDS });
+      return;
+    }
+    const element = await page.waitForXPath(event.xPath, { timeout: EVENT_TIMEOUT_MILLISECONDS });
+    switch (event.name) {
+      case 'click':
+        await element.click();
+        break;
+      case 'select':
+        await element.select(event.value);
+        break;
+      case 'change':
+        await element.type(event.value);
+        break;
+      default:
+        throw new functions.https.HttpsError(
+          'invalid-argument',
+          'Argument is invalid',
+        );
+    }
   } catch (error) {
-    if (error instanceof puppeteer.errors.TimeoutError) return;
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
+    if (error instanceof puppeteer.errors.TimeoutError) {
+      throw new functions.https.HttpsError(
+        'deadline-exceeded',
+        `Timeout error occurred position: ${event.position}`,
+      );
+    }
   }
 }
 
@@ -69,20 +113,12 @@ async function saveScreenshot(macro: Macro, context: functions.https.CallableCon
     const device = getDevice(macro)
     await page.emulate(device);
     await page.goto(macro.url);
-    for (const event of macro.events) {
-      await triggerEvent(page, event);
-    }
+    await triggerEvents(page, macro.events);
     const tmpPath = getTmpPath(`${context.auth.uid}.png`);
     await page.screenshot({ path: tmpPath, fullPage: true });
     await browser.close();
   } catch (error) {
-    if (error instanceof puppeteer.errors.TimeoutError) {
-      throw new functions.https.HttpsError(
-        'deadline-exceeded',
-        'Timeout error occurred',
-      );
-    }
-    console.warn(error);
+    if (error instanceof functions.https.HttpsError) throw error;
     throw new functions.https.HttpsError(
       'unknown',
       'Unknown error occurred',
