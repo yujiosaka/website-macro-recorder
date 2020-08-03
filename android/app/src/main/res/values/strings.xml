@@ -19,8 +19,8 @@
     <!-- Strings used for validation -->
     <string name="error_enter_here">Enter %1$s here</string>
     <string name="error_format_is_invalid">%1$s format is invalid</string>
-    <string name="error_deadline_exceeded">Timeout error occurred\nKeep the execution time within 3 minute</string>
-    <string name="error_timeout">Event is not executed within 30 seconds</string>
+    <string name="error_deadline_exceeded">Timeout error occurred</string>
+    <string name="error_timeout">Event not completed in 30 seconds</string>
     <string name="error_unavailable">Out of memory error occurred</string>
     <string name="error_internal">Network error occurred</string>
 
