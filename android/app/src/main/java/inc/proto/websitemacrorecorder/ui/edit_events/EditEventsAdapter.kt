@@ -20,10 +20,6 @@ class EditEventsAdapter(
 ) : RecyclerView.Adapter<EditEventsViewHolder>() {
     private lateinit var context: Context
 
-    init {
-        switchTips()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : EditEventsViewHolder {
         context = parent.context
         val view = LayoutInflater.from(context).inflate(R.layout.item_event, parent, false)
@@ -55,7 +51,7 @@ class EditEventsAdapter(
                 holder.textName.text = context.resources.getString(R.string.text_name_type)
                 holder.imageReorder.visibility = View.INVISIBLE
             }
-            "navigation" -> {
+            "page" -> {
                 holder.imageName.setImageResource(R.drawable.ic_history_white_24dp)
                 holder.textName.text = context.resources.getString(R.string.text_name_page)
                 holder.imageReorder.visibility = View.INVISIBLE
@@ -65,13 +61,16 @@ class EditEventsAdapter(
                 holder.textName.text = context.resources.getString(R.string.text_name_timer)
                 holder.imageReorder.visibility = View.VISIBLE
             }
+            else -> {
+                throw IllegalArgumentException("Unknown event name! ${event.name}")
+            }
         }
         when (event.name) {
             "timer" -> {
                 holder.textTargetType.text = context.resources.getString(R.string.text_target_type_wait_for_timer)
                 holder.textValue.text = context.resources.getString(R.string.text_value_seconds, event.value)
             }
-            "navigation" -> {
+            "page" -> {
                 holder.textTargetType.text = context.resources.getString(R.string.text_target_type_wait_for_navigation)
                 holder.textValue.text = event.value
             }
@@ -129,7 +128,6 @@ class EditEventsAdapter(
     fun removeItem(position: Int) {
         events.removeAt(position)
         notifyItemRemoved(position)
-        switchTips()
     }
 
     fun addItem(event: MacroEvent) {
@@ -148,7 +146,6 @@ class EditEventsAdapter(
         }
         events.add(event)
         notifyItemInserted(itemCount)
-        switchTips()
     }
 
     fun setMessage(position: Int, message: String) {
@@ -161,14 +158,5 @@ class EditEventsAdapter(
 
     private fun itemAt(position: Int): MacroEvent {
         return events[position]
-    }
-
-    private fun switchTips() {
-        if (fragment.view == null) return
-        fragment.requireView().findViewById<TextView>(R.id.text_tips).visibility = if (itemCount == 0) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
     }
 }

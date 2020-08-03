@@ -154,7 +154,7 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_events, menu)
+        inflater.inflate(R.menu.menu_edit_events, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

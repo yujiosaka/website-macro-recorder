@@ -15,10 +15,16 @@ service cloud.firestore {
                validateDeviceScaleFactor() &&
                validateAcceptLanguage() &&
                validateUserAgent() &&
+               validateSelectedAreaLeft() &&
+               validateSelectedAreaRight() &&
+               validateSelectedAreaTop() &&
+               validateSelectedAreaBottom() &&
                request.resource.data.name is string &&
                request.resource.data.enableSchedule is bool &&
                request.resource.data.notifySuccess is bool &&
                request.resource.data.notifyFailure is bool &&
+               request.resource.data.checkEntirePage is bool &&
+               request.resource.data.checkSelectedArea is bool &&
                request.resource.data.isFailure is bool
       }
 
@@ -72,6 +78,23 @@ service cloud.firestore {
       function validateUserAgent() {
         return request.resource.data.userAgent is string &&
                request.resource.data.userAgent.size() >= 1;
+      }
+
+      function validateSelectedAreaLeft() {
+        return request.resource.data.selectedAreaLeft is number &&
+               request.resource.data.selectedAreaLeft >= 5
+      }
+      function validateSelectedAreaRight() {
+        return request.resource.data.selectedAreaRight is number &&
+               request.resource.data.selectedAreaRight >= 5
+      }
+      function validateSelectedAreaTop() {
+        return request.resource.data.selectedAreaTop is number &&
+               request.resource.data.selectedAreaTop >= 5
+      }
+      function validateSelectedAreaBottom() {
+        return request.resource.data.selectedAreaBottom is number &&
+               request.resource.data.selectedAreaBottom >= 5
       }
 
       allow get: if request.auth.uid == resource.data.uid;

@@ -34,7 +34,7 @@ class EditRecordFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
         vm.resetEvents()
         binding = FragmentEditRecordBinding.inflate(inflater, container, false)
         binding.vm = vm
@@ -43,7 +43,7 @@ class EditRecordFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_record, menu)
+        inflater.inflate(R.menu.menu_edit_record, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

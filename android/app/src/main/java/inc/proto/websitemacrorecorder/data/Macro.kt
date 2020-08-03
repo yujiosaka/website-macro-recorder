@@ -1,5 +1,6 @@
 package inc.proto.websitemacrorecorder.data
 
+import android.graphics.Rect
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.google.firebase.Timestamp
@@ -21,12 +22,18 @@ class Macro(
     enableSchedule: Boolean = true,
     notifySuccess: Boolean = true,
     notifyFailure: Boolean = true,
+    checkEntirePage: Boolean = false,
+    checkSelectedArea: Boolean = false,
     isFailure: Boolean = false,
     acceptLanguage: String = Locale.getDefault().language,
     userAgent: String = "",
     height: Int = 0,
     width: Int = 0,
     deviceScaleFactor: Float = App.context.resources.displayMetrics.density,
+    selectedAreaLeft: Int? = null,
+    selectedAreaTop: Int? = null,
+    selectedAreaRight: Int? = null,
+    selectedAreaBottom: Int? = null,
     events: ArrayList<MacroEvent> = arrayListOf(),
     createdAt: Timestamp? = null,
     updatedAt: Timestamp? = null
@@ -122,6 +129,20 @@ class Macro(
         }
 
     @Bindable
+    var checkEntirePage = checkEntirePage
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.checkEntirePage)
+        }
+
+    @Bindable
+    var checkSelectedArea = checkSelectedArea
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.checkSelectedArea)
+        }
+
+    @Bindable
     var isFailure = isFailure
         set(value) {
             field = value
@@ -161,6 +182,62 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.deviceScaleFactor)
+        }
+
+    @Bindable
+    var selectedAreaLeft = selectedAreaLeft
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.selectedAreaLeft)
+        }
+
+    @Bindable
+    var selectedAreaTop = selectedAreaTop
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.selectedAreaTop)
+        }
+
+    @Bindable
+    var selectedAreaRight = selectedAreaRight
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.selectedAreaRight)
+        }
+
+    @Bindable
+    var selectedAreaBottom = selectedAreaBottom
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.selectedAreaBottom)
+        }
+
+    var isAreaSelected = false
+        get() {
+            return selectedAreaLeft != null &&
+                    selectedAreaTop != null &&
+                    selectedAreaRight != null &&
+                    selectedAreaBottom != null
+        }
+
+    var selectedAreaSize = ""
+        get() {
+            if (!isAreaSelected) return ""
+            val width = selectedAreaRight!! - selectedAreaLeft!!
+            val height = selectedAreaBottom!! - selectedAreaTop!!
+            return "$width x $height"
+        }
+
+    var selectedAreaRect: Rect?
+        get() {
+            if (!isAreaSelected) return null
+            return Rect(selectedAreaLeft!!, selectedAreaTop!!, selectedAreaRight!!, selectedAreaBottom!!)
+        }
+        set(value) {
+            selectedAreaLeft = value?.left
+            selectedAreaTop = value?.top
+            selectedAreaRight = value?.right
+            selectedAreaBottom = value?.bottom
         }
 
     @Bindable

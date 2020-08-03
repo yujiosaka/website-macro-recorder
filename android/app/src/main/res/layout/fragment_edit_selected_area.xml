@@ -4,19 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-        <variable
-            name="vm"
-            type="inc.proto.websitemacrorecorder.ui.confirm.ConfirmViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_confirm"
+        android:id="@+id/layout_edit_selected_area"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.edit_selected_area.EditSelectedAreaFragment" >
 
         <ScrollView
-            android:id="@+id/scroll_confirm"
+            android:id="@+id/scroll_edit_selected_area"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -36,31 +34,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <inc.proto.websitemacrorecorder.util.DragRectView
+                    android:id="@+id/drag_rectangle"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_screenshot"
+                    app:layout_constraintEnd_toEndOf="@+id/image_screenshot"
+                    app:layout_constraintStart_toStartOf="@+id/image_screenshot"
+                    app:layout_constraintTop_toTopOf="@+id/image_screenshot" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-        <ProgressBar
-            android:id="@+id/progress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:progressTint="@color/colorSecondary"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline"
-            tools:visibility="visible" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_begin="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

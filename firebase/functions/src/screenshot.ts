@@ -22,6 +22,7 @@ function getDevice(macro: Macro) {
       deviceScaleFactor: macro.deviceScaleFactor,
       isMobile: true,
       hasTouch: true,
+      isLandscape: false,
     },
     userAgent: macro.userAgent,
   };
@@ -31,7 +32,7 @@ async function triggerEvents(page: puppeteer.Page, events: MacroEvent[]) {
   if (events.length === 0) return;
   const serialEvents: MacroEvent[] = [];
   for (let i = 0; i < events.length; i++) {
-    var event = events[i];
+    const event = events[i];
     if (event.name !== 'page') {
       await triggerEventSeries(page, serialEvents);
       serialEvents.splice(0); // Reset array
@@ -115,7 +116,7 @@ async function saveScreenshot(macro: Macro, context: functions.https.CallableCon
   try {
     const browser = await puppeteer.launch({ args: ARGS });
     const page = await browser.newPage();
-    const device = getDevice(macro)
+    const device = getDevice(macro);
     await page.emulate(device);
     await page.goto(macro.url);
     await triggerEvents(page, macro.events);
