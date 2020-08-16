@@ -14,9 +14,6 @@
     <string name="action_edit_macro">Edit this macro</string>
     <string name="action_reset">Reset</string>
 
-    <!-- Strings used for notification -->
-    <string name="update">Updated %1$s</string>
-
     <!-- Strings used for validation -->
     <string name="error_enter_here">Enter %1$s here</string>
     <string name="error_format_is_invalid">%1$s format is invalid</string>
@@ -95,23 +92,21 @@
     <string name="text_add">Add</string>
     <string name="text_close">Close</string>
     <string name="text_seconds">Seconds</string>
-    <string name="text_wait">Wait</string>
     <string name="hint_seconds">3</string>
 
     <!-- Strings used for edit fragment -->
     <string name="text_name_title">Name</string>
     <string name="hint_name">Enter name</string>
-    <string name="text_record">Record</string>
+    <string name="text_macro">Macro</string>
     <string name="text_schedule">%1$s at %2$s</string>
     <string name="text_schedule_title">Schedule</string>
-    <string name="text_no_schedule">No schedule</string>
     <string name="text_notification_title">Notification</string>
     <string name="text_notify_success">Send app notification on success</string>
     <string name="text_notify_failure">Send app notification on error</string>
     <string name="text_update_check_title">Update check</string>
     <string name="text_check_entire_page">Check entire page for update</string>
     <string name="text_check_selected_area">Check area %1$s for update</string>
-    <string name="text_not_selected_area">Not selected area for update</string>
+    <string name="text_not_selected_area">Not selected area to check update</string>
     <string name="text_back_to_macro_list">≪ Back to your macro list</string>
     <string name="button_save">Save</string>
     <string name="button_delete">Delete this macro</string>
@@ -123,5 +118,5 @@
     <string name="text_back_to_macro_edit">≪ Back to your macro edit</string>
 
     <!-- Strings used for edit selected area fragment -->
-    <string name="notification_select_area">Press long to select area</string>
+    <string name="notification_select_area">Hold down the screenshot to select area</string>
 </resources>
