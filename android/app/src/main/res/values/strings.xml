@@ -21,7 +21,6 @@
     <string name="error_timeout">Event not completed in 30 seconds</string>
     <string name="error_unavailable">Out of memory error occurred</string>
     <string name="error_internal">Network error occurred</string>
-
     <string name="error_unauthenticated">Not authenticated</string>
     <string name="error_unknown">Unknown error occurred</string>
     <string name="error_invalid_argument">Argument is invalid</string>
@@ -53,6 +52,7 @@
     <string name="text_tutorial5">You can get notified by app\nwhen selected area is updated</string>
 
     <!-- Strings used for list fragment -->
+    <string name="notification_macro_succeeded">Running macro succeeded</string>
     <string name="text_error">Error</string>
     <string name="text_date_latest">...</string>
 

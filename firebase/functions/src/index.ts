@@ -7,3 +7,4 @@ admin.initializeApp({
 
 export * from './screenshot';
 export * from './save';
+export * from './run';

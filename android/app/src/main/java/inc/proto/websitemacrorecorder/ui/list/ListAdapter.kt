@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -27,6 +26,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
 
     private lateinit var context: Context
     private lateinit var sharedPreferences: SharedPreferences
+
     private val macroRepository = MacroRepository()
     private val fragment = fragment
 
@@ -85,11 +85,11 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
                 menu.add(Menu.NONE, ACTION_RUN_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
                 menu.findItem(ACTION_RUN_MACRO).setOnMenuItemClickListener {
+                    fragment.runMacro(model)
                     true
                 }
                 menu.findItem(ACTION_EDIT_MACRO).setOnMenuItemClickListener {
-                    val action = ListFragmentDirections.actionListFragmentToEditFragment(model)
-                    fragment.findNavController().navigate(action)
+                    fragment.editMacro(model)
                     true
                 }
             }

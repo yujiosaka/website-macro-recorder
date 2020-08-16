@@ -1,7 +1,13 @@
 import * as admin from 'firebase-admin';
 import { URL } from 'url';
+import { join } from 'path';
+import { tmpdir } from 'os';
 
 const storage = admin.storage();
+
+export function getTmpPath(filename: string) {
+  return join(tmpdir(), filename);
+}
 
 export function isUrl(url: string) {
   try {
