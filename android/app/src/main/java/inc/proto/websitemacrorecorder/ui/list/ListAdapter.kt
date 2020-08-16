@@ -2,6 +2,7 @@ package inc.proto.websitemacrorecorder.ui.list
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -81,7 +82,6 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         }
         holder.card.setOnSingleClickListener {
             holder.card.setOnCreateContextMenuListener { menu, _, _ ->
-                menu.setHeaderTitle(model.name)
                 menu.add(Menu.NONE, ACTION_RUN_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
                 menu.findItem(ACTION_RUN_MACRO).setOnMenuItemClickListener {
@@ -93,7 +93,11 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
                     true
                 }
             }
-            holder.card.showContextMenu()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                holder.card.showContextMenu(holder.card.pivotX, holder.card.pivotY)
+            } else {
+                holder.card.showContextMenu()
+            }
             holder.card.setOnCreateContextMenuListener(null)
         }
     }
