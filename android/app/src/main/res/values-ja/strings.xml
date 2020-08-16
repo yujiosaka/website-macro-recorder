@@ -53,6 +53,8 @@
 
     <!-- Strings used for list fragment -->
     <string name="notification_macro_succeeded">マクロの実行が成功しました</string>
+    <string name="notification_entire_page_changed">ページ全体の更新が検知されました</string>
+    <string name="notification_selected_area_changed">選択エリアの更新が検知されました</string>
     <string name="text_no_name">名称未設定</string>
     <string name="text_error">エラー</string>
     <string name="text_date_latest">...</string>
@@ -99,15 +101,15 @@
     <string name="text_name_title">名称</string>
     <string name="hint_name">名称を入力してください</string>
     <string name="text_macro">マクロ</string>
-    <string name="text_schedule">%1$s%2$s</string>
+    <string name="text_schedule">%1$s%2$sにスケジュール実行</string>
     <string name="text_schedule_title">スケジュール</string>
     <string name="text_notification_title">通知</string>
-    <string name="text_notify_success">マクロ失敗時にアプリ通知を行う</string>
-    <string name="text_notify_failure">マクロ成功時にアプリ通知を行う</string>
+    <string name="text_notify_success">実行失敗時にアプリ通知を行う</string>
+    <string name="text_notify_failure">実行成功時にアプリ通知を行う</string>
     <string name="text_update_check_title">更新チェック</string>
     <string name="text_check_entire_page">ページ全体をチェック</string>
-    <string name="text_check_selected_area">選択エリア(%1$s)をチェック</string>
-    <string name="text_not_selected_area">更新チェックのエリア未選択</string>
+    <string name="text_check_selected_area">選択エリア %1$s をチェック</string>
+    <string name="text_not_selected_area">チェック対象のエリア未選択</string>
     <string name="text_back_to_macro_list">≪ マクロの一覧に戻る</string>
     <string name="button_save">保存</string>
     <string name="button_delete">削除</string>

@@ -101,7 +101,18 @@ class ListFragment : Fragment() {
                 Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
                 return@addOnCompleteListener
             }
-            val text = root.resources.getString(R.string.notification_macro_succeeded)
+            val data = it.result!!.data as Map<String, Boolean>
+            val text = when {
+                data["entirePage"] != true && data["selectedArea"] != true -> {
+                    root.resources.getString(R.string.notification_macro_succeeded)
+                }
+                data["entirePage"] != true -> {
+                    root.resources.getString(R.string.notification_entire_page_changed)
+                }
+                else -> {
+                    root.resources.getString(R.string.notification_selected_area_changed)
+                }
+            }
             Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
         }
     }
