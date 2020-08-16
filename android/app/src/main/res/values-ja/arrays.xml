@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="text_date_array">
+        <item>登録が新しい順に並び替え</item>
+        <item>登録が古い順に並び替え</item>
+        <item>更新が新しい順に並び替え</item>
+        <item>更新が古い順に並び替え</item>
+    </string-array>
+
+    <string-array name="text_frequency_array">
+        <item>スケジュール未設定</item>
+        <item>毎日</item>
+        <item>毎時</item>
+    </string-array>
+</resources>
