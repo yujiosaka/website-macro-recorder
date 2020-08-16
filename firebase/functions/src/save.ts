@@ -18,6 +18,8 @@ function validate(macro: Macro) {
          isNumber(macro.scheduleMinute) && macro.scheduleMinute >= 0 && macro.scheduleMinute < 60 &&
          isBoolean(macro.notifySuccess) &&
          isBoolean(macro.notifyFailure) &&
+         isBoolean(macro.checkEntirePage) &&
+         isBoolean(macro.checkSelectedArea) &&
          isBoolean(macro.isFailure) &&
          isString(macro.userAgent) && !isEmpty(macro.userAgent) &&
          isString(macro.acceptLanguage) && !isEmpty(macro.acceptLanguage) &&

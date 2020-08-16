@@ -12,6 +12,7 @@
     <string name="action_save">Save</string>
     <string name="action_run_macro">Run this macro</string>
     <string name="action_edit_macro">Edit this macro</string>
+    <string name="action_reset">Reset</string>
 
     <!-- Strings used for notification -->
     <string name="update">Updated %1$s</string>
@@ -39,10 +40,10 @@
     <string name="edit_url_fragment_label">Enter Website URL</string>
     <string name="edit_record_fragment_label">Record Your Macro</string>
     <string name="edit_events_fragment_label">Edit Events</string>
-    <string name="confirm_fragment_label">Confirm your macro</string>
+    <string name="confirm_fragment_label">Confirm Your Macro</string>
     <string name="edit_fragment_label">Edit Your Macro</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
-    <string name="edit_advanced_fragment_label">Edit Advanced Setting</string>
+    <string name="edit_selected_area_fragment_label">Select Area</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
 
     <!-- Strings used for tutorial fragment -->
@@ -52,7 +53,7 @@
     <string name="text_tutorial2">Start recording your macro\nby entering the target site URL</string>
     <string name="text_tutorial3">You can also start recording\nyour macro from Chrome\&apos; share</string>
     <string name="text_tutorial4">You can edit your record by sorting\nand removing events and add timers</string>
-
+    <string name="text_tutorial5">You can get notified by app\nwhen selected area is updated</string>
 
     <!-- Strings used for list fragment -->
     <string name="text_error">Error</string>
@@ -70,7 +71,6 @@
     <string name="notification_restart_recording">Restart recording</string>
 
     <!-- Strings used for edit events fragment -->
-    <string name="text_tips">Tips\n\nTap an element on the page after navigation when your macro fails running.\n\nOr add a timer by tapping the clock icon on the menu bar to make sure the navigation completes.\n\nYou can also drag events to change the order and delete one by swiping it to the right.</string>
     <string name="text_name_click">Tap</string>
     <string name="text_name_type">Type</string>
     <string name="text_name_select">Select</string>
@@ -108,6 +108,10 @@
     <string name="text_notification_title">Notification</string>
     <string name="text_notify_success">Send app notification on success</string>
     <string name="text_notify_failure">Send app notification on error</string>
+    <string name="text_update_check_title">Update check</string>
+    <string name="text_check_entire_page">Check entire page for update</string>
+    <string name="text_check_selected_area">Check area %1$s for update</string>
+    <string name="text_not_selected_area">Not selected area for update</string>
     <string name="text_back_to_macro_list">≪ Back to your macro list</string>
     <string name="button_save">Save</string>
     <string name="button_delete">Delete this macro</string>
@@ -117,4 +121,7 @@
 
     <!-- Strings used for edit schedule fragment -->
     <string name="text_back_to_macro_edit">≪ Back to your macro edit</string>
+
+    <!-- Strings used for edit selected area fragment -->
+    <string name="notification_select_area">Press long to select area</string>
 </resources>

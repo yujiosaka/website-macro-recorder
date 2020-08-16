@@ -148,12 +148,28 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_editFragment_to_editSelectedAreaFragment"
+            app:destination="@id/editSelectedAreaFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/editScheduleFragment"
         android:name="inc.proto.websitemacrorecorder.ui.edit_schedule.EditScheduleFragment"
         android:label="@string/edit_schedule_fragment_label"
         tools:layout="@layout/fragment_edit_schedule">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editSelectedAreaFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.edit_selected_area.EditSelectedAreaFragment"
+        android:label="@string/edit_selected_area_fragment_label"
+        tools:layout="@layout/fragment_edit_selected_area" >
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
@@ -203,7 +219,19 @@
         android:label="fragment_tutorial4"
         tools:layout="@layout/fragment_tutorial4" >
         <action
-            android:id="@+id/action_tutorial4Fragment_to_listFragment_without_history"
+            android:id="@+id/action_tutorial4Fragment_to_tutorial5Fragment"
+            app:destination="@id/tutorial5Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/tutorial5Fragment"
+        android:name="inc.proto.websitemacrorecorder.ui.tutorial5.Tutorial5Fragment"
+        android:label="Tutorial5Fragment" >
+        <action
+            android:id="@+id/action_tutorial5Fragment_to_listFragment_without_history"
             app:destination="@id/listFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true"

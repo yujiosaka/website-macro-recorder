@@ -37,7 +37,7 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
         binding = FragmentListBinding.inflate(inflater, container, false)
         binding.vm = vm
         binding.lifecycleOwner = this

@@ -29,11 +29,26 @@ class EditViewModel(macro: Macro) : ViewModel() {
         }
     }
 
+    val checkSelectedArea: LiveData<String> = Transformations.map(_macro) {
+        if (_macro.value!!.isAreaSelected) {
+            App.context.resources.getString(
+                R.string.text_check_selected_area,
+                _macro.value!!.selectedAreaSize
+            )
+        } else {
+            App.context.resources.getString(R.string.text_not_selected_area)
+        }
+    }
+
+    val isAreaSelected: LiveData<Boolean> = Transformations.map(_macro) {
+        _macro.value!!.isAreaSelected
+    }
+
     fun validateName(editText: EditText) {
         if (_macro.value?.name == "") {
-            editText.error = editText.resources.getString(
+            editText.error = App.context.resources.getString(
                 R.string.error_enter_here,
-                editText.resources.getString(R.string.name)
+                App.context.resources.getString(R.string.name)
             )
         } else {
             editText.error = null

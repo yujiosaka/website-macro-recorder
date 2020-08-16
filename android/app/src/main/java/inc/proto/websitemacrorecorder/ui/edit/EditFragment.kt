@@ -96,5 +96,26 @@ class EditFragment : Fragment() {
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
         }
+        binding.editCheckEntirePage.setOnCheckedChangeListener { _, isChecked ->
+            if (vm.macro.value!!.checkEntirePage == isChecked) return@setOnCheckedChangeListener
+            vm.macro.value!!.checkEntirePage = isChecked
+            macroRepository.update(vm.macro.value!!.id, mapOf(
+                "checkEntirePage" to vm.macro.value!!.checkEntirePage,
+                "updatedAt" to FieldValue.serverTimestamp()
+            ))
+        }
+        binding.editCheckSelectedArea.setOnCheckedChangeListener { _, isChecked ->
+            if (vm.macro.value!!.checkSelectedArea == isChecked) return@setOnCheckedChangeListener
+
+            vm.macro.value!!.checkSelectedArea = isChecked
+            macroRepository.update(vm.macro.value!!.id, mapOf(
+                "checkSelectedArea" to vm.macro.value!!.checkSelectedArea,
+                "updatedAt" to FieldValue.serverTimestamp()
+            ))
+        }
+        binding.textCheckSelectedArea.paintFlags = binding.textCheckSelectedArea.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        binding.textCheckSelectedArea.setOnSingleClickListener {
+            findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditSelectedAreaFragment(vm.macro.value!!))
+        }
     }
 }
