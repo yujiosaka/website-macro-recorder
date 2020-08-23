@@ -53,6 +53,7 @@
 
     <!-- Strings used for list fragment -->
     <string name="notification_macro_succeeded">マクロの実行が成功しました</string>
+    <string name="text_no_name">名称未設定</string>
     <string name="text_error">エラー</string>
     <string name="text_date_latest">...</string>
 
@@ -113,10 +114,12 @@
     <string name="message_delete">本当に削除してよろしいですか？</string>
     <string name="message_yes">はい</string>
     <string name="message_no">いいえ</string>
+    <string name="notification_update_macro">マクロの更新を保存しました</string>
 
     <!-- Strings used for edit schedule fragment -->
     <string name="text_back_to_macro_edit">≪ マクロの編集に戻る</string>
 
     <!-- Strings used for edit selected area fragment -->
     <string name="notification_select_area">画面を長押ししてエリアを選択してください</string>
+    <string name="notification_area_selected">チェックをタップしてエリアを保存してください</string>
 </resources>

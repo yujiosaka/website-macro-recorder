@@ -2,7 +2,9 @@ package inc.proto.websitemacrorecorder.util
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 import java.io.InputStream
+import kotlin.coroutines.CoroutineContext
 
 object Helper {
     fun inputStreamToString(streamStream: InputStream): String {
@@ -21,5 +23,16 @@ object Helper {
         val gson = Gson()
         val json = gson.toJson(data)
         return gson.fromJson(json, T::class.java)
+    }
+
+    fun <T> throttle(wait: Long, f: (T) -> Unit): (T) -> Unit {
+        var job: Job? = null
+        return { param: T ->
+            job?.cancel()
+            job = CoroutineScope(Dispatchers.Main).launch {
+                delay(wait)
+                f(param)
+            }
+        }
     }
 }

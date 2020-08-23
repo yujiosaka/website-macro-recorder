@@ -10,7 +10,9 @@ import android.widget.AdapterView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
+import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentEditScheduleBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.ui.dialog.time_picker_dialog.TimePickerDialogFragment
@@ -48,14 +50,10 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
             "scheduleMinute" to vm.macro.value!!.scheduleMinute,
             "updatedAt" to FieldValue.serverTimestamp()
         ))
+        showUpdateNotification()
     }
 
     private fun bindViewModel() {
-        binding.textBackToMacroEdit.paintFlags = binding.textBackToMacroEdit.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        binding.textBackToMacroEdit.setOnSingleClickListener {
-            findNavController().popBackStack()
-        }
-
         binding.editSchedule.setOnSingleClickListener {
             if (activity == null) return@setOnSingleClickListener
             val dialog = TimePickerDialogFragment()
@@ -76,10 +74,19 @@ class EditScheduleFragment : Fragment(), TimePickerDialogFragment.Listener {
                         "scheduleFrequency" to vm.macro.value!!.scheduleFrequency,
                         "updatedAt" to FieldValue.serverTimestamp()
                     ))
+                    showUpdateNotification()
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+        binding.buttonBackToMacroEdit.setOnSingleClickListener {
+            findNavController().popBackStack()
+        }
     }
 
+    private fun showUpdateNotification() {
+        if (activity == null) return
+        val root: View = requireActivity().findViewById(R.id.root)
+        Snackbar.make(root, R.string.notification_update_macro, Snackbar.LENGTH_SHORT).show()
+    }
 }

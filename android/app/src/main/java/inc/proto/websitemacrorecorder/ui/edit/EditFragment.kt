@@ -3,6 +3,7 @@ package inc.proto.websitemacrorecorder.ui.edit
 import android.app.AlertDialog
 import android.graphics.Paint
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentEditBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
+import inc.proto.websitemacrorecorder.util.Helper.throttle
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class EditFragment : Fragment() {
+    companion object {
+        private const val THROTTLE_WAIT = 500L
+    }
+
     private val vm: EditViewModel by lazy {
         ViewModelProvider(this, EditViewModelFactory(args.macro)).get(EditViewModel::class.java)
     }
@@ -42,10 +49,6 @@ class EditFragment : Fragment() {
     }
 
     private fun bindViewModel() {
-        binding.textBackToMacroList.paintFlags = binding.textBackToMacroList.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-        binding.textBackToMacroList.setOnSingleClickListener {
-            findNavController().navigate(R.id.action_editFragment_to_listFragment)
-        }
         binding.textUrl.paintFlags = binding.textUrl.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textUrl.setOnSingleClickListener {
             findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditUrlFragment(vm.macro.value!!))
@@ -64,13 +67,18 @@ class EditFragment : Fragment() {
                 .setNegativeButton(R.string.message_no, null)
                 .show()
         }
-        binding.editName.doAfterTextChanged {
-            if (vm.macro.value!!.name == it.toString()) return@doAfterTextChanged
+        val doAfterTextChangedThrottled = throttle<Editable?>(THROTTLE_WAIT) {
+            if (it == null) return@throttle
+            if (vm.macro.value!!.name == it.toString()) return@throttle
             vm.macro.value!!.name = it.toString()
             macroRepository.update(vm.macro.value!!.id, mapOf(
                 "name" to vm.macro.value!!.name,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
+            showUpdateNotification()
+        }
+        binding.editName.doAfterTextChanged {
+            doAfterTextChangedThrottled(it)
         }
         binding.editEnableSchedule.setOnCheckedChangeListener { _, isChecked ->
             if (vm.macro.value!!.enableSchedule == isChecked) return@setOnCheckedChangeListener
@@ -79,6 +87,7 @@ class EditFragment : Fragment() {
                 "enableSchedule" to vm.macro.value!!.enableSchedule,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
+            showUpdateNotification()
         }
         binding.editNotifySuccess.setOnCheckedChangeListener { _, isChecked ->
             if (vm.macro.value!!.notifySuccess == isChecked) return@setOnCheckedChangeListener
@@ -87,6 +96,7 @@ class EditFragment : Fragment() {
                 "notifySuccess" to vm.macro.value!!.notifySuccess,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
+            showUpdateNotification()
         }
         binding.editNotifyFailure.setOnCheckedChangeListener { _, isChecked ->
             if (vm.macro.value!!.notifyFailure == isChecked) return@setOnCheckedChangeListener
@@ -95,6 +105,7 @@ class EditFragment : Fragment() {
                 "notifyFailure" to vm.macro.value!!.notifyFailure,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
+            showUpdateNotification()
         }
         binding.editCheckEntirePage.setOnCheckedChangeListener { _, isChecked ->
             if (vm.macro.value!!.checkEntirePage == isChecked) return@setOnCheckedChangeListener
@@ -103,19 +114,29 @@ class EditFragment : Fragment() {
                 "checkEntirePage" to vm.macro.value!!.checkEntirePage,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
+            showUpdateNotification()
         }
         binding.editCheckSelectedArea.setOnCheckedChangeListener { _, isChecked ->
             if (vm.macro.value!!.checkSelectedArea == isChecked) return@setOnCheckedChangeListener
-
             vm.macro.value!!.checkSelectedArea = isChecked
             macroRepository.update(vm.macro.value!!.id, mapOf(
                 "checkSelectedArea" to vm.macro.value!!.checkSelectedArea,
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
+            showUpdateNotification()
         }
         binding.textCheckSelectedArea.paintFlags = binding.textCheckSelectedArea.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textCheckSelectedArea.setOnSingleClickListener {
             findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditSelectedAreaFragment(vm.macro.value!!))
         }
+        binding.buttonBackToMacroList.setOnSingleClickListener {
+            findNavController().navigate(R.id.action_editFragment_to_listFragment)
+        }
+    }
+
+    private fun showUpdateNotification() {
+        if (activity == null) return
+        val root: View = requireActivity().findViewById(R.id.root)
+        Snackbar.make(root, R.string.notification_update_macro, Snackbar.LENGTH_SHORT).show()
     }
 }

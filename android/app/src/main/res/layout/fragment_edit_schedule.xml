@@ -16,18 +16,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.edit_schedule.EditScheduleFragment">
 
-        <TextView
-            android:id="@+id/text_back_to_macro_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/text_back_to_macro_edit"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Spinner
             android:id="@+id/edit_schedule_frequency"
             android:layout_width="wrap_content"
@@ -35,9 +23,9 @@
             android:layout_marginStart="16dp"
             android:entries="@array/text_frequency_array"
             android:selectedItemPosition="@{ vm.macro.scheduleFrequency }"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_schedule"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/edit_schedule" />
 
         <EditText
             android:id="@+id/edit_schedule"
@@ -51,10 +39,25 @@
             android:text="@{ vm.macro.schedule }"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.GONE }"
+            app:layout_constraintBottom_toTopOf="@+id/button_back_to_macro_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/edit_schedule_frequency"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <Button
+            android:id="@+id/button_back_to_macro_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/text_back_to_macro_edit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/edit_schedule_frequency"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_schedule" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
