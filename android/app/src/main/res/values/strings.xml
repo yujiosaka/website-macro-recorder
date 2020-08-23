@@ -53,6 +53,7 @@
 
     <!-- Strings used for list fragment -->
     <string name="notification_macro_succeeded">Running macro succeeded</string>
+    <string name="text_no_name">No name</string>
     <string name="text_error">Error</string>
     <string name="text_date_latest">...</string>
 
@@ -107,16 +108,18 @@
     <string name="text_check_entire_page">Check entire page for update</string>
     <string name="text_check_selected_area">Check area %1$s for update</string>
     <string name="text_not_selected_area">Not selected area to check update</string>
-    <string name="text_back_to_macro_list">≪ Back to your macro list</string>
+    <string name="text_back_to_macro_list">Back</string>
     <string name="button_save">Save</string>
     <string name="button_delete">Delete this macro</string>
     <string name="message_delete">Do you really want to delete this macro?</string>
     <string name="message_yes">Yes</string>
     <string name="message_no">No</string>
+    <string name="notification_update_macro">Saved your macro update</string>
 
     <!-- Strings used for edit schedule fragment -->
-    <string name="text_back_to_macro_edit">≪ Back to your macro edit</string>
+    <string name="text_back_to_macro_edit">Back</string>
 
     <!-- Strings used for edit selected area fragment -->
     <string name="notification_select_area">Hold down the screenshot to select area</string>
+    <string name="notification_area_selected">Tap check mark to save the area</string>
 </resources>

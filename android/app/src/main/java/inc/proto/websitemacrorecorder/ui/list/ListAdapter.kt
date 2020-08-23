@@ -59,7 +59,12 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
                 "updatedAt" to FieldValue.serverTimestamp()
             ))
         }
-        holder.textName.text = model.name
+        holder.textName.text = if (model.name != "") {
+            model.name
+        } else {
+            context.resources.getString(R.string.text_no_name)
+
+        }
         holder.textUrl.text = model.url
         val order = sharedPreferences.getInt("ORDER", 0)
         holder.textDate.text = if (listOf(Macro.ORDER_UPDATED_AT_DESC_VALUE, Macro.ORDER_UPDATED_AT_ASC_VALUE).contains(order)) {

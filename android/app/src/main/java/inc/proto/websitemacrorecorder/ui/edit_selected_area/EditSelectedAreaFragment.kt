@@ -88,5 +88,8 @@ class EditSelectedAreaFragment : Fragment(), DragRectView.Listener {
     override fun endDraw(_rect: Rect) {
         binding.scrollEditSelectedArea.requestDisallowInterceptTouchEvent(false)
         args.macro.selectedAreaRect = _rect
+        if (activity == null) return
+        val root: View = requireActivity().findViewById(R.id.root)
+        Snackbar.make(root, R.string.notification_area_selected, Snackbar.LENGTH_SHORT).show()
     }
 }
