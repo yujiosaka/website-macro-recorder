@@ -1,6 +1,6 @@
 interface Macro {
-  id: String;
-  uid: String;
+  id: string;
+  uid: string;
   name: string;
   url: string;
   screenshotUrl: string;
@@ -22,4 +22,6 @@ interface Macro {
   selectedAreaTop: number;
   selectedAreaBottom: number;
   events: MacroEvent[];
+  createdAt: FirebaseFirestore.FieldValue;
+  updatedAt: FirebaseFirestore.FieldValue;
 }

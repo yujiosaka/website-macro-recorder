@@ -28,6 +28,36 @@ function validate(macro: Macro) {
          isNumber(macro.deviceScaleFactor) && macro.deviceScaleFactor >= 1;
 }
 
+async function moveScreenshot(macro: Macro, context: functions.https.CallableContext) {
+  const source = `screenshots/${context.auth!.uid}/tmp.png`;
+  const destination = `screenshots/${context.auth!.uid}/${macro.id}.png`;
+  try {
+    macro.screenshotUrl = await move(source, destination);
+  } catch (error) {
+    console.warn(error);
+    throw new functions.https.HttpsError(
+      'unknown',
+      'Unknown error occurred',
+    );
+  }
+}
+
+async function saveMacro(macro: Macro, context: functions.https.CallableContext) {
+  macro.uid = context.auth!.uid;
+  macro.updatedAt = admin.firestore.FieldValue.serverTimestamp();
+  if (!macro.createdAt) macro.createdAt = macro.updatedAt;
+  try {
+    await firestore.collection('macros').doc(macro.id).set(macro);
+    return macro;
+  } catch (error) {
+    console.warn(error);
+    throw new functions.https.HttpsError(
+      'unknown',
+      'Unknown error occurred',
+    );
+  }
+}
+
 export const save = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
@@ -44,20 +74,6 @@ export const save = functions.runWith({
       'Argument is invalid',
     );
   }
-  const source = `screenshots/${context.auth.uid}/tmp.png`;
-  const destination = `screenshots/${context.auth.uid}/${data.id}.png`;
-  try {
-    data.uid = context.auth.uid;
-    data.screenshotUrl = await move(source, destination);
-    data.updatedAt = admin.firestore.FieldValue.serverTimestamp();
-    if (!data.createdAt) data.createdAt = data.updatedAt;
-    await firestore.collection('macros').doc(data.id).set(data);
-    return data;
-  } catch (error) {
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
-  }
+  await moveScreenshot(data, context);
+  return saveMacro(data, context);
 });

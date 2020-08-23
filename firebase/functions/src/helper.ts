@@ -30,3 +30,8 @@ export async function move(source: string, destination: string) {
   const [metadata] = await file.getMetadata();
   return metadata.mediaLink;
 }
+
+export async function download(source: string) {
+  const [file] = await storage.bucket().file(source).download();
+  return file;
+}

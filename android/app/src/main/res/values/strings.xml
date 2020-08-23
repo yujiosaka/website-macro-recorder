@@ -53,6 +53,8 @@
 
     <!-- Strings used for list fragment -->
     <string name="notification_macro_succeeded">Running macro succeeded</string>
+    <string name="notification_entire_page_changed">Detected entire page update</string>
+    <string name="notification_selected_area_changed">Detected selected area update</string>
     <string name="text_no_name">No name</string>
     <string name="text_error">Error</string>
     <string name="text_date_latest">...</string>

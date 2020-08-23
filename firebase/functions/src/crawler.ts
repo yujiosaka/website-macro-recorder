@@ -69,17 +69,13 @@ export default class Crawler {
           );
       }
     } catch (error) {
-      if (error instanceof functions.https.HttpsError) throw error;
       if (error instanceof puppeteer.errors.TimeoutError) {
         throw new functions.https.HttpsError(
           'deadline-exceeded',
           `Timeout error occurred position: ${event.position}`,
         );
       }
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw error;
     }
   }
 
@@ -119,8 +115,8 @@ export default class Crawler {
     }));
   }
 
-  async screenshot(tmpPath: string) {
-    await this.page.screenshot({ path: tmpPath, fullPage: true });
+  async screenshot(options: object) {
+    return await this.page.screenshot(options);
   }
 
   async close() {
