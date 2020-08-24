@@ -36,7 +36,8 @@ class Macro(
     selectedAreaBottom: Int? = null,
     events: ArrayList<MacroEvent> = arrayListOf(),
     createdAt: Timestamp? = null,
-    updatedAt: Timestamp? = null
+    updatedAt: Timestamp? = null,
+    executedAt: Timestamp? = null
 ) : Serializable, BaseObservable() {
     companion object {
         const val ORDER_UPDATED_AT_DESC_VALUE = 0
@@ -259,5 +260,12 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.updatedAt)
+        }
+
+    @Bindable
+    var executedAt = executedAt
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.executedAt)
         }
 }

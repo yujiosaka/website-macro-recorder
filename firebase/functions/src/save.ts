@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { isString, isNumber, isBoolean, isEmpty, includes } from 'lodash';
+import { isString, isNumber, isBoolean, isEmpty, includes, extend } from 'lodash';
 import { isUrl, move } from './helper';
 
 const RUNTIME_TIMEOUT_SECONDS = 30;
@@ -43,11 +43,14 @@ async function moveScreenshot(macro: Macro, context: functions.https.CallableCon
 }
 
 async function saveMacro(macro: Macro, context: functions.https.CallableContext) {
-  macro.uid = context.auth!.uid;
-  macro.updatedAt = admin.firestore.FieldValue.serverTimestamp();
-  if (!macro.createdAt) macro.createdAt = macro.updatedAt;
+  const ts = admin.firestore.FieldValue.serverTimestamp();
   try {
-    await firestore.collection('macros').doc(macro.id).set(macro);
+    await firestore.collection('macros').doc(macro.id).set(extend({}, macro, {
+      uid: context.auth!.uid,
+      createdAt: ts,
+      updatedAt: ts,
+      executedAt: ts,
+    }));
     return macro;
   } catch (error) {
     console.warn(error);
