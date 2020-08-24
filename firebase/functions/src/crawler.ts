@@ -30,8 +30,8 @@ export default class Crawler {
   getDevice(macro: Macro) {
     return {
       viewport: {
-        height: Math.floor(macro.height / macro.deviceScaleFactor),
-        width: Math.floor(macro.width / macro.deviceScaleFactor),
+        height: Math.floor(macro.viewportHeight / macro.deviceScaleFactor),
+        width: Math.floor(macro.viewportWidth / macro.deviceScaleFactor),
         deviceScaleFactor: macro.deviceScaleFactor,
         isMobile: true,
         hasTouch: true,

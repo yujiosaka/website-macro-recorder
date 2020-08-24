@@ -14,8 +14,8 @@ interface Macro {
   isFailure: boolean;
   userAgent: string;
   acceptLanguage: string;
-  height: number;
-  width: number;
+  viewportHeight: number;
+  viewportWidth: number;
   deviceScaleFactor: number;
   selectedAreaLeft: number;
   selectedAreaRight: number;

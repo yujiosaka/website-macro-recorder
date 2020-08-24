@@ -61,8 +61,8 @@ class EditRecordFragment : Fragment() {
             R.id.action_done -> {
                 if (loading) return false
                 vm.macro.value!!.userAgent = binding.webRecorder.settings.userAgentString
-                vm.macro.value!!.height = binding.webRecorder.height
-                vm.macro.value!!.width = binding.webRecorder.width
+                vm.macro.value!!.viewportHeight = binding.webRecorder.height
+                vm.macro.value!!.viewportWidth = binding.webRecorder.width
                 findNavController().navigate(EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(vm.macro.value!!))
                 true
             }

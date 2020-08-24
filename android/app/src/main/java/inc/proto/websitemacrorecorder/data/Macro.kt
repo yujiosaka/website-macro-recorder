@@ -27,8 +27,8 @@ class Macro(
     isFailure: Boolean = false,
     acceptLanguage: String = Locale.getDefault().language,
     userAgent: String = "",
-    height: Int = 0,
-    width: Int = 0,
+    viewportHeight: Int = 0,
+    viewportWidth: Int = 0,
     deviceScaleFactor: Float = App.context.resources.displayMetrics.density,
     selectedAreaLeft: Int? = null,
     selectedAreaTop: Int? = null,
@@ -164,17 +164,17 @@ class Macro(
         }
 
     @Bindable
-    var height = height
+    var viewportHeight = viewportHeight
         set(value) {
             field = value
-            notifyPropertyChanged(BR.height)
+            notifyPropertyChanged(BR.viewportHeight)
         }
 
     @Bindable
-    var width = width
+    var viewportWidth = viewportWidth
         set(value) {
             field = value
-            notifyPropertyChanged(BR.width)
+            notifyPropertyChanged(BR.viewportWidth)
         }
 
     @Bindable
@@ -223,9 +223,9 @@ class Macro(
     var selectedAreaSize = ""
         get() {
             if (!isAreaSelected) return ""
-            val width = selectedAreaRight!! - selectedAreaLeft!!
-            val height = selectedAreaBottom!! - selectedAreaTop!!
-            return "$width x $height"
+            val selectedAreaWidth = selectedAreaRight!! - selectedAreaLeft!!
+            val selectedAreaHeight = selectedAreaBottom!! - selectedAreaTop!!
+            return "$isAreaSelected x $selectedAreaHeight"
         }
 
     var selectedAreaRect: Rect?

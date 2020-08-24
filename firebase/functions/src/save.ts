@@ -23,8 +23,8 @@ function validate(macro: Macro) {
          isBoolean(macro.isFailure) &&
          isString(macro.userAgent) && !isEmpty(macro.userAgent) &&
          isString(macro.acceptLanguage) && !isEmpty(macro.acceptLanguage) &&
-         isNumber(macro.height) && macro.height >= 1 &&
-         isNumber(macro.width) && macro.width >= 1 &&
+         isNumber(macro.viewportHeight) && macro.viewportHeight >= 1 &&
+         isNumber(macro.viewportWidth) && macro.viewportWidth >= 1 &&
          isNumber(macro.deviceScaleFactor) && macro.deviceScaleFactor >= 1;
 }
 

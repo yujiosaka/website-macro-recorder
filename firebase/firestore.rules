@@ -56,13 +56,13 @@ service cloud.firestore {
       }
 
       function validateHeight() {
-        return request.resource.data.height is number &&
-               request.resource.data.height > 0;
+        return request.resource.data.viewportHeight is number &&
+               request.resource.data.viewportHeight > 0;
       }
 
       function validateWidth() {
-        return request.resource.data.width is number &&
-               request.resource.data.width > 0;
+        return request.resource.data.viewportWidth is number &&
+               request.resource.data.viewportWidth > 0;
       }
 
       function validateDeviceScaleFactor() {
