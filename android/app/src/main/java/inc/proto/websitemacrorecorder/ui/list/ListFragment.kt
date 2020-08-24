@@ -103,10 +103,10 @@ class ListFragment : Fragment() {
             }
             val data = it.result!!.data as Map<String, Boolean>
             val text = when {
-                data["entirePage"] != true && data["selectedArea"] != true -> {
+                data["isEntirePageUpdated"] != true && data["isSelectedAreaUpdated"] != true -> {
                     root.resources.getString(R.string.notification_macro_succeeded)
                 }
-                data["entirePage"] != true -> {
+                data["isEntirePageUpdated"] != true -> {
                     root.resources.getString(R.string.notification_entire_page_changed)
                 }
                 else -> {

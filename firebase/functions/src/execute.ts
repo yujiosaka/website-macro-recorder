@@ -1,3 +1,5 @@
+import { extend } from 'lodash';
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as sharp from 'sharp';
 import pixelmatch = require('pixelmatch');
@@ -7,6 +9,8 @@ import Crawler from './crawler';
 
 const RUNTIME_TIMEOUT_SECONDS = 180;
 const RUNTIME_MEMORY = '2GB';
+
+const firestore = admin.firestore();
 
 async function downloadScreenshot(macro: Macro, context: functions.https.CallableContext) {
   const source = `screenshots/${context.auth!.uid}/${macro.id}.png`;
@@ -41,18 +45,18 @@ async function saveScreenshot(macro: Macro) {
 
 async function checkUpdate(macro: Macro, original: Buffer, current: Buffer) {
   try {
-    let entirePage = true;
-    let selectedArea = true;
+    let isEntirePageUpdated = true;
+    let isSelectedAreaUpdated = true;
     if (macro.checkEntirePage) {
-      entirePage = compareImage(original, current);
+      isEntirePageUpdated = compareImage(original, current);
     }
     if (macro.checkSelectedArea && isAreaSelected(macro)) {
       const shape = getShape(macro);
       const originalSelectedArea = await sharp(original).extract(shape).toBuffer();
       const currentSelectedArea = await sharp(current).extract(shape).toBuffer();
-      selectedArea = compareImage(originalSelectedArea, currentSelectedArea);
+      isSelectedAreaUpdated = compareImage(originalSelectedArea, currentSelectedArea);
     }
-    return { entirePage, selectedArea };
+    return { isEntirePageUpdated, isSelectedAreaUpdated };
   } catch (error) {
     console.warn(error);
     throw new functions.https.HttpsError(
@@ -88,6 +92,20 @@ function isAreaSelected(macro: Macro) {
   return true;
 }
 
+async function updateMacro(macro: Macro, update: { isFailure: boolean }) {
+  try {
+    await firestore.collection('macros').doc(macro.id).update(extend({}, update, {
+      executedAt: admin.firestore.FieldValue.serverTimestamp(),
+    }));
+  } catch (error) {
+    console.warn(error);
+    throw new functions.https.HttpsError(
+      'unknown',
+      'Unknown error occurred',
+    );
+  }
+}
+
 export const execute = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
@@ -98,7 +116,14 @@ export const execute = functions.runWith({
       'Not authenticated',
     );
   }
-  const original = await downloadScreenshot(data, context);
-  const current = await saveScreenshot(data);
-  return checkUpdate(data, original, current);
+  try {
+    const original = await downloadScreenshot(data, context);
+    const current = await saveScreenshot(data);
+    const update = await checkUpdate(data, original, current);
+    await updateMacro(data, { isFailure: false });
+    return update;
+  } catch (error) {
+    await updateMacro(data, { isFailure: true });
+    throw error;
+  }
 });

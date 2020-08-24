@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit
 
 class MacroRepository {
     companion object {
-        private const val CREATE_NAME = "save"
-        private const val EXECUTE_NAME = "run"
+        private const val CREATE_NAME = "create"
+        private const val EXECUTE_NAME = "execute"
         private const val SCREENSHOT_NAME = "screenshot"
         private const val COLLECTION_NAME = "macros"
         private const val UID_NAME = "uid"
