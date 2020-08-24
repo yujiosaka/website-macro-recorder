@@ -42,7 +42,7 @@ async function moveScreenshot(macro: Macro, context: functions.https.CallableCon
   }
 }
 
-async function saveMacro(macro: Macro, context: functions.https.CallableContext) {
+async function createMacro(macro: Macro, context: functions.https.CallableContext) {
   const ts = admin.firestore.FieldValue.serverTimestamp();
   try {
     await firestore.collection('macros').doc(macro.id).set(extend({}, macro, {
@@ -61,7 +61,7 @@ async function saveMacro(macro: Macro, context: functions.https.CallableContext)
   }
 }
 
-export const save = functions.runWith({
+export const create = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
 }).https.onCall(async (data, context) => {
@@ -78,5 +78,5 @@ export const save = functions.runWith({
     );
   }
   await moveScreenshot(data, context);
-  return saveMacro(data, context);
+  return createMacro(data, context);
 });
