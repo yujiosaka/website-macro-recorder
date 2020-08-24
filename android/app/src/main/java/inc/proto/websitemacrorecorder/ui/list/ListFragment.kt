@@ -79,11 +79,11 @@ class ListFragment : Fragment() {
         bindViewModel()
     }
 
-    fun runMacro(macro: Macro) {
+    fun executeMacro(macro: Macro) {
         if (loading || activity == null) return
         loading = true
         binding.progress.visibility = View.VISIBLE
-        macroRepository.run(Helper.objectToMap(macro)).addOnCompleteListener(requireActivity()) {
+        macroRepository.execute(Helper.objectToMap(macro)).addOnCompleteListener(requireActivity()) {
             binding.progress.visibility = View.GONE
             loading = false
             if (activity == null) return@addOnCompleteListener

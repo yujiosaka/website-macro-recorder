@@ -11,12 +11,12 @@ class MacroRepository {
     companion object {
         private const val SCREENSHOT_NAME = "screenshot"
         private const val SAVE_NAME = "save"
-        private const val RUN_NAME = "run"
+        private const val EXECUTE_NAME = "run"
         private const val COLLECTION_NAME = "macros"
         private const val UID_NAME = "uid"
         private const val SCREENSHOT_TIMEOUT_SECONDS = 300L
         private const val SAVE_TIMEOUT_SECONDS = 30L
-        private const val RUN_TIMEOUT_SECONDS = 300L
+        private const val EXECUTE_TIMEOUT_SECONDS = 300L
     }
 
     private val db = FirebaseFirestore.getInstance()
@@ -30,8 +30,8 @@ class MacroRepository {
         return functions.getHttpsCallable(SAVE_NAME).withTimeout(SAVE_TIMEOUT_SECONDS, TimeUnit.SECONDS).call(macro)
     }
 
-    fun run(macro: Map<String, Any?>): Task<HttpsCallableResult> {
-        return functions.getHttpsCallable(RUN_NAME).withTimeout(RUN_TIMEOUT_SECONDS, TimeUnit.SECONDS).call(macro)
+    fun execute(macro: Map<String, Any?>): Task<HttpsCallableResult> {
+        return functions.getHttpsCallable(EXECUTE_NAME).withTimeout(EXECUTE_TIMEOUT_SECONDS, TimeUnit.SECONDS).call(macro)
     }
 
     fun update(id: String, macro: Map<String, Any?>): Task<Void> {

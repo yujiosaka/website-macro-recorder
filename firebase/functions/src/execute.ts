@@ -25,7 +25,7 @@ async function saveScreenshot(macro: Macro) {
   const destination = getTmpPath(`${macro.id}-current.png`);
   try {
     const crawler = await Crawler.launch();
-    await crawler.run(macro);
+    await crawler.crawl(macro);
     const buffer = await crawler.screenshot({ path: destination, fullPage: true });
     await crawler.close();
     return buffer;
@@ -88,7 +88,7 @@ function isAreaSelected(macro: Macro) {
   return true;
 }
 
-export const run = functions.runWith({
+export const execute = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
 }).https.onCall(async (data, context) => {

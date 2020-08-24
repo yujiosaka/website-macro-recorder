@@ -20,7 +20,7 @@ import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
     companion object {
-        private const val ACTION_RUN_MACRO = 1
+        private const val ACTION_EXECUTE_MACRO = 1
         private const val ACTION_EDIT_MACRO = 2
     }
 
@@ -87,10 +87,10 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         }
         holder.card.setOnSingleClickListener {
             holder.card.setOnCreateContextMenuListener { menu, _, _ ->
-                menu.add(Menu.NONE, ACTION_RUN_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))
+                menu.add(Menu.NONE, ACTION_EXECUTE_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
-                menu.findItem(ACTION_RUN_MACRO).setOnMenuItemClickListener {
-                    fragment.runMacro(model)
+                menu.findItem(ACTION_EXECUTE_MACRO).setOnMenuItemClickListener {
+                    fragment.executeMacro(model)
                     true
                 }
                 menu.findItem(ACTION_EDIT_MACRO).setOnMenuItemClickListener {

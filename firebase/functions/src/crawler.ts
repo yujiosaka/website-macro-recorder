@@ -20,7 +20,7 @@ export default class Crawler {
     this.page = page;
   }
 
-  async run(macro: Macro) {
+  async crawl(macro: Macro) {
     const device = this.getDevice(macro);
     await this.page.emulate(device);
     await this.page.goto(macro.url);

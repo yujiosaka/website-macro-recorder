@@ -24,4 +24,5 @@ interface Macro {
   events: MacroEvent[];
   createdAt: FirebaseFirestore.FieldValue;
   updatedAt: FirebaseFirestore.FieldValue;
+  executedAt: FirebaseFirestore.FieldValue;
 }

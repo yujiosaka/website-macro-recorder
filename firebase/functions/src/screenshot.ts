@@ -9,7 +9,7 @@ async function saveScreenshot(macro: Macro, context: functions.https.CallableCon
   const destination = getTmpPath(`${context.auth!.uid}.png`);
   try {
     const crawler = await Crawler.launch();
-    await crawler.run(macro);
+    await crawler.crawl(macro);
     await crawler.screenshot({ path: destination, fullPage: true });
     await crawler.close();
   } catch (error) {
