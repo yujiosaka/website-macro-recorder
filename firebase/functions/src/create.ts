@@ -20,6 +20,8 @@ function validate(macro: Macro) {
          isBoolean(macro.notifyFailure) &&
          isBoolean(macro.checkEntirePage) &&
          isBoolean(macro.checkSelectedArea) &&
+         isBoolean(macro.isEntirePageUpdated) &&
+         isBoolean(macro.isSelectedAreaUpdated) &&
          isBoolean(macro.isFailure) &&
          isString(macro.userAgent) && !isEmpty(macro.userAgent) &&
          isString(macro.acceptLanguage) && !isEmpty(macro.acceptLanguage) &&
@@ -64,19 +66,19 @@ async function createMacro(macro: Macro, context: functions.https.CallableContex
 export const create = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
-}).https.onCall(async (data, context) => {
+}).https.onCall(async (macro: Macro, context: functions.https.CallableContext) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
       'Not authenticated',
     );
   }
-  if (!validate(data)) {
+  if (!validate(macro)) {
     throw new functions.https.HttpsError(
       'invalid-argument',
       'Argument is invalid',
     );
   }
-  await moveScreenshot(data, context);
-  return createMacro(data, context);
+  await moveScreenshot(macro, context);
+  return createMacro(macro, context);
 });

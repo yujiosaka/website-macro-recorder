@@ -101,17 +101,12 @@ class ListFragment : Fragment() {
                 Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
                 return@addOnCompleteListener
             }
-            val data = it.result!!.data as Map<String, Boolean>
+            val data = it.result!!.data as Map<String, Any?>
+            val res = Helper.mapToObject<Macro>(data)
             val text = when {
-                data["isEntirePageUpdated"] != true && data["isSelectedAreaUpdated"] != true -> {
-                    root.resources.getString(R.string.notification_macro_succeeded)
-                }
-                data["isEntirePageUpdated"] != true -> {
-                    root.resources.getString(R.string.notification_entire_page_changed)
-                }
-                else -> {
-                    root.resources.getString(R.string.notification_selected_area_changed)
-                }
+                !res.isEntirePageUpdated && !res.isSelectedAreaUpdated -> root.resources.getString(R.string.notification_macro_succeeded)
+                !res.isEntirePageUpdated -> root.resources.getString(R.string.notification_entire_page_changed)
+                else -> root.resources.getString(R.string.notification_selected_area_changed)
             }
             Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
         }

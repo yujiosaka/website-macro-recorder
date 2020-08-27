@@ -39,13 +39,13 @@ async function uploadScreenshot(context: functions.https.CallableContext) {
 export const screenshot = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
-}).https.onCall(async (data, context) => {
+}).https.onCall(async (macro: Macro, context: functions.https.CallableContext) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
       'Not authenticated',
     );
   }
-  await saveScreenshot(data, context);
+  await saveScreenshot(macro, context);
   return uploadScreenshot(context);
 });

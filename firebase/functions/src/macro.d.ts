@@ -11,6 +11,8 @@ interface Macro {
   notifyFailure: boolean;
   checkEntirePage: boolean;
   checkSelectedArea: boolean;
+  isEntirePageUpdated: boolean;
+  isSelectedAreaUpdated: boolean;
   isFailure: boolean;
   userAgent: string;
   acceptLanguage: string;

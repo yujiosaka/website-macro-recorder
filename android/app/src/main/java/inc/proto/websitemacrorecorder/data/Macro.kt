@@ -24,6 +24,8 @@ class Macro(
     notifyFailure: Boolean = true,
     checkEntirePage: Boolean = false,
     checkSelectedArea: Boolean = false,
+    isEntirePageUpdated: Boolean = false,
+    isSelectedAreaUpdated: Boolean = false,
     isFailure: Boolean = false,
     acceptLanguage: String = Locale.getDefault().language,
     userAgent: String = "",
@@ -141,6 +143,20 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.checkSelectedArea)
+        }
+
+    @Bindable
+    var isEntirePageUpdated = isEntirePageUpdated
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.isEntirePageUpdated)
+        }
+
+    @Bindable
+    var isSelectedAreaUpdated = isSelectedAreaUpdated
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.isSelectedAreaUpdated)
         }
 
     @Bindable

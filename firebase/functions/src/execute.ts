@@ -44,9 +44,9 @@ async function saveScreenshot(macro: Macro) {
 }
 
 async function checkUpdate(macro: Macro, original: Buffer, current: Buffer) {
+  let isEntirePageUpdated = false;
+  let isSelectedAreaUpdated = false;
   try {
-    let isEntirePageUpdated = true;
-    let isSelectedAreaUpdated = true;
     if (macro.checkEntirePage) {
       isEntirePageUpdated = compareImage(original, current);
     }
@@ -92,7 +92,7 @@ function isAreaSelected(macro: Macro) {
   return true;
 }
 
-async function updateMacro(macro: Macro, update: { isFailure: boolean }) {
+async function updateMacro(macro: Macro, update: { [key: string]: boolean }) {
   try {
     await firestore.collection('macros').doc(macro.id).update(extend({}, update, {
       executedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -109,7 +109,7 @@ async function updateMacro(macro: Macro, update: { isFailure: boolean }) {
 export const execute = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
-}).https.onCall(async (data, context) => {
+}).https.onCall(async (macro: Macro, context: functions.https.CallableContext) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
@@ -117,13 +117,13 @@ export const execute = functions.runWith({
     );
   }
   try {
-    const original = await downloadScreenshot(data, context);
-    const current = await saveScreenshot(data);
-    const update = await checkUpdate(data, original, current);
-    await updateMacro(data, { isFailure: false });
-    return update;
+    const original = await downloadScreenshot(macro, context);
+    const current = await saveScreenshot(macro);
+    const update = await checkUpdate(macro, original, current);
+    await updateMacro(macro, { ...update, isFailure: false });
+    return macro;
   } catch (error) {
-    await updateMacro(data, { isFailure: true });
+    await updateMacro(macro, { isFailure: true });
     throw error;
   }
 });

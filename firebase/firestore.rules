@@ -25,6 +25,8 @@ service cloud.firestore {
                request.resource.data.notifyFailure is bool &&
                request.resource.data.checkEntirePage is bool &&
                request.resource.data.checkSelectedArea is bool &&
+               request.resource.data.isEntirePageUpdated is bool &&
+               request.resource.data.isSelectedAreaUpdated is bool &&
                request.resource.data.isFailure is bool
       }
 
