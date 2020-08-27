@@ -69,6 +69,7 @@
     <string name="notification_type_value">%1$sが入力されました\n%2$s</string>
     <string name="notification_select_value">%1$sが選択されました\n%2$s</string>
     <string name="notification_restart_recording">記録をやり直します</string>
+    <string name="notification_wait_for_navigation">画面遷移が完了しました\n%1$</string>
 
     <!-- Strings used for edit events fragment -->
     <string name="text_name_click">タップ</string>
