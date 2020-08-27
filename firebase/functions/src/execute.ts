@@ -97,6 +97,7 @@ async function updateMacro(macro: Macro, update: { [key: string]: boolean }) {
     await firestore.collection('macros').doc(macro.id).update(extend({}, update, {
       executedAt: admin.firestore.FieldValue.serverTimestamp(),
     }));
+    return { ...macro, ...update };
   } catch (error) {
     console.warn(error);
     throw new functions.https.HttpsError(
@@ -120,10 +121,9 @@ export const execute = functions.runWith({
     const original = await downloadScreenshot(macro, context);
     const current = await saveScreenshot(macro);
     const update = await checkUpdate(macro, original, current);
-    await updateMacro(macro, { ...update, isFailure: false });
-    return macro;
+    return await updateMacro(macro, { ...update, isFailure: false });
   } catch (error) {
-    await updateMacro(macro, { isFailure: true });
+    await updateMacro(macro, { isEntirePageUpdated: false, isSelectedAreaUpdated: false, isFailure: true });
     throw error;
   }
 });
