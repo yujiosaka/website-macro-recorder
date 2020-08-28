@@ -101,14 +101,14 @@ class Runner {
     }
   }
 
-  defaultHistory() {
-    return {
+  defaultHistory(override = {}) {
+    return extend({
       screenshotUrl: '',
       isEntirePageUpdated: false,
       isSelectedAreaUpdated: false,
       isFailure: false,
       executedAt: admin.firestore.Timestamp.now(),
-    };
+    }, override);
   }
 
   private compareImage(original: Buffer, current: Buffer) {
@@ -149,17 +149,17 @@ export const execute = functions.runWith({
     );
   }
   const runner = new Runner(data);
+  const original = await runner.downloadScreenshot();
+  let current: Buffer;
   try {
-    const original = await runner.downloadScreenshot();
-    const current = await runner.saveScreenshot();
-    const history = await runner.checkUpdate(original, current);
-    history.screenshotUrl = await runner.uploadScreenshot(history);
-    await runner.updateMacro(history);
-    return history;
+    current = await runner.saveScreenshot();
   } catch (error) {
-    const history = runner.defaultHistory();
-    history.isFailure = true;
+    const history = runner.defaultHistory({ isFailure: true })
     await runner.updateMacro(history);
     throw error;
   }
+  const history = await runner.checkUpdate(original, current);
+  history.screenshotUrl = await runner.uploadScreenshot(history);
+  await runner.updateMacro(history);
+  return history;
 });
