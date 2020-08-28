@@ -47,14 +47,14 @@ class Runner {
 export const screenshot = functions.runWith({
   timeoutSeconds: RUNTIME_TIMEOUT_SECONDS,
   memory: RUNTIME_MEMORY,
-}).https.onCall(async (macro: Macro, context: functions.https.CallableContext) => {
+}).https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
       'Not authenticated',
     );
   }
-  const runner = new Runner({ ...macro, uid: context.auth.uid });
+  const runner = new Runner({ ...data, uid: context.auth.uid });
   await runner.saveScreenshot();
   return runner.uploadScreenshot();
 });
