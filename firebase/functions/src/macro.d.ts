@@ -24,7 +24,8 @@ interface Macro {
   selectedAreaTop: number;
   selectedAreaBottom: number;
   events: MacroEvent[];
-  createdAt: FirebaseFirestore.FieldValue;
-  updatedAt: FirebaseFirestore.FieldValue;
-  executedAt: FirebaseFirestore.FieldValue;
+  histories: MacroHistory[];
+  createdAt: FirebaseFirestore.Timestamp;
+  updatedAt: FirebaseFirestore.Timestamp;
+  executedAt: FirebaseFirestore.Timestamp;
 }

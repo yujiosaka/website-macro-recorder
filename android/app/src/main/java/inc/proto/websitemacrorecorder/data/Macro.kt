@@ -13,6 +13,7 @@ import kotlin.collections.ArrayList
 
 class Macro(
     id: String = MacroRepository().getId(),
+    uid: String? = null,
     name: String = "",
     url: String = "https://",
     screenshotUrl: String = "",
@@ -37,6 +38,7 @@ class Macro(
     selectedAreaRight: Int? = null,
     selectedAreaBottom: Int? = null,
     events: ArrayList<MacroEvent> = arrayListOf(),
+    histories: ArrayList<MacroHistory> = arrayListOf(),
     createdAt: Timestamp? = null,
     updatedAt: Timestamp? = null,
     executedAt: Timestamp? = null
@@ -53,6 +55,13 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.id)
+        }
+
+    @Bindable
+    var uid = uid
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.uid)
         }
 
     @Bindable
@@ -262,6 +271,13 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.events)
+        }
+
+    @Bindable
+    var histories = histories
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.histories)
         }
 
     @Bindable

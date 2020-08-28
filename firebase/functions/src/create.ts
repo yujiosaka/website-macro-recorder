@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { isString, isNumber, isBoolean, isEmpty, includes, extend } from 'lodash';
+import { isString, isNumber, isBoolean, isEmpty, isArray, includes, extend } from 'lodash';
 import { isUrl, move } from './helper';
 
 const RUNTIME_TIMEOUT_SECONDS = 30;
@@ -27,7 +27,9 @@ function validate(macro: Macro) {
          isString(macro.acceptLanguage) && !isEmpty(macro.acceptLanguage) &&
          isNumber(macro.viewportHeight) && macro.viewportHeight >= 1 &&
          isNumber(macro.viewportWidth) && macro.viewportWidth >= 1 &&
-         isNumber(macro.deviceScaleFactor) && macro.deviceScaleFactor >= 1;
+         isNumber(macro.deviceScaleFactor) && macro.deviceScaleFactor >= 1 &&
+         isArray(macro.events) &&
+         isArray(macro.histories);
 }
 
 async function moveScreenshot(macro: Macro, context: functions.https.CallableContext) {
@@ -45,13 +47,13 @@ async function moveScreenshot(macro: Macro, context: functions.https.CallableCon
 }
 
 async function createMacro(macro: Macro, context: functions.https.CallableContext) {
-  const ts = admin.firestore.FieldValue.serverTimestamp();
+  const now = admin.firestore.Timestamp.now();
   try {
     await firestore.collection('macros').doc(macro.id).set(extend({}, macro, {
       uid: context.auth!.uid,
-      createdAt: ts,
-      updatedAt: ts,
-      executedAt: ts,
+      createdAt: now,
+      updatedAt: now,
+      executedAt: now,
     }));
     return macro;
   } catch (error) {

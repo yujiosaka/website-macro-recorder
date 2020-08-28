@@ -27,7 +27,9 @@ service cloud.firestore {
                request.resource.data.checkSelectedArea is bool &&
                request.resource.data.isEntirePageUpdated is bool &&
                request.resource.data.isSelectedAreaUpdated is bool &&
-               request.resource.data.isFailure is bool
+               request.resource.data.isFailure is bool &&
+               request.resource.data.events is list &&
+               request.resource.data.histories is list
       }
 
       function validateUrl() {

@@ -1,10 +1,10 @@
-import { extend } from 'lodash';
+import { extend, omit } from 'lodash';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as sharp from 'sharp';
 import pixelmatch = require('pixelmatch');
 import { PNG } from 'pngjs';
-import { getTmpPath, download } from './helper';
+import { getTmpPath, download, upload } from './helper';
 import Crawler from './crawler';
 
 const RUNTIME_TIMEOUT_SECONDS = 180;
@@ -26,7 +26,7 @@ async function downloadScreenshot(macro: Macro, context: functions.https.Callabl
 }
 
 async function saveScreenshot(macro: Macro) {
-  const destination = getTmpPath(`${macro.id}-current.png`);
+  const destination = getTmpPath(`${macro.id}.png`);
   try {
     const crawler = await Crawler.launch();
     await crawler.crawl(macro);
@@ -44,19 +44,18 @@ async function saveScreenshot(macro: Macro) {
 }
 
 async function checkUpdate(macro: Macro, original: Buffer, current: Buffer) {
-  let isEntirePageUpdated = false;
-  let isSelectedAreaUpdated = false;
+  const history = defaultHistory();
   try {
     if (macro.checkEntirePage) {
-      isEntirePageUpdated = compareImage(original, current);
+      history.isEntirePageUpdated = compareImage(original, current);
     }
     if (macro.checkSelectedArea && isAreaSelected(macro)) {
       const shape = getShape(macro);
       const originalSelectedArea = await sharp(original).extract(shape).toBuffer();
       const currentSelectedArea = await sharp(current).extract(shape).toBuffer();
-      isSelectedAreaUpdated = compareImage(originalSelectedArea, currentSelectedArea);
+      history.isSelectedAreaUpdated = compareImage(originalSelectedArea, currentSelectedArea);
     }
-    return { isEntirePageUpdated, isSelectedAreaUpdated };
+    return history;
   } catch (error) {
     console.warn(error);
     throw new functions.https.HttpsError(
@@ -64,6 +63,16 @@ async function checkUpdate(macro: Macro, original: Buffer, current: Buffer) {
       'Unknown error occurred',
     );
   }
+}
+
+function defaultHistory() {
+  return {
+    screenshotUrl: '',
+    isEntirePageUpdated: false,
+    isSelectedAreaUpdated: false,
+    isFailure: false,
+    executedAt: admin.firestore.Timestamp.now(),
+  };
 }
 
 function compareImage(original: Buffer, current: Buffer) {
@@ -75,6 +84,14 @@ function compareImage(original: Buffer, current: Buffer) {
   return diff === 1;
 }
 
+function isAreaSelected(macro: Macro) {
+  if (macro.selectedAreaLeft === null || macro.selectedAreaLeft === undefined) return false;
+  if (macro.selectedAreaTop === null || macro.selectedAreaTop === undefined) return false;
+  if (macro.selectedAreaRight === null || macro.selectedAreaRight === undefined) return false;
+  if (macro.selectedAreaBottom === null || macro.selectedAreaBottom === undefined) return false;
+  return true;
+}
+
 function getShape(macro: Macro) {
   return {
     width: macro.selectedAreaRight - macro.selectedAreaLeft,
@@ -84,20 +101,27 @@ function getShape(macro: Macro) {
   };
 }
 
-function isAreaSelected(macro: Macro) {
-  if (macro.selectedAreaLeft === null || macro.selectedAreaLeft === undefined) return false;
-  if (macro.selectedAreaTop === null || macro.selectedAreaTop === undefined) return false;
-  if (macro.selectedAreaRight === null || macro.selectedAreaRight === undefined) return false;
-  if (macro.selectedAreaBottom === null || macro.selectedAreaBottom === undefined) return false;
-  return true;
-}
-
-async function updateMacro(macro: Macro, update: { [key: string]: boolean }) {
+async function updateMacro(macro: Macro, history: MacroHistory) {
+  const update = omit(history, 'screenshotUrl');
   try {
     await firestore.collection('macros').doc(macro.id).update(extend({}, update, {
-      executedAt: admin.firestore.FieldValue.serverTimestamp(),
+      histories: admin.firestore.FieldValue.arrayUnion(history),
     }));
     return { ...macro, ...update };
+  } catch (error) {
+    console.warn(error);
+    throw new functions.https.HttpsError(
+      'unknown',
+      'Unknown error occurred',
+    );
+  }
+}
+
+async function uploadScreenshot(macro: Macro, history: MacroHistory) {
+  const source = getTmpPath(`${macro.id}.png`);
+  const destination = `screenshots/${macro.uid}/${macro.id}/histories/${history.executedAt.toMillis()}.png`;
+  try {
+    return await upload(source, destination);
   } catch (error) {
     console.warn(error);
     throw new functions.https.HttpsError(
@@ -120,10 +144,12 @@ export const execute = functions.runWith({
   try {
     const original = await downloadScreenshot(macro, context);
     const current = await saveScreenshot(macro);
-    const update = await checkUpdate(macro, original, current);
-    return await updateMacro(macro, { ...update, isFailure: false });
+    const history = await checkUpdate(macro, original, current);
+    history.screenshotUrl = await uploadScreenshot(macro, history);
+    return await updateMacro(macro, history);
   } catch (error) {
-    await updateMacro(macro, { isEntirePageUpdated: false, isSelectedAreaUpdated: false, isFailure: true });
+    const history = defaultHistory();
+    await updateMacro(macro, extend({}, history, { isFailure: true }));
     throw error;
   }
 });
