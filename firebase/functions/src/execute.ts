@@ -12,122 +12,130 @@ const RUNTIME_MEMORY = '2GB';
 
 const firestore = admin.firestore();
 
-async function downloadScreenshot(macro: Macro, context: functions.https.CallableContext) {
-  const source = `screenshots/${context.auth!.uid}/${macro.id}.png`;
-  try {
-    return await download(source);
-  } catch (error) {
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
-  }
-}
+class Runner {
+  macro: Macro;
 
-async function saveScreenshot(macro: Macro) {
-  const destination = getTmpPath(`${macro.id}.png`);
-  try {
-    const crawler = await Crawler.launch();
-    await crawler.crawl(macro);
-    const buffer = await crawler.screenshot({ path: destination, fullPage: true });
-    await crawler.close();
-    return buffer;
-  } catch (error) {
-    if (error instanceof functions.https.HttpsError) throw error;
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
+  constructor(macro: Macro) {
+    this.macro = macro;
   }
-}
 
-async function checkUpdate(macro: Macro, original: Buffer, current: Buffer) {
-  const history = defaultHistory();
-  try {
-    if (macro.checkEntirePage) {
-      history.isEntirePageUpdated = compareImage(original, current);
+  async downloadScreenshot() {
+    const source = `screenshots/${this.macro.uid}/${this.macro.id}.png`;
+    try {
+      return await download(source);
+    } catch (error) {
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
     }
-    if (macro.checkSelectedArea && isAreaSelected(macro)) {
-      const shape = getShape(macro);
-      const originalSelectedArea = await sharp(original).extract(shape).toBuffer();
-      const currentSelectedArea = await sharp(current).extract(shape).toBuffer();
-      history.isSelectedAreaUpdated = compareImage(originalSelectedArea, currentSelectedArea);
+  }
+
+  async saveScreenshot() {
+    const destination = getTmpPath(`${this.macro.id}.png`);
+    try {
+      const crawler = await Crawler.launch();
+      await crawler.crawl(this.macro);
+      const buffer = await crawler.screenshot({ path: destination, fullPage: true });
+      await crawler.close();
+      return buffer;
+    } catch (error) {
+      if (error instanceof functions.https.HttpsError) throw error;
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
     }
-    return history;
-  } catch (error) {
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
   }
-}
 
-function defaultHistory() {
-  return {
-    screenshotUrl: '',
-    isEntirePageUpdated: false,
-    isSelectedAreaUpdated: false,
-    isFailure: false,
-    executedAt: admin.firestore.Timestamp.now(),
-  };
-}
-
-function compareImage(original: Buffer, current: Buffer) {
-  const originalImage = PNG.sync.read(original);
-  const currentImage = PNG.sync.read(current);
-  if (originalImage.width !== currentImage.width) return false;
-  if (originalImage.height !== currentImage.height) return false;
-  const diff = pixelmatch(originalImage.data, currentImage.data, null, originalImage.width, originalImage.height);
-  return diff === 1;
-}
-
-function isAreaSelected(macro: Macro) {
-  if (macro.selectedAreaLeft === null || macro.selectedAreaLeft === undefined) return false;
-  if (macro.selectedAreaTop === null || macro.selectedAreaTop === undefined) return false;
-  if (macro.selectedAreaRight === null || macro.selectedAreaRight === undefined) return false;
-  if (macro.selectedAreaBottom === null || macro.selectedAreaBottom === undefined) return false;
-  return true;
-}
-
-function getShape(macro: Macro) {
-  return {
-    width: macro.selectedAreaRight - macro.selectedAreaLeft,
-    height: macro.selectedAreaBottom - macro.selectedAreaTop,
-    left: macro.selectedAreaLeft,
-    top: macro.selectedAreaTop,
-  };
-}
-
-async function updateMacro(macro: Macro, history: MacroHistory) {
-  const update = omit(history, 'screenshotUrl');
-  try {
-    await firestore.collection('macros').doc(macro.id).update(extend({}, update, {
-      histories: admin.firestore.FieldValue.arrayUnion(history),
-    }));
-    return { ...macro, ...update };
-  } catch (error) {
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
+  async checkUpdate(original: Buffer, current: Buffer) {
+    const history = this.defaultHistory();
+    try {
+      if (this.macro.checkEntirePage) {
+        history.isEntirePageUpdated = this.compareImage(original, current);
+      }
+      if (this.macro.checkSelectedArea && this.isAreaSelected()) {
+        const shape = this.getShape();
+        const originalSelectedArea = await sharp(original).extract(shape).toBuffer();
+        const currentSelectedArea = await sharp(current).extract(shape).toBuffer();
+        history.isSelectedAreaUpdated = this.compareImage(originalSelectedArea, currentSelectedArea);
+      }
+      return history;
+    } catch (error) {
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
+    }
   }
-}
 
-async function uploadScreenshot(macro: Macro, history: MacroHistory) {
-  const source = getTmpPath(`${macro.id}.png`);
-  const destination = `screenshots/${macro.uid}/${macro.id}/histories/${history.executedAt.toMillis()}.png`;
-  try {
-    return await upload(source, destination);
-  } catch (error) {
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
+  async uploadScreenshot(history: MacroHistory) {
+    const source = getTmpPath(`${this.macro.id}.png`);
+    const destination = `screenshots/${this.macro.uid}/${this.macro.id}/histories/${history.executedAt.toMillis()}.png`;
+    try {
+      return await upload(source, destination);
+    } catch (error) {
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
+    }
+  }
+
+  async updateMacro(history: MacroHistory) {
+    const update = omit(history, 'screenshotUrl');
+    try {
+      await firestore.collection('macros').doc(this.macro.id).update(extend({}, update, {
+        histories: admin.firestore.FieldValue.arrayUnion(history),
+      }));
+      return { ...this.macro, ...update };
+    } catch (error) {
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
+    }
+  }
+
+  defaultHistory() {
+    return {
+      screenshotUrl: '',
+      isEntirePageUpdated: false,
+      isSelectedAreaUpdated: false,
+      isFailure: false,
+      executedAt: admin.firestore.Timestamp.now(),
+    };
+  }
+
+  private compareImage(original: Buffer, current: Buffer) {
+    const originalImage = PNG.sync.read(original);
+    const currentImage = PNG.sync.read(current);
+    if (originalImage.width !== currentImage.width) return false;
+    if (originalImage.height !== currentImage.height) return false;
+    const diff = pixelmatch(originalImage.data, currentImage.data, null, originalImage.width, originalImage.height);
+    return diff === 1;
+  }
+
+  private isAreaSelected() {
+    if (this.macro.selectedAreaLeft === null || this.macro.selectedAreaLeft === undefined) return false;
+    if (this.macro.selectedAreaTop === null || this.macro.selectedAreaTop === undefined) return false;
+    if (this.macro.selectedAreaRight === null || this.macro.selectedAreaRight === undefined) return false;
+    if (this.macro.selectedAreaBottom === null || this.macro.selectedAreaBottom === undefined) return false;
+    return true;
+  }
+
+  private getShape() {
+    return {
+      width: this.macro.selectedAreaRight - this.macro.selectedAreaLeft,
+      height: this.macro.selectedAreaBottom - this.macro.selectedAreaTop,
+      left: this.macro.selectedAreaLeft,
+      top: this.macro.selectedAreaTop,
+    };
   }
 }
 
@@ -141,15 +149,16 @@ export const execute = functions.runWith({
       'Not authenticated',
     );
   }
+  const runner = new Runner(macro);
   try {
-    const original = await downloadScreenshot(macro, context);
-    const current = await saveScreenshot(macro);
-    const history = await checkUpdate(macro, original, current);
-    history.screenshotUrl = await uploadScreenshot(macro, history);
-    return await updateMacro(macro, history);
+    const original = await runner.downloadScreenshot();
+    const current = await runner.saveScreenshot();
+    const history = await runner.checkUpdate(original, current);
+    history.screenshotUrl = await runner.uploadScreenshot(history);
+    return await runner.updateMacro(history);
   } catch (error) {
-    const history = defaultHistory();
-    await updateMacro(macro, extend({}, history, { isFailure: true }));
+    const history = runner.defaultHistory();
+    await runner.updateMacro(extend({}, history, { isFailure: true }));
     throw error;
   }
 });

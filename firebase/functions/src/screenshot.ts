@@ -5,34 +5,42 @@ import Crawler from './lib/crawler';
 const RUNTIME_TIMEOUT_SECONDS = 180;
 const RUNTIME_MEMORY = '2GB';
 
-async function saveScreenshot(macro: Macro, context: functions.https.CallableContext) {
-  const destination = getTmpPath(`${context.auth!.uid}.png`);
-  try {
-    const crawler = await Crawler.launch();
-    await crawler.crawl(macro);
-    await crawler.screenshot({ path: destination, fullPage: true });
-    await crawler.close();
-  } catch (error) {
-    if (error instanceof functions.https.HttpsError) throw error;
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
-  }
-}
+class Runner {
+  macro: Macro;
 
-async function uploadScreenshot(context: functions.https.CallableContext) {
-  const source = getTmpPath(`${context.auth!.uid}.png`);
-  const destination = `screenshots/${context.auth!.uid}/tmp.png`;
-  try {
-    return await upload(source, destination);
-  } catch (error) {
-    console.warn(error);
-    throw new functions.https.HttpsError(
-      'unknown',
-      'Unknown error occurred',
-    );
+  constructor(macro: Macro) {
+    this.macro = macro;
+  }
+
+  async saveScreenshot() {
+    const destination = getTmpPath(`${this.macro.uid}.png`);
+    try {
+      const crawler = await Crawler.launch();
+      await crawler.crawl(this.macro);
+      await crawler.screenshot({ path: destination, fullPage: true });
+      await crawler.close();
+    } catch (error) {
+      if (error instanceof functions.https.HttpsError) throw error;
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
+    }
+  }
+
+  async uploadScreenshot() {
+    const source = getTmpPath(`${this.macro.uid}.png`);
+    const destination = `screenshots/${this.macro.uid}/tmp.png`;
+    try {
+      return await upload(source, destination);
+    } catch (error) {
+      console.warn(error);
+      throw new functions.https.HttpsError(
+        'unknown',
+        'Unknown error occurred',
+      );
+    }
   }
 }
 
@@ -46,6 +54,7 @@ export const screenshot = functions.runWith({
       'Not authenticated',
     );
   }
-  await saveScreenshot(macro, context);
-  return uploadScreenshot(context);
+  const runner = new Runner({ ...macro, uid: context.auth.uid });
+  await runner.saveScreenshot();
+  return runner.uploadScreenshot();
 });
