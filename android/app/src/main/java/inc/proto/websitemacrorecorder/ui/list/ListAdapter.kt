@@ -67,23 +67,38 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         }
         holder.textUrl.text = model.url
         val order = sharedPreferences.getInt("ORDER", 0)
-        holder.textDate.text = if (listOf(Macro.ORDER_UPDATED_AT_DESC_VALUE, Macro.ORDER_UPDATED_AT_ASC_VALUE).contains(order)) {
-            if (model.updatedAt != null) {
-                DateFormat.getMediumDateFormat(context).format(model.updatedAt!!.toDate())
-            } else {
-                context.resources.getString(R.string.text_date_latest)
+        holder.textDate.text = when (order) {
+            Macro.ORDER_UPDATED_AT_DESC_VALUE, Macro.ORDER_UPDATED_AT_ASC_VALUE -> {
+                if (model.updatedAt != null) {
+                    DateFormat.getMediumDateFormat(context).format(model.updatedAt!!.toDate())
+                } else {
+                    context.resources.getString(R.string.text_date_latest)
+                }
             }
-        } else {
-            if (model.createdAt != null) {
-                DateFormat.getMediumDateFormat(context).format(model.createdAt!!.toDate())
-            } else {
-                context.resources.getString(R.string.text_date_latest)
+            Macro.ORDER_CREATED_AT_DESC_VALUE, Macro.ORDER_CREATED_AT_ASC_VALUE -> {
+                if (model.createdAt != null) {
+                    DateFormat.getMediumDateFormat(context).format(model.createdAt!!.toDate())
+                } else {
+                    context.resources.getString(R.string.text_date_latest)
+                }
+            }
+            else -> {
+                if (model.executedAt != null) {
+                    DateFormat.getMediumDateFormat(context).format(model.executedAt!!.toDate())
+                } else {
+                    context.resources.getString(R.string.text_date_latest)
+                }
             }
         }
-        holder.textError.visibility = if (model.isFailure) {
+        holder.chipError.visibility = if (model.isFailure) {
             View.VISIBLE
         } else {
-            View.INVISIBLE
+            View.GONE
+        }
+        holder.chipChange.visibility = if (model.isEntirePageUpdated || model.isSelectedAreaUpdated) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
         holder.card.setOnSingleClickListener {
             holder.card.setOnCreateContextMenuListener { menu, _, _ ->

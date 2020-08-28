@@ -57,6 +57,7 @@
     <string name="notification_selected_area_changed">選択エリアの更新が検知されました</string>
     <string name="text_no_name">名称未設定</string>
     <string name="text_error">エラー</string>
+    <string name="text_change">変更</string>
     <string name="text_date_latest">...</string>
 
     <!-- Strings used for edit url fragment -->

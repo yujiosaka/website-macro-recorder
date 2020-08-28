@@ -48,6 +48,8 @@ class Macro(
         const val ORDER_UPDATED_AT_ASC_VALUE = 1
         const val ORDER_CREATED_AT_DESC_VALUE = 2
         const val ORDER_CREATED_AT_ASC_VALUE = 3
+        const val ORDER_EXECUTED_AT_DESC_VALUE = 4
+        const val ORDER_EXECUTED_AT_ASC_VALUE = 5
     }
 
     @Bindable

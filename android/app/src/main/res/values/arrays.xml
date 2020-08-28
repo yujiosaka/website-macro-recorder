@@ -5,6 +5,8 @@
         <item>Sort by least recently updated</item>
         <item>Sort by newest</item>
         <item>Sort by oldest</item>
+        <item>Sort by recently executed</item>
+        <item>Sort by least recently executed</item>
     </string-array>
 
     <string-array name="text_frequency_array">

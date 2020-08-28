@@ -6,6 +6,7 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.item_macro.view.*
 
 class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -16,5 +17,6 @@ class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var textName: TextView = view.text_name
     var textUrl: TextView = view.text_url
     var textDate: TextView = view.text_date
-    var textError: TextView = view.text_error
+    var chipError: Chip = view.chip_error
+    var chipChange: Chip = view.chip_change
 }

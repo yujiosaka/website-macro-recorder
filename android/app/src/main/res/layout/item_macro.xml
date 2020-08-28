@@ -39,7 +39,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:cardCornerRadius="16dp"
+        app:cardCornerRadius="8dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,27 +48,20 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="120dp" />
+            android:layout_height="150dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+                android:id="@+id/constraintLayout"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <inc.proto.websitemacrorecorder.util.TopCropImageView
                     android:id="@+id/image_screenshot"
                     android:layout_width="0dp"
-                    android:layout_height="147dp"
+                    android:layout_height="0dp"
                     android:scaleType="centerInside"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -78,12 +71,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_height="147dp"
+                android:layout_height="0dp"
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayout"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
@@ -95,7 +87,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:ellipsize="end"
-                    android:maxLines="2"
+                    android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
@@ -142,17 +134,33 @@
                     app:layout_constraintTop_toTopOf="@+id/image_date" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/text_error"
+                    android:id="@+id/chip_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:backgroundTint="@color/colorSecondary"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/colorDelete"
                     android:text="@string/text_error"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/image_date"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/image_date" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_change"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:text="@string/text_change"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_date"
+                    app:layout_constraintEnd_toStartOf="@+id/chip_error"
                     app:layout_constraintTop_toTopOf="@+id/image_date" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
