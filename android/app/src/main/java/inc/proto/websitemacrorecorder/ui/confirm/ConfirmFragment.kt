@@ -53,7 +53,7 @@ class ConfirmFragment : Fragment() {
                 loading = true
                 binding.progress.visibility = View.VISIBLE
                 val macro = objectToMap(vm.macro.value!!)
-                macroRepository.save(macro).addOnCompleteListener(requireActivity()) {
+                macroRepository.create(macro).addOnCompleteListener(requireActivity()) {
                     binding.progress.visibility = View.GONE
                     loading = false
                     if (!it.isSuccessful) {

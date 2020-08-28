@@ -13,6 +13,7 @@ import kotlin.collections.ArrayList
 
 class Macro(
     id: String = MacroRepository().getId(),
+    uid: String? = null,
     name: String = "",
     url: String = "https://",
     screenshotUrl: String = "",
@@ -24,19 +25,23 @@ class Macro(
     notifyFailure: Boolean = true,
     checkEntirePage: Boolean = false,
     checkSelectedArea: Boolean = false,
+    isEntirePageUpdated: Boolean = false,
+    isSelectedAreaUpdated: Boolean = false,
     isFailure: Boolean = false,
     acceptLanguage: String = Locale.getDefault().language,
     userAgent: String = "",
-    height: Int = 0,
-    width: Int = 0,
+    viewportHeight: Int = 0,
+    viewportWidth: Int = 0,
     deviceScaleFactor: Float = App.context.resources.displayMetrics.density,
     selectedAreaLeft: Int? = null,
     selectedAreaTop: Int? = null,
     selectedAreaRight: Int? = null,
     selectedAreaBottom: Int? = null,
     events: ArrayList<MacroEvent> = arrayListOf(),
+    histories: ArrayList<MacroHistory> = arrayListOf(),
     createdAt: Timestamp? = null,
-    updatedAt: Timestamp? = null
+    updatedAt: Timestamp? = null,
+    executedAt: Timestamp? = null
 ) : Serializable, BaseObservable() {
     companion object {
         const val ORDER_UPDATED_AT_DESC_VALUE = 0
@@ -50,6 +55,13 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.id)
+        }
+
+    @Bindable
+    var uid = uid
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.uid)
         }
 
     @Bindable
@@ -143,6 +155,20 @@ class Macro(
         }
 
     @Bindable
+    var isEntirePageUpdated = isEntirePageUpdated
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.isEntirePageUpdated)
+        }
+
+    @Bindable
+    var isSelectedAreaUpdated = isSelectedAreaUpdated
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.isSelectedAreaUpdated)
+        }
+
+    @Bindable
     var isFailure = isFailure
         set(value) {
             field = value
@@ -164,17 +190,17 @@ class Macro(
         }
 
     @Bindable
-    var height = height
+    var viewportHeight = viewportHeight
         set(value) {
             field = value
-            notifyPropertyChanged(BR.height)
+            notifyPropertyChanged(BR.viewportHeight)
         }
 
     @Bindable
-    var width = width
+    var viewportWidth = viewportWidth
         set(value) {
             field = value
-            notifyPropertyChanged(BR.width)
+            notifyPropertyChanged(BR.viewportWidth)
         }
 
     @Bindable
@@ -223,9 +249,9 @@ class Macro(
     var selectedAreaSize = ""
         get() {
             if (!isAreaSelected) return ""
-            val width = selectedAreaRight!! - selectedAreaLeft!!
-            val height = selectedAreaBottom!! - selectedAreaTop!!
-            return "$width x $height"
+            val selectedAreaWidth = selectedAreaRight!! - selectedAreaLeft!!
+            val selectedAreaHeight = selectedAreaBottom!! - selectedAreaTop!!
+            return "$selectedAreaWidth x $selectedAreaHeight"
         }
 
     var selectedAreaRect: Rect?
@@ -248,6 +274,13 @@ class Macro(
         }
 
     @Bindable
+    var histories = histories
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.histories)
+        }
+
+    @Bindable
     var createdAt = createdAt
         set(value) {
             field = value
@@ -259,5 +292,12 @@ class Macro(
         set(value) {
             field = value
             notifyPropertyChanged(BR.updatedAt)
+        }
+
+    @Bindable
+    var executedAt = executedAt
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.executedAt)
         }
 }

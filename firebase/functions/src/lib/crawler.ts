@@ -20,7 +20,7 @@ export default class Crawler {
     this.page = page;
   }
 
-  async run(macro: Macro) {
+  async crawl(macro: Macro) {
     const device = this.getDevice(macro);
     await this.page.emulate(device);
     await this.page.goto(macro.url);
@@ -30,8 +30,8 @@ export default class Crawler {
   getDevice(macro: Macro) {
     return {
       viewport: {
-        height: Math.floor(macro.height / macro.deviceScaleFactor),
-        width: Math.floor(macro.width / macro.deviceScaleFactor),
+        height: Math.floor(macro.viewportHeight / macro.deviceScaleFactor),
+        width: Math.floor(macro.viewportWidth / macro.deviceScaleFactor),
         deviceScaleFactor: macro.deviceScaleFactor,
         isMobile: true,
         hasTouch: true,

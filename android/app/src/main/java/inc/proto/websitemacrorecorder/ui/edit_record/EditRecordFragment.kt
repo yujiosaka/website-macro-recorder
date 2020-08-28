@@ -61,8 +61,8 @@ class EditRecordFragment : Fragment() {
             R.id.action_done -> {
                 if (loading) return false
                 vm.macro.value!!.userAgent = binding.webRecorder.settings.userAgentString
-                vm.macro.value!!.height = binding.webRecorder.height
-                vm.macro.value!!.width = binding.webRecorder.width
+                vm.macro.value!!.viewportHeight = binding.webRecorder.height
+                vm.macro.value!!.viewportWidth = binding.webRecorder.width
                 findNavController().navigate(EditRecordFragmentDirections.actionEditRecordFragmentToEditEventsFragment(vm.macro.value!!))
                 true
             }
@@ -98,8 +98,11 @@ class EditRecordFragment : Fragment() {
 
             override fun onPageFinished(view: WebView, url: String) {
                 if (view.progress != 100) return
-                if (!loading) {
+                if (!loading && activity != null) {
                     vm.pushEvent(MacroEvent(name = "page", value = url))
+                    val root: View = requireActivity().findViewById(R.id.root)
+                    val text = root.resources.getString(R.string.notification_wait_for_navigation, url)
+                    Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
                 }
                 finishLoading()
                 if (vm.macro.value!!.name == "" && binding.webRecorder.title != "") {

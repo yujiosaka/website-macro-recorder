@@ -1,10 +1,9 @@
 package inc.proto.websitemacrorecorder.util
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.*
 import java.io.InputStream
-import kotlin.coroutines.CoroutineContext
 
 object Helper {
     fun inputStreamToString(streamStream: InputStream): String {
@@ -14,13 +13,13 @@ object Helper {
     }
 
     fun objectToMap(data: Any): Map<String, Any?> {
-        val gson = Gson()
+        val gson = GsonBuilder().serializeNulls().create()
         val json = gson.toJson(data)
         return gson.fromJson(json, object : TypeToken<Map<String, Any?>>() {}.type)
     }
 
     inline fun <reified T> mapToObject(data: Map<String, Any?>): T {
-        val gson = Gson()
+        val gson = GsonBuilder().serializeNulls().create()
         val json = gson.toJson(data)
         return gson.fromJson(json, T::class.java)
     }

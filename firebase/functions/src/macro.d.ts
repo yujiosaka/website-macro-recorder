@@ -11,17 +11,21 @@ interface Macro {
   notifyFailure: boolean;
   checkEntirePage: boolean;
   checkSelectedArea: boolean;
+  isEntirePageUpdated: boolean;
+  isSelectedAreaUpdated: boolean;
   isFailure: boolean;
   userAgent: string;
   acceptLanguage: string;
-  height: number;
-  width: number;
+  viewportHeight: number;
+  viewportWidth: number;
   deviceScaleFactor: number;
   selectedAreaLeft: number;
   selectedAreaRight: number;
   selectedAreaTop: number;
   selectedAreaBottom: number;
   events: MacroEvent[];
-  createdAt: FirebaseFirestore.FieldValue;
-  updatedAt: FirebaseFirestore.FieldValue;
+  histories: MacroHistory[];
+  createdAt: FirebaseFirestore.Timestamp;
+  updatedAt: FirebaseFirestore.Timestamp;
+  executedAt: FirebaseFirestore.Timestamp;
 }

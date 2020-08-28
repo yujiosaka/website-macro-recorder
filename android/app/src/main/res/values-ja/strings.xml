@@ -69,6 +69,7 @@
     <string name="notification_type_value">%1$sが入力されました\n%2$s</string>
     <string name="notification_select_value">%1$sが選択されました\n%2$s</string>
     <string name="notification_restart_recording">記録をやり直します</string>
+    <string name="notification_wait_for_navigation">画面遷移が完了しました\n%1$</string>
 
     <!-- Strings used for edit events fragment -->
     <string name="text_name_click">タップ</string>
@@ -109,7 +110,7 @@
     <string name="text_update_check_title">更新チェック</string>
     <string name="text_check_entire_page">ページ全体をチェック</string>
     <string name="text_check_selected_area">選択エリア %1$s をチェック</string>
-    <string name="text_not_selected_area">チェック対象のエリア未選択</string>
+    <string name="text_area_not_selected">チェック対象のエリア未選択</string>
     <string name="text_back_to_macro_list">≪ マクロの一覧に戻る</string>
     <string name="button_save">保存</string>
     <string name="button_delete">削除</string>

@@ -10,8 +10,8 @@ service cloud.firestore {
                validateScheduleFrequency() &&
                validateScheduleHour() &&
                validateScheduleMinute() &&
-               validateHeight() &&
-               validateWidth() &&
+               validateViewportHeight() &&
+               validateViewportWidth() &&
                validateDeviceScaleFactor() &&
                validateAcceptLanguage() &&
                validateUserAgent() &&
@@ -25,7 +25,11 @@ service cloud.firestore {
                request.resource.data.notifyFailure is bool &&
                request.resource.data.checkEntirePage is bool &&
                request.resource.data.checkSelectedArea is bool &&
-               request.resource.data.isFailure is bool
+               request.resource.data.isEntirePageUpdated is bool &&
+               request.resource.data.isSelectedAreaUpdated is bool &&
+               request.resource.data.isFailure is bool &&
+               request.resource.data.events is list &&
+               request.resource.data.histories is list
       }
 
       function validateUrl() {
@@ -55,14 +59,14 @@ service cloud.firestore {
                request.resource.data.scheduleMinute < 60;
       }
 
-      function validateHeight() {
-        return request.resource.data.height is number &&
-               request.resource.data.height > 0;
+      function validateViewportHeight() {
+        return request.resource.data.viewportHeight is number &&
+               request.resource.data.viewportHeight > 0;
       }
 
-      function validateWidth() {
-        return request.resource.data.width is number &&
-               request.resource.data.width > 0;
+      function validateViewportWidth() {
+        return request.resource.data.viewportWidth is number &&
+               request.resource.data.viewportWidth > 0;
       }
 
       function validateDeviceScaleFactor() {
@@ -81,19 +85,23 @@ service cloud.firestore {
       }
 
       function validateSelectedAreaLeft() {
-        return request.resource.data.selectedAreaLeft is number &&
+        return request.resource.data.selectedAreaLeft == null ||
+               request.resource.data.selectedAreaLeft is number &&
                request.resource.data.selectedAreaLeft >= 5
       }
       function validateSelectedAreaRight() {
-        return request.resource.data.selectedAreaRight is number &&
+        return request.resource.data.selectedAreaRight == null ||
+               request.resource.data.selectedAreaRight is number &&
                request.resource.data.selectedAreaRight >= 5
       }
       function validateSelectedAreaTop() {
-        return request.resource.data.selectedAreaTop is number &&
+        return request.resource.data.selectedAreaTop == null ||
+               request.resource.data.selectedAreaTop is number &&
                request.resource.data.selectedAreaTop >= 5
       }
       function validateSelectedAreaBottom() {
-        return request.resource.data.selectedAreaBottom is number &&
+        return request.resource.data.selectedAreaBottom == null ||
+               request.resource.data.selectedAreaBottom is number &&
                request.resource.data.selectedAreaBottom >= 5
       }
 

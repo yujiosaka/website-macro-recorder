@@ -19,6 +19,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.functions.FirebaseFunctionsException
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
+import inc.proto.websitemacrorecorder.data.MacroHistory
 import inc.proto.websitemacrorecorder.databinding.FragmentListBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.ui.confirm.ConfirmFragmentDirections
@@ -79,11 +80,11 @@ class ListFragment : Fragment() {
         bindViewModel()
     }
 
-    fun runMacro(macro: Macro) {
+    fun executeMacro(macro: Macro) {
         if (loading || activity == null) return
         loading = true
         binding.progress.visibility = View.VISIBLE
-        macroRepository.run(Helper.objectToMap(macro)).addOnCompleteListener(requireActivity()) {
+        macroRepository.execute(macro.id).addOnCompleteListener(requireActivity()) {
             binding.progress.visibility = View.GONE
             loading = false
             if (activity == null) return@addOnCompleteListener
@@ -101,17 +102,12 @@ class ListFragment : Fragment() {
                 Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
                 return@addOnCompleteListener
             }
-            val data = it.result!!.data as Map<String, Boolean>
+            val data = it.result!!.data as Map<String, Any?>
+            val history = Helper.mapToObject<MacroHistory>(data)
             val text = when {
-                data["entirePage"] != true && data["selectedArea"] != true -> {
-                    root.resources.getString(R.string.notification_macro_succeeded)
-                }
-                data["entirePage"] != true -> {
-                    root.resources.getString(R.string.notification_entire_page_changed)
-                }
-                else -> {
-                    root.resources.getString(R.string.notification_selected_area_changed)
-                }
+                !history.isEntirePageUpdated && !history.isSelectedAreaUpdated -> root.resources.getString(R.string.notification_macro_succeeded)
+                !history.isEntirePageUpdated -> root.resources.getString(R.string.notification_entire_page_changed)
+                else -> root.resources.getString(R.string.notification_selected_area_changed)
             }
             Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
         }
