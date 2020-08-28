@@ -65,11 +65,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
+                <inc.proto.websitemacrorecorder.util.TopCropImageView
                     android:id="@+id/image_screenshot"
                     android:layout_width="0dp"
                     android:layout_height="147dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="centerInside"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
