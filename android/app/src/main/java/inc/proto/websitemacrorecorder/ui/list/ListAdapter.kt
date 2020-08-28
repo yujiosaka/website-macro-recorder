@@ -20,8 +20,7 @@ import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
     companion object {
-        private const val ACTION_EXECUTE_MACRO = 1
-        private const val ACTION_EDIT_MACRO = 2
+        private const val ACTION_EDIT_MACRO = 1
     }
 
     private lateinit var context: Context
@@ -63,47 +62,65 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
             model.name
         } else {
             context.resources.getString(R.string.text_no_name)
-
+        }
+        holder.textName.setOnSingleClickListener {
+            fragment.editMacro(model)
         }
         holder.textUrl.text = model.url
+        holder.textUrl.setOnSingleClickListener {
+            fragment.editMacro(model)
+        }
         val order = sharedPreferences.getInt("ORDER", 0)
-        holder.textDate.text = if (listOf(Macro.ORDER_UPDATED_AT_DESC_VALUE, Macro.ORDER_UPDATED_AT_ASC_VALUE).contains(order)) {
-            if (model.updatedAt != null) {
-                DateFormat.getMediumDateFormat(context).format(model.updatedAt!!.toDate())
-            } else {
-                context.resources.getString(R.string.text_date_latest)
+        holder.textDate.text = when (order) {
+            Macro.ORDER_UPDATED_AT_DESC_VALUE, Macro.ORDER_UPDATED_AT_ASC_VALUE -> {
+                if (model.updatedAt != null) {
+                    DateFormat.getMediumDateFormat(context).format(model.updatedAt!!.toDate())
+                } else {
+                    context.resources.getString(R.string.text_date_latest)
+                }
             }
-        } else {
-            if (model.createdAt != null) {
-                DateFormat.getMediumDateFormat(context).format(model.createdAt!!.toDate())
-            } else {
-                context.resources.getString(R.string.text_date_latest)
+            Macro.ORDER_CREATED_AT_DESC_VALUE, Macro.ORDER_CREATED_AT_ASC_VALUE -> {
+                if (model.createdAt != null) {
+                    DateFormat.getMediumDateFormat(context).format(model.createdAt!!.toDate())
+                } else {
+                    context.resources.getString(R.string.text_date_latest)
+                }
+            }
+            else -> {
+                if (model.executedAt != null) {
+                    DateFormat.getMediumDateFormat(context).format(model.executedAt!!.toDate())
+                } else {
+                    context.resources.getString(R.string.text_date_latest)
+                }
             }
         }
-        holder.textError.visibility = if (model.isFailure) {
+        holder.chipError.visibility = if (model.isFailure) {
             View.VISIBLE
         } else {
-            View.INVISIBLE
+            View.GONE
         }
-        holder.card.setOnSingleClickListener {
-            holder.card.setOnCreateContextMenuListener { menu, _, _ ->
-                menu.add(Menu.NONE, ACTION_EXECUTE_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))
+        holder.chipChange.visibility = if (model.isEntirePageUpdated || model.isSelectedAreaUpdated) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.imagePlay.setOnSingleClickListener {
+            fragment.executeMacro(model)
+        }
+        holder.imageMore.setOnSingleClickListener {
+            holder.imageMore.setOnCreateContextMenuListener { menu, _, _ ->
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
-                menu.findItem(ACTION_EXECUTE_MACRO).setOnMenuItemClickListener {
-                    fragment.executeMacro(model)
-                    true
-                }
                 menu.findItem(ACTION_EDIT_MACRO).setOnMenuItemClickListener {
                     fragment.editMacro(model)
                     true
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                holder.card.showContextMenu(holder.card.pivotX, holder.card.pivotY)
+                holder.imageMore.showContextMenu(holder.imageMore.pivotX, holder.imageMore.pivotY)
             } else {
-                holder.card.showContextMenu()
+                holder.imageMore.showContextMenu()
             }
-            holder.card.setOnCreateContextMenuListener(null)
+            holder.imageMore.setOnCreateContextMenuListener(null)
         }
     }
 }

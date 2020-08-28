@@ -5,6 +5,8 @@
         <item>登録が古い順に並び替え</item>
         <item>更新が新しい順に並び替え</item>
         <item>更新が古い順に並び替え</item>
+        <item>実行が新しい順に並び替え</item>
+        <item>実行が古い順に並び替え</item>
     </string-array>
 
     <string-array name="text_frequency_array">

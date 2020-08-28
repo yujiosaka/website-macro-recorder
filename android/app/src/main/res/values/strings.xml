@@ -10,7 +10,6 @@
     <string name="action_done">Done</string>
     <string name="action_add_timer">Add timer</string>
     <string name="action_save">Save</string>
-    <string name="action_run_macro">Run this macro</string>
     <string name="action_edit_macro">Edit this macro</string>
     <string name="action_reset">Reset</string>
 
@@ -57,6 +56,7 @@
     <string name="notification_selected_area_changed">Detected selected area update</string>
     <string name="text_no_name">No name</string>
     <string name="text_error">Error</string>
+    <string name="text_change">Change</string>
     <string name="text_date_latest">...</string>
 
     <!-- Strings used for edit url fragment -->

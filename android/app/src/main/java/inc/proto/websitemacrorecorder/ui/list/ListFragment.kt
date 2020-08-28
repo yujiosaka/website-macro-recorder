@@ -153,6 +153,8 @@ class ListFragment : Fragment() {
             Macro.ORDER_UPDATED_AT_ASC_VALUE -> this.orderBy("updatedAt", Query.Direction.ASCENDING)
             Macro.ORDER_CREATED_AT_DESC_VALUE -> this.orderBy("createdAt", Query.Direction.DESCENDING)
             Macro.ORDER_CREATED_AT_ASC_VALUE -> this.orderBy("createdAt", Query.Direction.ASCENDING)
+            Macro.ORDER_EXECUTED_AT_DESC_VALUE -> this.orderBy("executedAt", Query.Direction.DESCENDING)
+            Macro.ORDER_EXECUTED_AT_ASC_VALUE -> this.orderBy("executedAt", Query.Direction.ASCENDING)
             else -> throw IllegalArgumentException("Unknown order! $order")
         }
     }
