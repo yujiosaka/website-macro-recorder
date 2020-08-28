@@ -19,6 +19,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.functions.FirebaseFunctionsException
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
+import inc.proto.websitemacrorecorder.data.MacroHistory
 import inc.proto.websitemacrorecorder.databinding.FragmentListBinding
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import inc.proto.websitemacrorecorder.ui.confirm.ConfirmFragmentDirections
@@ -102,10 +103,10 @@ class ListFragment : Fragment() {
                 return@addOnCompleteListener
             }
             val data = it.result!!.data as Map<String, Any?>
-            val res = Helper.mapToObject<Macro>(data)
+            val history = Helper.mapToObject<MacroHistory>(data)
             val text = when {
-                !res.isEntirePageUpdated && !res.isSelectedAreaUpdated -> root.resources.getString(R.string.notification_macro_succeeded)
-                !res.isEntirePageUpdated -> root.resources.getString(R.string.notification_entire_page_changed)
+                !history.isEntirePageUpdated && !history.isSelectedAreaUpdated -> root.resources.getString(R.string.notification_macro_succeeded)
+                !history.isEntirePageUpdated -> root.resources.getString(R.string.notification_entire_page_changed)
                 else -> root.resources.getString(R.string.notification_selected_area_changed)
             }
             Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()

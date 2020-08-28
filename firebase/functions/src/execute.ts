@@ -92,7 +92,6 @@ class Runner {
       await firestore.collection('macros').doc(this.macro.id).update(extend({}, update, {
         histories: admin.firestore.FieldValue.arrayUnion(history),
       }));
-      return { ...this.macro, ...update };
     } catch (error) {
       console.warn(error);
       throw new functions.https.HttpsError(
@@ -155,10 +154,12 @@ export const execute = functions.runWith({
     const current = await runner.saveScreenshot();
     const history = await runner.checkUpdate(original, current);
     history.screenshotUrl = await runner.uploadScreenshot(history);
-    return await runner.updateMacro(history);
+    await runner.updateMacro(history);
+    return history;
   } catch (error) {
     const history = runner.defaultHistory();
-    await runner.updateMacro(extend({}, history, { isFailure: true }));
+    history.isFailure = true;
+    await runner.updateMacro(history);
     throw error;
   }
 });
