@@ -1,10 +1,12 @@
 package inc.proto.websitemacrorecorder.ui.edit_url
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -35,6 +37,15 @@ class EditUrlFragment : Fragment() {
     }
 
     private fun bindViewModel() {
+        binding.editUrl.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_NULL &&
+                event.action == KeyEvent.ACTION_DOWN &&
+                binding.editUrl.error == null) {
+                binding.buttonStartRecording.performClick()
+                return@setOnEditorActionListener true
+            }
+            false
+        }
         binding.buttonStartRecording.setOnSingleClickListener {
             findNavController().navigate(EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!))
         }
