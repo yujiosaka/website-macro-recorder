@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { isString, isNumber, isBoolean, isEmpty, isArray, includes } from 'lodash';
+import { isString, isNumber, isBoolean, isNull, isEmpty, isArray, includes } from 'lodash';
 import { isUrl, move } from './lib/helper';
 
 const RUNTIME_TIMEOUT_SECONDS = 30;
@@ -30,6 +30,10 @@ class Runner {
                     isBoolean(this.macro.isEntirePageUpdated) &&
                     isBoolean(this.macro.isSelectedAreaUpdated) &&
                     isBoolean(this.macro.isFailure) &&
+                    isNull(this.macro.selectedAreaLeft) &&
+                    isNull(this.macro.selectedAreaRight) &&
+                    isNull(this.macro.selectedAreaTop) &&
+                    isNull(this.macro.selectedAreaBottom) &&
                     isString(this.macro.userAgent) && !isEmpty(this.macro.userAgent) &&
                     isString(this.macro.acceptLanguage) && !isEmpty(this.macro.acceptLanguage) &&
                     isNumber(this.macro.viewportHeight) && this.macro.viewportHeight >= 1 &&

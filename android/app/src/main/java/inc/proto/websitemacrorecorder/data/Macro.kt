@@ -251,7 +251,7 @@ class Macro(
             if (!isAreaSelected) return ""
             val selectedAreaWidth = selectedAreaRight!! - selectedAreaLeft!!
             val selectedAreaHeight = selectedAreaBottom!! - selectedAreaTop!!
-            return "$isAreaSelected x $selectedAreaHeight"
+            return "$selectedAreaWidth x $selectedAreaHeight"
         }
 
     var selectedAreaRect: Rect?
