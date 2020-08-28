@@ -10,7 +10,6 @@
     <string name="action_done">完了</string>
     <string name="action_add_timer">タイマー追加</string>
     <string name="action_save">登録</string>
-    <string name="action_run_macro">マクロを実行する</string>
     <string name="action_edit_macro">マクロを編集する</string>
     <string name="action_reset">やり直し</string>
 

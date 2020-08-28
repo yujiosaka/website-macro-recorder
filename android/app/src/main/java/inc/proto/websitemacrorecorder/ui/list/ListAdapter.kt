@@ -20,8 +20,7 @@ import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
     companion object {
-        private const val ACTION_EXECUTE_MACRO = 1
-        private const val ACTION_EDIT_MACRO = 2
+        private const val ACTION_EDIT_MACRO = 1
     }
 
     private lateinit var context: Context
@@ -100,25 +99,23 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         } else {
             View.GONE
         }
-        holder.card.setOnSingleClickListener {
-            holder.card.setOnCreateContextMenuListener { menu, _, _ ->
-                menu.add(Menu.NONE, ACTION_EXECUTE_MACRO, Menu.NONE, context.resources.getString(R.string.action_run_macro))
+        holder.imagePlay.setOnSingleClickListener {
+            fragment.executeMacro(model)
+        }
+        holder.imageMore.setOnSingleClickListener {
+            holder.imageMore.setOnCreateContextMenuListener { menu, _, _ ->
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
-                menu.findItem(ACTION_EXECUTE_MACRO).setOnMenuItemClickListener {
-                    fragment.executeMacro(model)
-                    true
-                }
                 menu.findItem(ACTION_EDIT_MACRO).setOnMenuItemClickListener {
                     fragment.editMacro(model)
                     true
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                holder.card.showContextMenu(holder.card.pivotX, holder.card.pivotY)
+                holder.imageMore.showContextMenu(holder.imageMore.pivotX, holder.imageMore.pivotY)
             } else {
-                holder.card.showContextMenu()
+                holder.imageMore.showContextMenu()
             }
-            holder.card.setOnCreateContextMenuListener(null)
+            holder.imageMore.setOnCreateContextMenuListener(null)
         }
     }
 }

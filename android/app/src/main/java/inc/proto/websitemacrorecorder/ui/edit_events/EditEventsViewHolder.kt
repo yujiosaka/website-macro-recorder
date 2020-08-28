@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_event.view.*
 
 class EditEventsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    var imageName: ImageView = view.image_name
-    var textName: TextView = view.text_name
-    var textTargetType: TextView = view.text_target_type
-    var textValue: TextView = view.text_value
-    var imageWarning: ImageView = view.image_warning
-    var textMessage: TextView = view.text_message
-    var imageReorder: ImageView = view.image_reorder
+    val imageName: ImageView = view.image_name
+    val textName: TextView = view.text_name
+    val textTargetType: TextView = view.text_target_type
+    val textValue: TextView = view.text_value
+    val imageWarning: ImageView = view.image_warning
+    val textMessage: TextView = view.text_message
+    val imageReorder: ImageView = view.image_reorder
 }
