@@ -62,9 +62,14 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
             model.name
         } else {
             context.resources.getString(R.string.text_no_name)
-
+        }
+        holder.textName.setOnSingleClickListener {
+            fragment.editMacro(model)
         }
         holder.textUrl.text = model.url
+        holder.textUrl.setOnSingleClickListener {
+            fragment.editMacro(model)
+        }
         val order = sharedPreferences.getInt("ORDER", 0)
         holder.textDate.text = when (order) {
             Macro.ORDER_UPDATED_AT_DESC_VALUE, Macro.ORDER_UPDATED_AT_ASC_VALUE -> {
