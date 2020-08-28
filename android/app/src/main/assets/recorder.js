@@ -196,6 +196,8 @@
             return 'radio';
           case 'submit', 'reset', 'button', 'image':
             return 'button';
+          case 'password':
+            return 'password';
           default:
             return 'input';
         }

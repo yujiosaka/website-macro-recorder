@@ -85,6 +85,7 @@
     <string name="text_target_type_radio">ラジオボタン</string>
     <string name="text_target_type_button">ボタン</string>
     <string name="text_target_type_select">選択ボックス</string>
+    <string name="text_target_type_password">パスワード</string>
     <string name="text_target_type_text">テキスト</string>
     <string name="text_target_type_wait_for_navigation">画面遷移の完了を待つ</string>
     <string name="text_target_type_wait_for_timer">タイマーの完了を待つ</string>

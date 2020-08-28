@@ -85,6 +85,7 @@
     <string name="text_target_type_radio">Radio button</string>
     <string name="text_target_type_button">Button</string>
     <string name="text_target_type_select">Select box</string>
+    <string name="text_target_type_password">Password</string>
     <string name="text_target_type_text">Text</string>
     <string name="text_target_type_wait_for_navigation">Wait for navigation</string>
     <string name="text_target_type_wait_for_timer">Wait for timer</string>

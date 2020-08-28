@@ -86,7 +86,9 @@ class EditEventsAdapter(
                 } catch (e: Resources.NotFoundException) {
                     context.resources.getString(R.string.text_target_type_text)
                 }
-                holder.textValue.text = if (event.value != "") {
+                holder.textValue.text = if (event.value != "" && event.targetType == "password") {
+                    event.value.replace(".".toRegex(), "*")
+                } else if (event.value != "") {
                     event.value
                 } else {
                     context.resources.getString(R.string.text_value_empty)
