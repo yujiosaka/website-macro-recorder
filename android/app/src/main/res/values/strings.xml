@@ -110,7 +110,7 @@
     <string name="text_update_check_title">Update check</string>
     <string name="text_check_entire_page">Check entire page for update</string>
     <string name="text_check_selected_area">Check area %1$s for update</string>
-    <string name="text_not_selected_area">Not selected area to check update</string>
+    <string name="text_area_not_selected">Select area to check update</string>
     <string name="text_back_to_macro_list">Back</string>
     <string name="button_save">Save</string>
     <string name="button_delete">Delete this macro</string>
@@ -118,6 +118,7 @@
     <string name="message_yes">Yes</string>
     <string name="message_no">No</string>
     <string name="notification_update_macro">Saved your macro update</string>
+
 
     <!-- Strings used for edit schedule fragment -->
     <string name="text_back_to_macro_edit">Back</string>

@@ -36,7 +36,7 @@ class EditViewModel(macro: Macro) : ViewModel() {
                 _macro.value!!.selectedAreaSize
             )
         } else {
-            App.context.resources.getString(R.string.text_not_selected_area)
+            App.context.resources.getString(R.string.text_area_not_selected)
         }
     }
 

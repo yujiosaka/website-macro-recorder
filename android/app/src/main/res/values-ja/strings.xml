@@ -110,7 +110,7 @@
     <string name="text_update_check_title">更新チェック</string>
     <string name="text_check_entire_page">ページ全体をチェック</string>
     <string name="text_check_selected_area">選択エリア %1$s をチェック</string>
-    <string name="text_not_selected_area">チェック対象のエリア未選択</string>
+    <string name="text_area_not_selected">チェック対象のエリア未選択</string>
     <string name="text_back_to_macro_list">≪ マクロの一覧に戻る</string>
     <string name="button_save">保存</string>
     <string name="button_delete">削除</string>
