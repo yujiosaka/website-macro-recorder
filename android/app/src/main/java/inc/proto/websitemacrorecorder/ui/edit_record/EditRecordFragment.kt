@@ -188,6 +188,7 @@ class EditRecordFragment : Fragment() {
             "image" -> R.string.text_target_type_image
             "link" -> R.string.text_target_type_link
             "frame" -> R.string.text_target_type_frame
+            "password" -> R.string.text_target_type_password
             "input" -> R.string.text_target_type_input
             "checkbox" -> R.string.text_target_type_checkbox
             "radio" -> R.string.text_target_type_radio
