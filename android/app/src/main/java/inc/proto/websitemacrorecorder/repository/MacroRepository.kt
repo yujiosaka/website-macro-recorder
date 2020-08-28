@@ -26,8 +26,8 @@ class MacroRepository {
         return functions.getHttpsCallable(CREATE_NAME).withTimeout(CREATE_TIMEOUT_SECONDS, TimeUnit.SECONDS).call(macro)
     }
 
-    fun execute(macro: Map<String, Any?>): Task<HttpsCallableResult> {
-        return functions.getHttpsCallable(EXECUTE_NAME).withTimeout(EXECUTE_TIMEOUT_SECONDS, TimeUnit.SECONDS).call(macro)
+    fun execute(id: String): Task<HttpsCallableResult> {
+        return functions.getHttpsCallable(EXECUTE_NAME).withTimeout(EXECUTE_TIMEOUT_SECONDS, TimeUnit.SECONDS).call(id)
     }
 
     fun screenshot(macro: Map<String, Any?>): Task<HttpsCallableResult> {

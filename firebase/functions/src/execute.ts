@@ -1,4 +1,4 @@
-import { extend, omit } from 'lodash';
+import { extend, omit, slice } from 'lodash';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as sharp from 'sharp';
@@ -6,6 +6,7 @@ import pixelmatch = require('pixelmatch');
 import { PNG } from 'pngjs';
 import { getTmpPath, download, upload } from './lib/helper';
 import Crawler from './lib/crawler';
+import { MAX_HISTORIES } from './lib/const';
 
 const RUNTIME_TIMEOUT_SECONDS = 180;
 const RUNTIME_MEMORY = '2GB';
@@ -25,10 +26,7 @@ class Runner {
       return await download(source);
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
@@ -43,10 +41,7 @@ class Runner {
     } catch (error) {
       if (error instanceof functions.https.HttpsError) throw error;
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
@@ -65,10 +60,7 @@ class Runner {
       return history;
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
@@ -79,25 +71,18 @@ class Runner {
       return await upload(source, destination);
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
   async updateMacro(history: MacroHistory) {
     const update = omit(history, 'screenshotUrl');
+    const histories = slice(this.macro.histories.concat(history), -MAX_HISTORIES);
     try {
-      await firestore.collection('macros').doc(this.macro.id).update(extend({}, update, {
-        histories: admin.firestore.FieldValue.arrayUnion(history),
-      }));
+      await firestore.collection('macros').doc(this.macro.id).update(extend({}, update, { histories }));
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
@@ -143,22 +128,28 @@ export const execute = functions.runWith({
   memory: RUNTIME_MEMORY,
 }).https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError(
-      'unauthenticated',
-      'Not authenticated',
-    );
+    throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
   }
-  const runner = new Runner(data);
+  const doc = await firestore.collection('macros').doc(data).get();
+  if (!doc.exists) {
+    throw new functions.https.HttpsError('invalid-argument', 'Argument is invalid');
+  }
+  const macro = doc.data() as Macro;
+  if (context.auth.uid !== macro.uid) {
+    throw new functions.https.HttpsError('permission-denied', 'Permission denied');
+  }
+  const runner = new Runner(macro);
   const original = await runner.downloadScreenshot();
   let current: Buffer;
+  let history: MacroHistory;
   try {
     current = await runner.saveScreenshot();
   } catch (error) {
-    const history = runner.defaultHistory({ isFailure: true })
+    history = runner.defaultHistory({ isFailure: true });
     await runner.updateMacro(history);
     throw error;
   }
-  const history = await runner.checkUpdate(original, current);
+  history = await runner.checkUpdate(original, current);
   history.screenshotUrl = await runner.uploadScreenshot(history);
   await runner.updateMacro(history);
   return history;

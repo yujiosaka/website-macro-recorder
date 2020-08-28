@@ -41,12 +41,8 @@ class Runner {
                     isNumber(this.macro.deviceScaleFactor) && this.macro.deviceScaleFactor >= 1 &&
                     isArray(this.macro.events) &&
                     isArray(this.macro.histories);
-    if (!isValid) {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'Argument is invalid',
-      );
-    }
+    if (isValid) return;
+    throw new functions.https.HttpsError('invalid-argument', 'Argument is invalid');
   }
 
   async moveScreenshot() {
@@ -56,10 +52,7 @@ class Runner {
       this.macro.screenshotUrl = await move(source, destination);
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
@@ -73,13 +66,9 @@ class Runner {
       return this.macro;
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
-
 }
 
 export const create = functions.runWith({
@@ -87,10 +76,7 @@ export const create = functions.runWith({
   memory: RUNTIME_MEMORY,
 }).https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError(
-      'unauthenticated',
-      'Not authenticated',
-    );
+    throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
   }
   const runner = new Runner({ ...data, uid: context.auth.uid });
   runner.validateMacro();

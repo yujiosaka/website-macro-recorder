@@ -84,7 +84,7 @@ class ListFragment : Fragment() {
         if (loading || activity == null) return
         loading = true
         binding.progress.visibility = View.VISIBLE
-        macroRepository.execute(Helper.objectToMap(macro)).addOnCompleteListener(requireActivity()) {
+        macroRepository.execute(macro.id).addOnCompleteListener(requireActivity()) {
             binding.progress.visibility = View.GONE
             loading = false
             if (activity == null) return@addOnCompleteListener

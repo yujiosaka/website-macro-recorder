@@ -22,10 +22,7 @@ class Runner {
     } catch (error) {
       if (error instanceof functions.https.HttpsError) throw error;
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 
@@ -36,10 +33,7 @@ class Runner {
       return await upload(source, destination);
     } catch (error) {
       console.warn(error);
-      throw new functions.https.HttpsError(
-        'unknown',
-        'Unknown error occurred',
-      );
+      throw new functions.https.HttpsError('unknown', 'Unknown error occurred');
     }
   }
 }
@@ -49,10 +43,7 @@ export const screenshot = functions.runWith({
   memory: RUNTIME_MEMORY,
 }).https.onCall(async (data, context) => {
   if (!context.auth) {
-    throw new functions.https.HttpsError(
-      'unauthenticated',
-      'Not authenticated',
-    );
+    throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
   }
   const runner = new Runner({ ...data, uid: context.auth.uid });
   await runner.saveScreenshot();
