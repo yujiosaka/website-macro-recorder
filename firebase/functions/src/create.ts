@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { isString, isNumber, isBoolean, isEmpty, isArray, includes, extend } from 'lodash';
-import { isUrl, move } from './helper';
+import { isUrl, move } from './lib/helper';
 
 const RUNTIME_TIMEOUT_SECONDS = 30;
 const RUNTIME_MEMORY = '256MB';

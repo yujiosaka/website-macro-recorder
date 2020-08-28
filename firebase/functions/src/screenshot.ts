@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
-import { getTmpPath, upload } from './helper';
-import Crawler from './crawler';
+import { getTmpPath, upload } from './lib/helper';
+import Crawler from './lib/crawler';
 
 const RUNTIME_TIMEOUT_SECONDS = 180;
 const RUNTIME_MEMORY = '2GB';

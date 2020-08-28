@@ -4,8 +4,8 @@ import * as functions from 'firebase-functions';
 import * as sharp from 'sharp';
 import pixelmatch = require('pixelmatch');
 import { PNG } from 'pngjs';
-import { getTmpPath, download, upload } from './helper';
-import Crawler from './crawler';
+import { getTmpPath, download, upload } from './lib/helper';
+import Crawler from './lib/crawler';
 
 const RUNTIME_TIMEOUT_SECONDS = 180;
 const RUNTIME_MEMORY = '2GB';
