@@ -103,6 +103,17 @@
     <string name="text_name_title">名称</string>
     <string name="hint_name">名称を入力してください</string>
     <string name="text_macro">マクロ</string>
+    <string name="text_schedule_everyday">毎日</string>
+    <string name="text_schedule_weekdays">平日</string>
+    <string name="text_schedule_weekends">週末</string>
+    <string name="text_schedule_sunday">日曜日</string>
+    <string name="text_schedule_monday">月曜日</string>
+    <string name="text_schedule_tuesday">火曜日</string>
+    <string name="text_schedule_wednesday">水曜日</string>
+    <string name="text_schedule_thursday">木曜日</string>
+    <string name="text_schedule_friday">金曜日</string>
+    <string name="text_schedule_saturday">土曜日</string>
+    <string name="text_schedule_days">%1$s/7日</string>
     <string name="text_schedule">%1$s%2$sにスケジュール実行</string>
     <string name="text_schedule_title">スケジュール</string>
     <string name="text_notification_title">通知</string>
@@ -119,8 +130,16 @@
     <string name="message_yes">はい</string>
     <string name="message_no">いいえ</string>
     <string name="notification_update_macro">マクロの更新を保存しました</string>
+    <string name="notification_not_update_macro">曜日は一つ以上選択してください</string>
 
     <!-- Strings used for edit schedule fragment -->
+    <string name="text_sunday">日</string>
+    <string name="text_monday">月</string>
+    <string name="text_tuesday">火</string>
+    <string name="text_wednesday">水</string>
+    <string name="text_thursday">木</string>
+    <string name="text_friday">金</string>
+    <string name="text_saturday">土</string>
     <string name="text_back_to_macro_edit">≪ マクロの編集に戻る</string>
 
     <!-- Strings used for edit selected area fragment -->

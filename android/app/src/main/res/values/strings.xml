@@ -103,7 +103,18 @@
     <string name="text_name_title">Name</string>
     <string name="hint_name">Enter name</string>
     <string name="text_macro">Macro</string>
-    <string name="text_schedule">%1$s at %2$s</string>
+    <string name="text_schedule_everyday">every day</string>
+    <string name="text_schedule_weekdays">weekdays</string>
+    <string name="text_schedule_weekends">weekends</string>
+    <string name="text_schedule_sunday">Sunday</string>
+    <string name="text_schedule_monday">Monday</string>
+    <string name="text_schedule_tuesday">Tuesday</string>
+    <string name="text_schedule_wednesday">Wednesday</string>
+    <string name="text_schedule_thursday">Thursday</string>
+    <string name="text_schedule_friday">Friday</string>
+    <string name="text_schedule_saturday">Saturday</string>
+    <string name="text_schedule_days">%1$s/7 days</string>
+    <string name="text_schedule">Scheduled %1$s at %2$s</string>
     <string name="text_schedule_title">Schedule</string>
     <string name="text_notification_title">Notification</string>
     <string name="text_notify_success">Send app notification on success</string>
@@ -119,9 +130,17 @@
     <string name="message_yes">Yes</string>
     <string name="message_no">No</string>
     <string name="notification_update_macro">Saved your macro update</string>
-
+    <string name="notification_not_update_macro">Select at least one day of week</string>
 
     <!-- Strings used for edit schedule fragment -->
+    <string name="text_sunday">Su.</string>
+    <string name="text_monday">Mo.</string>
+    <string name="text_tuesday">Tu.</string>
+    <string name="text_wednesday">We.</string>
+    <string name="text_thursday">Th.</string>
+    <string name="text_friday">Fr.</string>
+    <string name="text_saturday">Sa.</string>
+
     <string name="text_back_to_macro_edit">Back</string>
 
     <!-- Strings used for edit selected area fragment -->

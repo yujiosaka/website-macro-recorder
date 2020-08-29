@@ -7,6 +7,13 @@ interface Macro {
   scheduleFrequency: number;
   scheduleHour: number;
   scheduleMinute: number;
+  scheduleSunday: Boolean;
+  scheduleMonday: Boolean;
+  scheduleTuesday: Boolean;
+  scheduleWednesday: Boolean;
+  scheduleThursday: Boolean;
+  scheduleFriday: Boolean;
+  scheduleSaturday: Boolean ;
   notifySuccess: boolean;
   notifyFailure: boolean;
   checkEntirePage: boolean;
