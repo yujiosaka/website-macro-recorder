@@ -20,6 +20,13 @@ class Macro(
     scheduleFrequency: Int = 0,
     scheduleHour: Int = 10,
     scheduleMinute: Int = 0,
+    scheduleSunday: Boolean = false,
+    scheduleMonday: Boolean = true,
+    scheduleTuesday: Boolean = true,
+    scheduleWednesday: Boolean = true,
+    scheduleThursday: Boolean = true,
+    scheduleFriday: Boolean = true,
+    scheduleSaturday: Boolean = false,
     enableSchedule: Boolean = true,
     notifySuccess: Boolean = true,
     notifyFailure: Boolean = true,
@@ -108,6 +115,119 @@ class Macro(
             field = value
             notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleMinute)
+        }
+
+    @Bindable
+    var scheduleSunday = scheduleSunday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleSunday)
+        }
+
+    @Bindable
+    var scheduleMonday = scheduleMonday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleMonday)
+        }
+
+    @Bindable
+    var scheduleTuesday = scheduleTuesday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleTuesday)
+        }
+
+    @Bindable
+    var scheduleWednesday = scheduleWednesday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleWednesday)
+        }
+
+    @Bindable
+    var scheduleThursday = scheduleThursday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleThursday)
+        }
+
+    @Bindable
+    var scheduleFriday = scheduleFriday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleFriday)
+        }
+
+    @Bindable
+    var scheduleSaturday = scheduleSaturday
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.schedule)
+            notifyPropertyChanged(BR.scheduleSaturday)
+        }
+
+    var scheduleDay = false
+        get() {
+            return scheduleSunday ||
+                    scheduleMonday ||
+                    scheduleTuesday ||
+                    scheduleWednesday ||
+                    scheduleThursday ||
+                    scheduleFriday ||
+                    scheduleSaturday
+        }
+
+    var scheduleDays = 5
+        get() {
+            var days = 0
+            if (scheduleSunday) days += 1
+            if (scheduleMonday) days += 1
+            if (scheduleTuesday) days += 1
+            if (scheduleWednesday) days += 1
+            if (scheduleThursday) days += 1
+            if (scheduleFriday) days += 1
+            if (scheduleSaturday) days += 1
+            return days
+        }
+
+    var scheduleEveryday = false
+        get() {
+            return scheduleSunday &&
+                    scheduleMonday &&
+                    scheduleTuesday &&
+                    scheduleWednesday &&
+                    scheduleThursday &&
+                    scheduleFriday &&
+                    scheduleSaturday
+        }
+
+    var scheduleWeekdays = true
+        get() {
+            return !scheduleSunday &&
+                    scheduleMonday &&
+                    scheduleTuesday &&
+                    scheduleWednesday &&
+                    scheduleThursday &&
+                    scheduleFriday &&
+                    !scheduleSaturday
+        }
+
+    var scheduleWeekends = false
+        get() {
+            return scheduleSunday &&
+                    !scheduleMonday &&
+                    !scheduleTuesday &&
+                    !scheduleWednesday &&
+                    !scheduleThursday &&
+                    !scheduleFriday &&
+                    scheduleSaturday
         }
 
     @get:Bindable

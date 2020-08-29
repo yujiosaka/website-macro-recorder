@@ -21,6 +21,13 @@ service cloud.firestore {
                validateSelectedAreaBottom() &&
                request.resource.data.name is string &&
                request.resource.data.enableSchedule is bool &&
+               request.resource.data.scheduleSunday is bool &&
+               request.resource.data.scheduleMonday is bool &&
+               request.resource.data.scheduleTuesday is bool &&
+               request.resource.data.scheduleWednesday is bool &&
+               request.resource.data.scheduleThursday is bool &&
+               request.resource.data.scheduleFriday is bool &&
+               request.resource.data.scheduleSaturday is bool &&
                request.resource.data.notifySuccess is bool &&
                request.resource.data.notifyFailure is bool &&
                request.resource.data.checkEntirePage is bool &&

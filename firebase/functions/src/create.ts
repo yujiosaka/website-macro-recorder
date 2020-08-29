@@ -23,6 +23,13 @@ class Runner {
                     isNumber(this.macro.scheduleFrequency) && includes([0, 1, 2], this.macro.scheduleFrequency) &&
                     isNumber(this.macro.scheduleHour) && this.macro.scheduleHour >= 0 && this.macro.scheduleHour < 24 &&
                     isNumber(this.macro.scheduleMinute) && this.macro.scheduleMinute >= 0 && this.macro.scheduleMinute < 60 &&
+                    isBoolean(this.macro.scheduleSunday) &&
+                    isBoolean(this.macro.scheduleMonday) &&
+                    isBoolean(this.macro.scheduleTuesday) &&
+                    isBoolean(this.macro.scheduleWednesday) &&
+                    isBoolean(this.macro.scheduleThursday) &&
+                    isBoolean(this.macro.scheduleFriday) &&
+                    isBoolean(this.macro.scheduleSaturday) &&
                     isBoolean(this.macro.notifySuccess) &&
                     isBoolean(this.macro.notifyFailure) &&
                     isBoolean(this.macro.checkEntirePage) &&

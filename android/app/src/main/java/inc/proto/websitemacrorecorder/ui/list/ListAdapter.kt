@@ -16,6 +16,7 @@ import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.repository.MacroRepository
 import android.text.format.DateFormat
 import androidx.preference.PreferenceManager
+import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
@@ -39,11 +40,23 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
     override fun onBindViewHolder(holder: ListViewHolder, position: Int, model: Macro) {
         Glide.with(context).load(model.screenshotUrl).into(holder.imageScreenshot)
         val frequencies = context.resources.getStringArray(R.array.text_frequency_array)
-        val schedule = frequencies[model.scheduleFrequency]
         holder.textSchedule.text = if (model.scheduleFrequency == 1) {
+            val schedule = when {
+                model.scheduleEveryday -> context.resources.getString(R.string.text_schedule_everyday)
+                model.scheduleWeekdays -> context.resources.getString(R.string.text_schedule_weekdays)
+                model.scheduleWeekends -> context.resources.getString(R.string.text_schedule_weekends)
+                model.scheduleDays == 1 && model.scheduleSunday -> context.resources.getString(R.string.text_schedule_sunday)
+                model.scheduleDays == 1 && model.scheduleMonday -> context.resources.getString(R.string.text_schedule_monday)
+                model.scheduleDays == 1 && model.scheduleTuesday -> context.resources.getString(R.string.text_schedule_tuesday)
+                model.scheduleDays == 1 && model.scheduleWednesday -> context.resources.getString(R.string.text_schedule_wednesday)
+                model.scheduleDays == 1 && model.scheduleThursday -> context.resources.getString(R.string.text_schedule_thursday)
+                model.scheduleDays == 1 && model.scheduleFriday -> context.resources.getString(R.string.text_schedule_friday)
+                model.scheduleDays == 1 && model.scheduleSaturday -> context.resources.getString(R.string.text_schedule_saturday)
+                else -> context.resources.getString(R.string.text_schedule_days, model.scheduleDays.toString())
+            }
             context.resources.getString(R.string.text_schedule, schedule, model.schedule)
         } else {
-            schedule
+            frequencies[model.scheduleFrequency]
         }
         holder.editEnableSchedule.visibility = if (model.scheduleFrequency == 0) {
             View.INVISIBLE
