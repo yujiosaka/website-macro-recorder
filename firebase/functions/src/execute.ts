@@ -52,10 +52,14 @@ class Runner {
         history.isEntirePageUpdated = this.compareImage(original, current);
       }
       if (this.macro.checkSelectedArea && this.isAreaSelected()) {
-        const shape = this.getShape();
-        const originalSelectedArea = await sharp(original).extract(shape).toBuffer();
-        const currentSelectedArea = await sharp(current).extract(shape).toBuffer();
-        history.isSelectedAreaUpdated = this.compareImage(originalSelectedArea, currentSelectedArea);
+        if (this.canSelectArea(original)) {
+          const shape = this.getShape();
+          const originalSelectedArea = await sharp(original).extract(shape).toBuffer();
+          const currentSelectedArea = await sharp(current).extract(shape).toBuffer();
+          history.isSelectedAreaUpdated = this.compareImage(originalSelectedArea, currentSelectedArea);
+        } else {
+          history.isSelectedAreaUpdated = true;
+        }
       }
       return history;
     } catch (error) {
@@ -110,6 +114,13 @@ class Runner {
     if (this.macro.selectedAreaTop === null || this.macro.selectedAreaTop === undefined) return false;
     if (this.macro.selectedAreaRight === null || this.macro.selectedAreaRight === undefined) return false;
     if (this.macro.selectedAreaBottom === null || this.macro.selectedAreaBottom === undefined) return false;
+    return true;
+  }
+
+  private canSelectArea(original: Buffer) {
+    const originalImage = PNG.sync.read(original);
+    if (originalImage.width < this.macro.selectedAreaRight) return false;
+    if (originalImage.height < this.macro.selectedAreaBottom) return false;
     return true;
   }
 
