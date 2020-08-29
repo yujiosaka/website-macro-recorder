@@ -39,6 +39,7 @@
     <string name="edit_fragment_label">Edit Your Macro</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_selected_area_fragment_label">Select Area</string>
+    <string name="tutorial_fragment_label">Tutorial</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
 
     <!-- Strings used for tutorial fragment -->

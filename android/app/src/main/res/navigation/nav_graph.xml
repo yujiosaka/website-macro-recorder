@@ -177,7 +177,7 @@
     <fragment
         android:id="@+id/tutorial1Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial1.Tutorial1Fragment"
-        android:label="fragment_tutorial1"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial1" >
         <action
             android:id="@+id/action_tutorial1Fragment_to_tutorial2Fragment"
@@ -190,7 +190,7 @@
     <fragment
         android:id="@+id/tutorial2Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial2.Tutorial2Fragment"
-        android:label="fragment_tutorial2"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial2" >
         <action
             android:id="@+id/action_tutorial2Fragment_to_tutorial3Fragment"
@@ -203,7 +203,7 @@
     <fragment
         android:id="@+id/tutorial3Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial3.Tutorial3Fragment"
-        android:label="fragment_tutorial3"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial3" >
         <action
             android:id="@+id/action_tutorial3Fragment_to_tutorial4Fragment"
@@ -216,7 +216,7 @@
     <fragment
         android:id="@+id/tutorial4Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial4.Tutorial4Fragment"
-        android:label="fragment_tutorial4"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial4" >
         <action
             android:id="@+id/action_tutorial4Fragment_to_tutorial5Fragment"
@@ -229,7 +229,8 @@
     <fragment
         android:id="@+id/tutorial5Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial5.Tutorial5Fragment"
-        android:label="Tutorial5Fragment" >
+        android:label="@string/tutorial_fragment_label"
+        tools:layout="@layout/fragment_tutorial5" >
         <action
             android:id="@+id/action_tutorial5Fragment_to_listFragment_without_history"
             app:destination="@id/listFragment"

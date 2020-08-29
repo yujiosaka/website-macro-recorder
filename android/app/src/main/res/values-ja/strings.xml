@@ -39,6 +39,7 @@
     <string name="edit_fragment_label">マクロの編集</string>
     <string name="edit_schedule_fragment_label">スケジュールの選択</string>
     <string name="edit_selected_area_fragment_label">エリアの選択</string>
+    <string name="tutorial_fragment_label">チュートリアル</string>
     <string name="plan_fragment_label">プラン変更</string>
 
     <!-- Strings used for tutorial fragment -->
