@@ -7,9 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import inc.proto.websitemacrorecorder.R
+import kotlinx.android.synthetic.main.fragment_view_histories.*
 
 class ViewHistoriesFragment : Fragment() {
+    private val adapter: ViewHistoriesAdapter by lazy {
+        ViewHistoriesAdapter(args.macro.histories)
+    }
     private val args: ViewHistoriesFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -21,6 +26,9 @@ class ViewHistoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recycler_histories.setHasFixedSize(true)
+        recycler_histories.layoutManager = LinearLayoutManager(activity)
+        recycler_histories.adapter = adapter
         setActionBarTitle()
     }
 
