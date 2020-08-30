@@ -189,6 +189,39 @@
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+        <action
+            android:id="@+id/action_viewHistoriesFragment_to_viewHistoryFragment"
+            app:destination="@id/viewHistoryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewHistoryFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.view_history.ViewHistoryFragment"
+        android:label="@string/view_history_fragment_label"
+        tools:layout="@layout/fragment_view_history">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+        <argument
+            android:name="history"
+            app:argType="inc.proto.websitemacrorecorder.data.MacroHistory"/>
+        <action
+            android:id="@+id/action_viewHistoryFragment_to_viewHistoryFragment_previous"
+            app:destination="@id/viewHistoryFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_viewHistoryFragment_to_viewHistoryFragment_next"
+            app:destination="@id/viewHistoryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/tutorial1Fragment"

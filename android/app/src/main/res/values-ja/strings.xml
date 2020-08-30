@@ -14,6 +14,8 @@
     <string name="action_view_histories">履歴を閲覧する</string>
     <string name="action_open_website">サイトを開く</string>
     <string name="action_reset">やり直し</string>
+    <string name="action_previous">前へ</string>
+    <string name="action_next">次へ</string>
 
     <!-- Strings used for validation -->
     <string name="error_enter_here">%1$sを入力してください</string>
@@ -41,7 +43,8 @@
     <string name="edit_fragment_label">マクロの編集</string>
     <string name="edit_schedule_fragment_label">スケジュールの選択</string>
     <string name="edit_selected_area_fragment_label">エリアの選択</string>
-    <string name="view_histories_fragment_label">実行履歴の一覧</string>
+    <string name="view_histories_fragment_label">履歴の一覧を読み込んでいます...</string>
+    <string name="view_history_fragment_label">履歴を読み込んでいます...</string>
     <string name="tutorial_fragment_label">チュートリアル</string>
     <string name="plan_fragment_label">プラン変更</string>
 

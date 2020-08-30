@@ -13,4 +13,5 @@ class ViewHistoriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val chipChange: Chip = view.chip_change
     val chipError: Chip = view.chip_error
     val chipSuccess: Chip = view.chip_success
+    val chipCheckScreenshot: Chip = view.chip_check_screenshot
 }

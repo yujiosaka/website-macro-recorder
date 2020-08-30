@@ -12,7 +12,7 @@ import inc.proto.websitemacrorecorder.data.MacroHistory
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 import kotlin.collections.ArrayList
 
-class ViewHistoriesAdapter(private val histories: ArrayList<MacroHistory>) : RecyclerView.Adapter<ViewHistoriesViewHolder>() {
+class ViewHistoriesAdapter(private val fragment: ViewHistoriesFragment, private val histories: ArrayList<MacroHistory>) : RecyclerView.Adapter<ViewHistoriesViewHolder>() {
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ViewHistoriesViewHolder {
@@ -24,6 +24,9 @@ class ViewHistoriesAdapter(private val histories: ArrayList<MacroHistory>) : Rec
     override fun onBindViewHolder(holder: ViewHistoriesViewHolder, position: Int) {
         val history = histories[position]
         Glide.with(context).load(history.screenshotUrl).into(holder.imageScreenshot)
+        holder.imageScreenshot.setOnSingleClickListener {
+            fragment.viewHistory(history)
+        }
         holder.textDate.text = if (history.executedAt != null) {
             val date = DateFormat.getMediumDateFormat(context).format(history.executedAt!!.toDate())
             val time = DateFormat.getTimeFormat(context).format(history.executedAt!!.toDate())
@@ -36,15 +39,27 @@ class ViewHistoriesAdapter(private val histories: ArrayList<MacroHistory>) : Rec
         } else {
             View.VISIBLE
         }
+        holder.chipSuccess.setOnSingleClickListener {
+            fragment.viewHistory(history)
+        }
         holder.chipError.visibility = if (history.isFailure) {
             View.VISIBLE
         } else {
             View.GONE
         }
+        holder.chipError.setOnSingleClickListener {
+            fragment.viewHistory(history)
+        }
         holder.chipChange.visibility = if (history.isEntirePageUpdated || history.isSelectedAreaUpdated) {
             View.VISIBLE
         } else {
             View.GONE
+        }
+        holder.chipChange.setOnSingleClickListener {
+            fragment.viewHistory(history)
+        }
+        holder.chipCheckScreenshot.setOnSingleClickListener {
+            fragment.viewHistory(history)
         }
     }
 

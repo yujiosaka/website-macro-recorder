@@ -6,15 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.MacroHistory
 import kotlinx.android.synthetic.main.fragment_view_histories.*
 
 class ViewHistoriesFragment : Fragment() {
     private val adapter: ViewHistoriesAdapter by lazy {
-        ViewHistoriesAdapter(args.macro.histories.reversed() as ArrayList<MacroHistory>)
+        ViewHistoriesAdapter(this, args.macro.histories.reversed() as ArrayList<MacroHistory>)
     }
     private val args: ViewHistoriesFragmentArgs by navArgs()
 
@@ -33,9 +35,16 @@ class ViewHistoriesFragment : Fragment() {
         setActionBarTitle()
     }
 
+    fun viewHistory(history: MacroHistory) {
+        findNavController().navigate(ViewHistoriesFragmentDirections.actionViewHistoriesFragmentToViewHistoryFragment(args.macro, history))
+    }
+
     private fun setActionBarTitle() {
-        if (args.macro.name != "") {
-            (activity as AppCompatActivity?)?.supportActionBar?.title = args.macro.name
+        val title = if (args.macro.name != "") {
+            args.macro.name
+        } else {
+            App.context.resources.getString(R.string.text_no_name)
         }
+        (activity as AppCompatActivity?)?.supportActionBar?.title = title
     }
 }

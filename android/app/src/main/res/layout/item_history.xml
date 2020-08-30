@@ -100,7 +100,7 @@
         app:layout_constraintTop_toTopOf="@+id/card" />
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/chip_compare"
+        android:id="@+id/chip_check_screenshot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
