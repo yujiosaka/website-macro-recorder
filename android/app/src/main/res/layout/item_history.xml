@@ -62,12 +62,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:backgroundTint="@color/colorSecondary"
         android:text="@string/text_change"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:visibility="gone"
+        app:chipBackgroundColor="@color/colorSecondary"
         app:layout_constraintStart_toEndOf="@+id/card"
         app:layout_constraintTop_toTopOf="@+id/card" />
 
@@ -76,12 +76,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:backgroundTint="@color/colorDelete"
         android:text="@string/text_error"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:visibility="gone"
+        app:chipBackgroundColor="@color/colorDelete"
         app:layout_constraintStart_toEndOf="@+id/chip_change"
         app:layout_constraintTop_toTopOf="@+id/chip_change" />
 
@@ -90,12 +90,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:backgroundTint="@color/colorPrimary"
         android:text="@string/text_success"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:visibility="gone"
+        app:chipBackgroundColor="@color/colorPrimary"
         app:layout_constraintStart_toEndOf="@+id/chip_error"
         app:layout_constraintTop_toTopOf="@+id/chip_error" />
 

@@ -138,12 +138,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/colorDelete"
                     android:text="@string/text_error"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:visibility="gone"
+                    app:chipBackgroundColor="@color/colorDelete"
                     app:layout_constraintStart_toEndOf="@+id/chip_change"
                     app:layout_constraintTop_toBottomOf="@+id/text_url" />
 
@@ -153,12 +153,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/colorSecondary"
                     android:text="@string/text_change"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:visibility="gone"
+                    app:chipBackgroundColor="@color/colorSecondary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_url" />
 
