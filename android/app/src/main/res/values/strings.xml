@@ -145,10 +145,12 @@
     <string name="text_thursday">Th.</string>
     <string name="text_friday">Fr.</string>
     <string name="text_saturday">Sa.</string>
-
     <string name="text_back_to_macro_edit">Back</string>
 
     <!-- Strings used for edit selected area fragment -->
     <string name="notification_select_area">Hold down the screenshot to select area</string>
     <string name="notification_area_selected">Tap check mark to save the area</string>
+
+    <!-- Strings used for view histories fragment -->
+    <string name="text_check_screenshot">Check screenshot</string>
 </resources>

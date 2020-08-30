@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#1D2B56</color>
     <color name="colorSecondary">#F5AE1A</color>
 
-    <color name="colorPlaceholder">#dddddd</color>
-    <color name="colorDelete">#f44336</color>
+    <color name="colorPlaceholder">#DDDDDD</color>
+    <color name="colorDelete">#F44336</color>
+    <color name="colorSuccess">#1D2B56</color>
 </resources>

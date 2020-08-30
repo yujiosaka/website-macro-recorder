@@ -68,8 +68,8 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:chipBackgroundColor="@color/colorSecondary"
-        app:layout_constraintStart_toEndOf="@+id/card"
-        app:layout_constraintTop_toTopOf="@+id/card" />
+        app:layout_constraintStart_toEndOf="@+id/chip_error"
+        app:layout_constraintTop_toTopOf="@+id/chip_error" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/chip_error"
@@ -82,8 +82,8 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:chipBackgroundColor="@color/colorDelete"
-        app:layout_constraintStart_toEndOf="@+id/chip_change"
-        app:layout_constraintTop_toTopOf="@+id/chip_change" />
+        app:layout_constraintStart_toEndOf="@+id/chip_success"
+        app:layout_constraintTop_toTopOf="@+id/chip_success" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/chip_success"
@@ -95,8 +95,24 @@
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:visibility="gone"
+        app:chipBackgroundColor="@color/colorSuccess"
+        app:layout_constraintStart_toEndOf="@+id/card"
+        app:layout_constraintTop_toTopOf="@+id/card" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_compare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/text_check_screenshot"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         app:chipBackgroundColor="@color/colorPrimary"
-        app:layout_constraintStart_toEndOf="@+id/chip_error"
-        app:layout_constraintTop_toTopOf="@+id/chip_error" />
+        app:chipIcon="@drawable/ic_compare_white_24dp"
+        app:chipIconSize="16dp"
+        app:chipStartPadding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

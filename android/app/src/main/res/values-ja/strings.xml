@@ -150,4 +150,7 @@
     <!-- Strings used for edit selected area fragment -->
     <string name="notification_select_area">画面を長押ししてエリアを選択してください</string>
     <string name="notification_area_selected">チェックをタップしてエリアを保存してください</string>
+
+    <!-- Strings used for view histories fragment -->
+    <string name="text_check_screenshot">スクリーンショットを確認する</string>
 </resources>
