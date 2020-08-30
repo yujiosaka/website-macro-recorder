@@ -62,7 +62,6 @@
                     android:id="@+id/image_screenshot"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:scaleType="centerInside"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -114,54 +113,54 @@
                     android:id="@+id/image_date"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="12dp"
                     android:tint="@android:color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/text_date"
                     app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
                 <TextView
                     android:id="@+id/text_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginBottom="12dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white"
                     android:textSize="12dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/image_date"
-                    app:layout_constraintStart_toEndOf="@+id/image_date"
-                    app:layout_constraintTop_toTopOf="@+id/image_date" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/colorDelete"
                     android:text="@string/text_error"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/image_date"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/image_date" />
+                    app:layout_constraintStart_toEndOf="@+id/chip_change"
+                    app:layout_constraintTop_toBottomOf="@+id/text_url" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_change"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/colorSecondary"
                     android:text="@string/text_change"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/image_date"
-                    app:layout_constraintEnd_toStartOf="@+id/chip_error"
-                    app:layout_constraintTop_toTopOf="@+id/image_date" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_url" />
 
                 <ImageView
                     android:id="@+id/image_more"
