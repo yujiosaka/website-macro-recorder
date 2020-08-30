@@ -12,6 +12,7 @@
     <string name="action_save">登録</string>
     <string name="action_edit_macro">マクロを編集する</string>
     <string name="action_view_histories">履歴を閲覧する</string>
+    <string name="action_open_website">サイトを開く</string>
     <string name="action_reset">やり直し</string>
 
     <!-- Strings used for validation -->

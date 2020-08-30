@@ -3,10 +3,12 @@ package inc.proto.websitemacrorecorder.ui.list
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -14,15 +16,14 @@ import com.google.firebase.firestore.FieldValue
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.repository.MacroRepository
-import android.text.format.DateFormat
-import androidx.preference.PreferenceManager
-import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
+
 
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
     companion object {
         private const val ACTION_EDIT_MACRO = 1
         private const val ACTION_VIEW_HISTORIES = 2
+        private const val ACTION_OPEN_WEBSITE = 3
     }
 
     private lateinit var context: Context
@@ -40,6 +41,9 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int, model: Macro) {
         Glide.with(context).load(model.screenshotUrl).into(holder.imageScreenshot)
+        holder.imageScreenshot.setOnSingleClickListener {
+            fragment.openWebsite(model)
+        }
         val frequencies = context.resources.getStringArray(R.array.text_frequency_array)
         holder.textSchedule.text = if (model.scheduleFrequency == 1) {
             val schedule = when {
@@ -82,7 +86,7 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         }
         holder.textUrl.text = model.url
         holder.textUrl.setOnSingleClickListener {
-            fragment.editMacro(model)
+            fragment.openWebsite(model)
         }
         val order = sharedPreferences.getInt("ORDER", 0)
         holder.textDate.text = when (order) {
@@ -134,12 +138,17 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
             holder.imageMore.setOnCreateContextMenuListener { menu, _, _ ->
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
                 menu.add(Menu.NONE, ACTION_VIEW_HISTORIES, Menu.NONE, context.resources.getString(R.string.action_view_histories))
+                menu.add(Menu.NONE, ACTION_OPEN_WEBSITE, Menu.NONE, context.resources.getString(R.string.action_open_website))
                 menu.findItem(ACTION_EDIT_MACRO).setOnMenuItemClickListener {
                     fragment.editMacro(model)
                     true
                 }
                 menu.findItem(ACTION_VIEW_HISTORIES).setOnMenuItemClickListener {
                     fragment.viewHistories(model)
+                    true
+                }
+                menu.findItem(ACTION_OPEN_WEBSITE).setOnMenuItemClickListener {
+                    fragment.openWebsite(model)
                     true
                 }
             }

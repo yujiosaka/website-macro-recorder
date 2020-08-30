@@ -12,6 +12,7 @@
     <string name="action_save">Save</string>
     <string name="action_edit_macro">Edit this macro</string>
     <string name="action_view_histories">View histories</string>
+    <string name="action_open_website">Open website</string>
     <string name="action_reset">Reset</string>
 
     <!-- Strings used for validation -->
