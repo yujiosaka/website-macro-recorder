@@ -11,7 +11,11 @@
     <string name="action_add_timer">タイマー追加</string>
     <string name="action_save">登録</string>
     <string name="action_edit_macro">マクロを編集する</string>
+    <string name="action_view_histories">履歴を閲覧する</string>
+    <string name="action_open_website">サイトを開く</string>
     <string name="action_reset">やり直し</string>
+    <string name="action_previous">前へ</string>
+    <string name="action_next">次へ</string>
 
     <!-- Strings used for validation -->
     <string name="error_enter_here">%1$sを入力してください</string>
@@ -39,6 +43,9 @@
     <string name="edit_fragment_label">マクロの編集</string>
     <string name="edit_schedule_fragment_label">スケジュールの選択</string>
     <string name="edit_selected_area_fragment_label">エリアの選択</string>
+    <string name="view_histories_fragment_label">履歴の一覧を読み込んでいます...</string>
+    <string name="view_history_fragment_label">履歴を読み込んでいます...</string>
+    <string name="tutorial_fragment_label">チュートリアル</string>
     <string name="plan_fragment_label">プラン変更</string>
 
     <!-- Strings used for tutorial fragment -->
@@ -56,7 +63,8 @@
     <string name="notification_selected_area_changed">選択エリアの更新が検知されました</string>
     <string name="text_no_name">名称未設定</string>
     <string name="text_error">エラー</string>
-    <string name="text_change">変更</string>
+    <string name="text_success">成功</string>
+    <string name="text_change">変更検知</string>
     <string name="text_date_latest">...</string>
 
     <!-- Strings used for edit url fragment -->
@@ -145,4 +153,7 @@
     <!-- Strings used for edit selected area fragment -->
     <string name="notification_select_area">画面を長押ししてエリアを選択してください</string>
     <string name="notification_area_selected">チェックをタップしてエリアを保存してください</string>
+
+    <!-- Strings used for view histories fragment -->
+    <string name="text_check_screenshot">スクリーンショットを確認する</string>
 </resources>

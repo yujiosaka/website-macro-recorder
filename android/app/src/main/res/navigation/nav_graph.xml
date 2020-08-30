@@ -54,6 +54,13 @@
             app:exitAnim="@anim/slide_out_bottom"
             app:popEnterAnim="@anim/slide_in_bottom"
             app:popExitAnim="@anim/slide_out_top" />
+        <action
+            android:id="@+id/action_listFragment_to_viewHistoriesFragment"
+            app:destination="@id/viewHistoriesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/editUrlFragment"
@@ -175,9 +182,51 @@
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
     </fragment>
     <fragment
+        android:id="@+id/viewHistoriesFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.view_histories.ViewHistoriesFragment"
+        android:label="@string/view_histories_fragment_label"
+        tools:layout="@layout/fragment_view_histories" >
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+        <action
+            android:id="@+id/action_viewHistoriesFragment_to_viewHistoryFragment"
+            app:destination="@id/viewHistoryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewHistoryFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.view_history.ViewHistoryFragment"
+        android:label="@string/view_history_fragment_label"
+        tools:layout="@layout/fragment_view_history">
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+        <argument
+            android:name="history"
+            app:argType="inc.proto.websitemacrorecorder.data.MacroHistory"/>
+        <action
+            android:id="@+id/action_viewHistoryFragment_to_viewHistoryFragment_previous"
+            app:destination="@id/viewHistoryFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_viewHistoryFragment_to_viewHistoryFragment_next"
+            app:destination="@id/viewHistoryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
         android:id="@+id/tutorial1Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial1.Tutorial1Fragment"
-        android:label="fragment_tutorial1"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial1" >
         <action
             android:id="@+id/action_tutorial1Fragment_to_tutorial2Fragment"
@@ -190,7 +239,7 @@
     <fragment
         android:id="@+id/tutorial2Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial2.Tutorial2Fragment"
-        android:label="fragment_tutorial2"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial2" >
         <action
             android:id="@+id/action_tutorial2Fragment_to_tutorial3Fragment"
@@ -203,7 +252,7 @@
     <fragment
         android:id="@+id/tutorial3Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial3.Tutorial3Fragment"
-        android:label="fragment_tutorial3"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial3" >
         <action
             android:id="@+id/action_tutorial3Fragment_to_tutorial4Fragment"
@@ -216,7 +265,7 @@
     <fragment
         android:id="@+id/tutorial4Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial4.Tutorial4Fragment"
-        android:label="fragment_tutorial4"
+        android:label="@string/tutorial_fragment_label"
         tools:layout="@layout/fragment_tutorial4" >
         <action
             android:id="@+id/action_tutorial4Fragment_to_tutorial5Fragment"
@@ -229,7 +278,8 @@
     <fragment
         android:id="@+id/tutorial5Fragment"
         android:name="inc.proto.websitemacrorecorder.ui.tutorial5.Tutorial5Fragment"
-        android:label="Tutorial5Fragment" >
+        android:label="@string/tutorial_fragment_label"
+        tools:layout="@layout/fragment_tutorial5" >
         <action
             android:id="@+id/action_tutorial5Fragment_to_listFragment_without_history"
             app:destination="@id/listFragment"

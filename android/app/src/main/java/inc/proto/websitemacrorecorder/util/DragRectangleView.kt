@@ -81,12 +81,13 @@ class DragRectView : View {
 
     private fun init() {
         paint = Paint()
-        paint!!.color = ContextCompat.getColor(context, R.color.colorPrimary)
+        paint!!.color = ContextCompat.getColor(context, R.color.colorSecondary)
         paint!!.style = Paint.Style.STROKE
         paint!!.strokeWidth = STROKE_WIDTH
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!isEnabled) return false
         when (event.action) {
             MotionEvent.ACTION_MOVE -> {
                 if (!pressing) return true
