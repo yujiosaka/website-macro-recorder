@@ -11,6 +11,7 @@
     <string name="action_add_timer">Add timer</string>
     <string name="action_save">Save</string>
     <string name="action_edit_macro">Edit this macro</string>
+    <string name="action_view_histories">View histories</string>
     <string name="action_reset">Reset</string>
 
     <!-- Strings used for validation -->
@@ -39,6 +40,7 @@
     <string name="edit_fragment_label">Edit Your Macro</string>
     <string name="edit_schedule_fragment_label">Edit Schedule</string>
     <string name="edit_selected_area_fragment_label">Select Area</string>
+    <string name="view_histories_fragment_label">View Histories</string>
     <string name="tutorial_fragment_label">Tutorial</string>
     <string name="plan_fragment_label">Upgrade / Downgrade</string>
 

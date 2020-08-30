@@ -22,6 +22,7 @@ import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macro>) : FirestoreRecyclerAdapter<Macro, ListViewHolder>(options) {
     companion object {
         private const val ACTION_EDIT_MACRO = 1
+        private const val ACTION_VIEW_HISTORIES = 2
     }
 
     private lateinit var context: Context
@@ -112,10 +113,19 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         } else {
             View.GONE
         }
+        holder.chipError.setOnSingleClickListener {
+            fragment.viewHistories(model)
+        }
         holder.chipChange.visibility = if (model.isEntirePageUpdated || model.isSelectedAreaUpdated) {
             View.VISIBLE
         } else {
             View.GONE
+        }
+        holder.chipChange.setOnSingleClickListener {
+            fragment.viewHistories(model)
+        }
+        holder.textDate.setOnSingleClickListener {
+            fragment.viewHistories(model)
         }
         holder.imagePlay.setOnSingleClickListener {
             fragment.executeMacro(model)
@@ -123,8 +133,13 @@ class ListAdapter(fragment: ListFragment, options: FirestoreRecyclerOptions<Macr
         holder.imageMore.setOnSingleClickListener {
             holder.imageMore.setOnCreateContextMenuListener { menu, _, _ ->
                 menu.add(Menu.NONE, ACTION_EDIT_MACRO, Menu.NONE, context.resources.getString(R.string.action_edit_macro))
+                menu.add(Menu.NONE, ACTION_VIEW_HISTORIES, Menu.NONE, context.resources.getString(R.string.action_view_histories))
                 menu.findItem(ACTION_EDIT_MACRO).setOnMenuItemClickListener {
                     fragment.editMacro(model)
+                    true
+                }
+                menu.findItem(ACTION_VIEW_HISTORIES).setOnMenuItemClickListener {
+                    fragment.viewHistories(model)
                     true
                 }
             }

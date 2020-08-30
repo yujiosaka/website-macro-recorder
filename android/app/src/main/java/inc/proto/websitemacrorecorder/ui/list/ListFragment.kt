@@ -118,6 +118,11 @@ class ListFragment : Fragment() {
         findNavController().navigate(ListFragmentDirections.actionListFragmentToEditFragment(macro))
     }
 
+    fun viewHistories(macro: Macro) {
+        if (loading) return
+        findNavController().navigate(ListFragmentDirections.actionListFragmentToViewHistoriesFragment(macro))
+    }
+
     private fun bindViewModel() {
         if (context == null) return
         binding.editOrder.adapter = ArrayAdapter.createFromResource(requireContext(), R.array.text_date_array, R.layout.item_order)

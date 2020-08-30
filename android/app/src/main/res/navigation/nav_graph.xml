@@ -54,6 +54,13 @@
             app:exitAnim="@anim/slide_out_bottom"
             app:popEnterAnim="@anim/slide_in_bottom"
             app:popExitAnim="@anim/slide_out_top" />
+        <action
+            android:id="@+id/action_listFragment_to_viewHistoriesFragment"
+            app:destination="@id/viewHistoriesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/editUrlFragment"
@@ -170,6 +177,15 @@
         android:name="inc.proto.websitemacrorecorder.ui.edit_selected_area.EditSelectedAreaFragment"
         android:label="@string/edit_selected_area_fragment_label"
         tools:layout="@layout/fragment_edit_selected_area" >
+        <argument
+            android:name="macro"
+            app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
+    </fragment>
+    <fragment
+        android:id="@+id/viewHistoriesFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.view_histories.ViewHistoriesFragment"
+        android:label="@string/view_histories_fragment_label"
+        tools:layout="@layout/fragment_view_histories" >
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
