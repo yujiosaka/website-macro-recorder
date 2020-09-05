@@ -1,4 +1,4 @@
-package inc.proto.websitemacrorecorder.ui.confirm
+package inc.proto.websitemacrorecorder.ui.edit_selected_area
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.util.ObservableMutableLiveData
 
-class ConfirmViewModel(macro: Macro) : ViewModel() {
+class EditSelectedAreaViewModel(macro: Macro) : ViewModel() {
     companion object {
         @JvmStatic
         @BindingAdapter("image")
@@ -22,6 +22,7 @@ class ConfirmViewModel(macro: Macro) : ViewModel() {
     private val _macro = ObservableMutableLiveData<Macro>().also {
         it.value = macro
     }
+
     val macro: LiveData<Macro> = _macro
 
     val screenshotUrl: LiveData<String> = Transformations.map(_macro) {

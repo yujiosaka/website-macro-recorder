@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="inc.proto.websitemacrorecorder.R" />
+        <variable
+            name="vm"
+            type="inc.proto.websitemacrorecorder.ui.tutorial4.Tutorial4ViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +24,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:image="@{ R.raw.image_tutorial4 }" />
 
         <TextView
             android:id="@+id/text_tutorial4"

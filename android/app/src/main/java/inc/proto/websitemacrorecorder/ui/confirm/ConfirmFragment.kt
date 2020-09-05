@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.functions.FirebaseFunctionsException
 import inc.proto.websitemacrorecorder.R
@@ -38,7 +37,6 @@ class ConfirmFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViewModel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -81,9 +79,5 @@ class ConfirmFragment : Fragment() {
                 super.onOptionsItemSelected(item)
             }
         }
-    }
-
-    private fun bindViewModel() {
-        Glide.with(this).load(vm.macro.value!!.screenshotUrl).into(binding.imageScreenshot)
     }
 }

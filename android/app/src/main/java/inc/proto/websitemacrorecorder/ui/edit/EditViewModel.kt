@@ -1,19 +1,61 @@
 package inc.proto.websitemacrorecorder.ui.edit
 
+import android.graphics.Paint
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
 import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.Macro
 import inc.proto.websitemacrorecorder.util.ObservableMutableLiveData
 
 class EditViewModel(macro: Macro) : ViewModel() {
+    companion object {
+        @JvmStatic
+        @BindingAdapter("paint")
+        fun paintText(view: TextView, flag: Int?) {
+            if (flag == null) return
+            view.paintFlags = view.paintFlags or flag
+        }
+    }
+
     private val _macro = ObservableMutableLiveData<Macro>().also {
         it.value = macro
     }
     val macro: LiveData<Macro> = _macro
+
+    val name: LiveData<String> = Transformations.map(_macro) {
+        it.name
+    }
+
+    val url: LiveData<String> = Transformations.map(_macro) {
+        it.url
+    }
+
+    val enableSchedule: LiveData<Boolean> = Transformations.map(_macro) {
+        it.enableSchedule
+    }
+
+    val notifySuccess: LiveData<Boolean> = Transformations.map(_macro) {
+        it.notifySuccess
+    }
+
+    val notifyFailure: LiveData<Boolean> = Transformations.map(_macro) {
+        it.notifyFailure
+    }
+
+    val checkEntirePage: LiveData<Boolean> = Transformations.map(_macro) {
+        it.checkEntirePage
+    }
+
+    val checkSelectedArea: LiveData<Boolean> = Transformations.map(_macro) {
+        it.checkSelectedArea
+    }
 
     val showSchedule: LiveData<Boolean> = Transformations.map(_macro) {
         it.scheduleFrequency == 1
@@ -41,7 +83,7 @@ class EditViewModel(macro: Macro) : ViewModel() {
         }
     }
 
-    val checkSelectedArea: LiveData<String> = Transformations.map(_macro) {
+    val selectedArea: LiveData<String> = Transformations.map(_macro) {
         if (_macro.value!!.isAreaSelected) {
             App.context.resources.getString(
                 R.string.text_check_selected_area,
