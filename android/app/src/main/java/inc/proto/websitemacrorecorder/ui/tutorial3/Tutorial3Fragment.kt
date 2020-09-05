@@ -7,20 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentTutorial3Binding
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class Tutorial3Fragment : Fragment() {
     private lateinit var binding: FragmentTutorial3Binding
+    private val vm: Tutorial3ViewModel by lazy {
+        ViewModelProvider(this).get(Tutorial3ViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tutorial3, container, false)
+        binding.vm = vm
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -36,7 +40,6 @@ class Tutorial3Fragment : Fragment() {
     }
 
     private fun bindViewModel() {
-        Glide.with(this).load(R.raw.image_tutorial3).into(binding.imageTutorial3)
         binding.buttonContinue.setOnSingleClickListener {
             findNavController().navigate(Tutorial3FragmentDirections.actionTutorial3FragmentToTutorial4Fragment())
         }

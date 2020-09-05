@@ -1,7 +1,6 @@
 package inc.proto.websitemacrorecorder.ui.edit
 
 import android.app.AlertDialog
-import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -49,11 +48,9 @@ class EditFragment : Fragment() {
     }
 
     private fun bindViewModel() {
-        binding.textUrl.paintFlags = binding.textUrl.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textUrl.setOnSingleClickListener {
             findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditUrlFragment(vm.macro.value!!))
         }
-        binding.textSchedule.paintFlags = binding.textSchedule.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textSchedule.setOnSingleClickListener {
             findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditScheduleFragment(vm.macro.value!!))
         }
@@ -125,7 +122,6 @@ class EditFragment : Fragment() {
             ))
             showUpdateNotification()
         }
-        binding.textCheckSelectedArea.paintFlags = binding.textCheckSelectedArea.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         binding.textCheckSelectedArea.setOnSingleClickListener {
             findNavController().navigate(EditFragmentDirections.actionEditFragmentToEditSelectedAreaFragment(vm.macro.value!!))
         }

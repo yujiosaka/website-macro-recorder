@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="inc.proto.websitemacrorecorder.R" />
+        <variable
+            name="vm"
+            type="inc.proto.websitemacrorecorder.ui.edit_selected_area.EditSelectedAreaViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +36,8 @@
                     android:adjustViewBounds="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:image="@{ vm.screenshotUrl }" />
 
                 <inc.proto.websitemacrorecorder.util.DragRectView
                     android:id="@+id/drag_rectangle"

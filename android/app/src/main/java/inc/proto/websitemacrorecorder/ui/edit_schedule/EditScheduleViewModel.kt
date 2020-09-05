@@ -13,7 +13,39 @@ class EditScheduleViewModel(macro: Macro) : ViewModel() {
 
     val macro: LiveData<Macro> = _macro
 
-    val showSchedule: LiveData<Boolean> = Transformations.map(_macro) {
-        it.scheduleFrequency == 1
+    val scheduleFrequency: LiveData<Int> = Transformations.map(_macro) {
+        it.scheduleFrequency
+    }
+
+    val schedule: LiveData<String> = Transformations.map(_macro) {
+        it.schedule
+    }
+
+    val scheduleSunday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleSunday
+    }
+
+    val scheduleMonday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleMonday
+    }
+
+    val scheduleTuesday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleTuesday
+    }
+
+    val scheduleWednesday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleWednesday
+    }
+
+    val scheduleThursday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleThursday
+    }
+
+    val scheduleFriday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleFriday
+    }
+
+    val scheduleSaturday: LiveData<Boolean> = Transformations.map(_macro) {
+        it.scheduleSaturday
     }
 }

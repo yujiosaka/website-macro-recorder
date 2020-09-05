@@ -5,6 +5,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="android.graphics.Paint"/>
         <variable
             name="vm"
             type="inc.proto.websitemacrorecorder.ui.edit.EditViewModel" />
@@ -52,7 +53,7 @@
                     android:ems="10"
                     android:hint="@string/hint_name"
                     android:inputType="textPersonName"
-                    android:text="@{ vm.macro.name }"
+                    android:text="@{ vm.name }"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold"
@@ -82,12 +83,13 @@
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:singleLine="true"
-                    android:text="@{ vm.macro.url }"
+                    android:text="@{ vm.url }"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_macro_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_macro_title"
+                    app:paint="@{ Paint.UNDERLINE_TEXT_FLAG }" />
 
                 <TextView
                     android:id="@+id/text_schedule_title"
@@ -117,14 +119,15 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/edit_enable_schedule"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_schedule_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_schedule_title"
+                    app:paint="@{ Paint.UNDERLINE_TEXT_FLAG }" />
 
                 <Switch
                     android:id="@+id/edit_enable_schedule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:checked="@{ vm.macro.enableSchedule }"
+                    android:checked="@{ vm.enableSchedule }"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
                     android:visibility="@{ vm.showSchedule ? View.VISIBLE : View.INVISIBLE }"
@@ -151,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:checked="@{ vm.macro.notifySuccess }"
+                    android:checked="@{ vm.notifySuccess }"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
                     app:layout_constraintBottom_toBottomOf="@+id/text_notify_success"
@@ -180,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:checked="@{ vm.macro.notifyFailure }"
+                    android:checked="@{ vm.notifyFailure }"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
                     app:layout_constraintBottom_toBottomOf="@+id/text_notify_failure"
@@ -237,7 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:checked="@{ vm.macro.checkEntirePage }"
+                    android:checked="@{ vm.checkEntirePage }"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
                     app:layout_constraintBottom_toBottomOf="@+id/text_check_entire_page"
@@ -252,21 +255,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="@{ vm.checkSelectedArea }"
+                    android:text="@{ vm.selectedArea }"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/edit_check_selected_area"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_check_entire_page" />
+                    app:layout_constraintTop_toBottomOf="@+id/text_check_entire_page"
+                    app:paint="@{ Paint.UNDERLINE_TEXT_FLAG }" />
 
                 <Switch
                     android:id="@+id/edit_check_selected_area"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:checked="@{ vm.macro.checkSelectedArea }"
+                    android:checked="@{ vm.checkSelectedArea }"
                     android:clickable="@{ vm.isAreaSelected }"
                     android:enabled="@{ vm.isAreaSelected }"
                     android:scaleX="1.2"

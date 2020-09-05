@@ -9,15 +9,18 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import com.bumptech.glide.Glide
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentTutorial5Binding
 import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
 
 class Tutorial5Fragment : Fragment() {
     private lateinit var binding: FragmentTutorial5Binding
+    private val vm: Tutorial5ViewModel by lazy {
+        ViewModelProvider(this).get(Tutorial5ViewModel::class.java)
+    }
 
     private val sharedPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(context)
@@ -28,6 +31,7 @@ class Tutorial5Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tutorial5, container, false)
+        binding.vm = vm
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -43,7 +47,6 @@ class Tutorial5Fragment : Fragment() {
     }
 
     private fun bindViewModel() {
-        Glide.with(this).load(R.raw.image_tutorial5).into(binding.imageTutorial5)
         binding.buttonStart.setOnSingleClickListener {
             sharedPreferences.edit { putBoolean("VIEWED_TUTORIAL", true) }
             findNavController().navigate(Tutorial5FragmentDirections .actionTutorial5FragmentToListFragmentWithoutHistory())
