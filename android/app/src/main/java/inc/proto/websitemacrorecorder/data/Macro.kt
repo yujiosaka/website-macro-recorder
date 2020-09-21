@@ -4,22 +4,22 @@ import android.graphics.Rect
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.google.firebase.Timestamp
-import inc.proto.websitemacrorecorder.App
 import inc.proto.websitemacrorecorder.BR
-import inc.proto.websitemacrorecorder.repository.MacroRepository
 import java.io.Serializable
-import java.util.*
 import kotlin.collections.ArrayList
 
 class Macro(
-    id: String = MacroRepository().getId(),
-    uid: String? = null,
+    // Basic
+    id: String = "",
+    uid: String = "",
     name: String = "",
-    url: String = "https://",
+    url: String = DEFAULT_URL,
     screenshotUrl: String = "",
-    scheduleFrequency: Int = 0,
-    scheduleHour: Int = 10,
-    scheduleMinute: Int = 0,
+
+    // Schedule
+    scheduleFrequency: Int = DEFAULT_SCHEDULE_FREQUENCY,
+    scheduleHour: Int = DEFAULT_SCHEDULE_HOUR,
+    scheduleMinute: Int = DEFAULT_SCHEDULE_MINUTE,
     scheduleSunday: Boolean = false,
     scheduleMonday: Boolean = true,
     scheduleTuesday: Boolean = true,
@@ -28,29 +28,49 @@ class Macro(
     scheduleFriday: Boolean = true,
     scheduleSaturday: Boolean = false,
     enableSchedule: Boolean = true,
+
+    // Notification
     notifySuccess: Boolean = true,
     notifyFailure: Boolean = true,
+
+    // Update check
     checkEntirePage: Boolean = false,
     checkSelectedArea: Boolean = false,
     isEntirePageUpdated: Boolean = false,
     isSelectedAreaUpdated: Boolean = false,
+
+    // Execution result
     isFailure: Boolean = false,
-    acceptLanguage: String = Locale.getDefault().language,
+
+    // Device
+    acceptLanguage: String = "",
     userAgent: String = "",
     viewportHeight: Int = 0,
     viewportWidth: Int = 0,
-    deviceScaleFactor: Float = App.context.resources.displayMetrics.density,
+    deviceScaleFactor: Float = 0f,
+
+    // Selected area
     selectedAreaLeft: Int? = null,
     selectedAreaTop: Int? = null,
     selectedAreaRight: Int? = null,
     selectedAreaBottom: Int? = null,
+
+    // Children
     events: ArrayList<MacroEvent> = arrayListOf(),
     histories: ArrayList<MacroHistory> = arrayListOf(),
+
+    // Date
     createdAt: Timestamp? = null,
     updatedAt: Timestamp? = null,
     executedAt: Timestamp? = null
 ) : Serializable, BaseObservable() {
     companion object {
+        private const val SCHEDULE_FORMAT = "%1$01d:%2$02d"
+
+        const val DEFAULT_URL = "https://"
+        const val DEFAULT_SCHEDULE_FREQUENCY = 0
+        const val DEFAULT_SCHEDULE_HOUR = 10
+        const val DEFAULT_SCHEDULE_MINUTE = 0
         const val ORDER_UPDATED_AT_DESC_VALUE = 0
         const val ORDER_UPDATED_AT_ASC_VALUE = 1
         const val ORDER_CREATED_AT_DESC_VALUE = 2
@@ -105,7 +125,6 @@ class Macro(
     var scheduleHour = scheduleHour
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleHour)
         }
 
@@ -113,7 +132,6 @@ class Macro(
     var scheduleMinute = scheduleMinute
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleMinute)
         }
 
@@ -121,7 +139,6 @@ class Macro(
     var scheduleSunday = scheduleSunday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleSunday)
         }
 
@@ -129,7 +146,6 @@ class Macro(
     var scheduleMonday = scheduleMonday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleMonday)
         }
 
@@ -137,7 +153,6 @@ class Macro(
     var scheduleTuesday = scheduleTuesday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleTuesday)
         }
 
@@ -145,7 +160,6 @@ class Macro(
     var scheduleWednesday = scheduleWednesday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleWednesday)
         }
 
@@ -153,7 +167,6 @@ class Macro(
     var scheduleThursday = scheduleThursday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleThursday)
         }
 
@@ -161,7 +174,6 @@ class Macro(
     var scheduleFriday = scheduleFriday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleFriday)
         }
 
@@ -169,76 +181,7 @@ class Macro(
     var scheduleSaturday = scheduleSaturday
         set(value) {
             field = value
-            notifyPropertyChanged(BR.schedule)
             notifyPropertyChanged(BR.scheduleSaturday)
-        }
-
-    var scheduleDay = false
-        get() {
-            return scheduleSunday ||
-                    scheduleMonday ||
-                    scheduleTuesday ||
-                    scheduleWednesday ||
-                    scheduleThursday ||
-                    scheduleFriday ||
-                    scheduleSaturday
-        }
-
-    var scheduleDays = 5
-        get() {
-            var days = 0
-            if (scheduleSunday) days += 1
-            if (scheduleMonday) days += 1
-            if (scheduleTuesday) days += 1
-            if (scheduleWednesday) days += 1
-            if (scheduleThursday) days += 1
-            if (scheduleFriday) days += 1
-            if (scheduleSaturday) days += 1
-            return days
-        }
-
-    var scheduleEveryday = false
-        get() {
-            return scheduleSunday &&
-                    scheduleMonday &&
-                    scheduleTuesday &&
-                    scheduleWednesday &&
-                    scheduleThursday &&
-                    scheduleFriday &&
-                    scheduleSaturday
-        }
-
-    var scheduleWeekdays = true
-        get() {
-            return !scheduleSunday &&
-                    scheduleMonday &&
-                    scheduleTuesday &&
-                    scheduleWednesday &&
-                    scheduleThursday &&
-                    scheduleFriday &&
-                    !scheduleSaturday
-        }
-
-    var scheduleWeekends = false
-        get() {
-            return scheduleSunday &&
-                    !scheduleMonday &&
-                    !scheduleTuesday &&
-                    !scheduleWednesday &&
-                    !scheduleThursday &&
-                    !scheduleFriday &&
-                    scheduleSaturday
-        }
-
-    @get:Bindable
-    var schedule: String
-        get() = "%1$01d:%2$02d".format(scheduleHour, scheduleMinute)
-        set(value) {
-            val pair = value.split(":").map { it.toInt() }
-            scheduleHour = pair[0]
-            scheduleMinute = pair[1]
-            notifyPropertyChanged(BR.scheduleHour)
-            notifyPropertyChanged(BR.scheduleMinute)
         }
 
     @Bindable
@@ -360,34 +303,6 @@ class Macro(
             notifyPropertyChanged(BR.selectedAreaBottom)
         }
 
-    var isAreaSelected = false
-        get() {
-            return selectedAreaLeft != null &&
-                    selectedAreaTop != null &&
-                    selectedAreaRight != null &&
-                    selectedAreaBottom != null
-        }
-
-    var selectedAreaSize = ""
-        get() {
-            if (!isAreaSelected) return ""
-            val selectedAreaWidth = selectedAreaRight!! - selectedAreaLeft!!
-            val selectedAreaHeight = selectedAreaBottom!! - selectedAreaTop!!
-            return "$selectedAreaWidth x $selectedAreaHeight"
-        }
-
-    var selectedAreaRect: Rect?
-        get() {
-            if (!isAreaSelected) return null
-            return Rect(selectedAreaLeft!!, selectedAreaTop!!, selectedAreaRight!!, selectedAreaBottom!!)
-        }
-        set(value) {
-            selectedAreaLeft = value?.left
-            selectedAreaTop = value?.top
-            selectedAreaRight = value?.right
-            selectedAreaBottom = value?.bottom
-        }
-
     @Bindable
     var events = events
         set(value) {
@@ -422,4 +337,88 @@ class Macro(
             field = value
             notifyPropertyChanged(BR.executedAt)
         }
+
+    fun isScheduled(): Boolean {
+        return scheduleSunday ||
+                scheduleMonday ||
+                scheduleTuesday ||
+                scheduleWednesday ||
+                scheduleThursday ||
+                scheduleFriday ||
+                scheduleSaturday
+    }
+
+    fun getScheduledDays(): Int {
+        var days = 0
+        if (scheduleSunday) days += 1
+        if (scheduleMonday) days += 1
+        if (scheduleTuesday) days += 1
+        if (scheduleWednesday) days += 1
+        if (scheduleThursday) days += 1
+        if (scheduleFriday) days += 1
+        if (scheduleSaturday) days += 1
+        return days
+    }
+
+    fun isScheduledEveryday(): Boolean {
+        return scheduleSunday &&
+                scheduleMonday &&
+                scheduleTuesday &&
+                scheduleWednesday &&
+                scheduleThursday &&
+                scheduleFriday &&
+                scheduleSaturday
+    }
+
+    fun isScheduledWeekdays(): Boolean {
+        return !scheduleSunday &&
+                scheduleMonday &&
+                scheduleTuesday &&
+                scheduleWednesday &&
+                scheduleThursday &&
+                scheduleFriday &&
+                !scheduleSaturday
+    }
+
+    fun isScheduledWeekends(): Boolean {
+        return scheduleSunday &&
+                !scheduleMonday &&
+                !scheduleTuesday &&
+                !scheduleWednesday &&
+                !scheduleThursday &&
+                !scheduleFriday &&
+                scheduleSaturday
+    }
+
+    fun getScheduleTime(): String {
+        return SCHEDULE_FORMAT.format(scheduleHour, scheduleMinute)
+    }
+
+    fun isAreaSelected(): Boolean {
+        return selectedAreaLeft != null &&
+                selectedAreaTop != null &&
+                selectedAreaRight != null &&
+                selectedAreaBottom != null
+    }
+
+    fun getSelectedAreaSize(): String {
+        if (!isAreaSelected()) return ""
+
+        val selectedAreaWidth = selectedAreaRight!! - selectedAreaLeft!!
+        val selectedAreaHeight = selectedAreaBottom!! - selectedAreaTop!!
+        return "$selectedAreaWidth x $selectedAreaHeight"
+    }
+
+    fun getSelectedAreaRect(): Rect? {
+        if (!isAreaSelected()) return null
+
+        return Rect(selectedAreaLeft!!, selectedAreaTop!!, selectedAreaRight!!, selectedAreaBottom!!)
+    }
+
+    fun setSelectedAreaRect(rect: Rect?) {
+        selectedAreaLeft = rect?.left
+        selectedAreaTop = rect?.top
+        selectedAreaRight = rect?.right
+        selectedAreaBottom = rect?.bottom
+    }
 }

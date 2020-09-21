@@ -2,14 +2,18 @@ package inc.proto.websitemacrorecorder.ui.edit_selected_area
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import inc.proto.websitemacrorecorder.data.Macro
-import inc.proto.websitemacrorecorder.util.ObservableMutableLiveData
+import inc.proto.websitemacrorecorder.repository.MacroRepository
+import inc.proto.websitemacrorecorder.util.ObservableSingleLiveEvent
 
-class EditSelectedAreaViewModel(macro: Macro) : ViewModel() {
+class EditSelectedAreaViewModel @ViewModelInject constructor(
+    private val macroRepository: MacroRepository,
+    @Assisted savedStateHandle: SavedStateHandle
+) : ViewModel() {
     companion object {
         @JvmStatic
         @BindingAdapter("image")
@@ -19,13 +23,12 @@ class EditSelectedAreaViewModel(macro: Macro) : ViewModel() {
         }
     }
 
-    private val _macro = ObservableMutableLiveData<Macro>().also {
-        it.value = macro
+    private val _macro = ObservableSingleLiveEvent<Macro>().also {
+        it.value = savedStateHandle.get("macro")
     }
-
     val macro: LiveData<Macro> = _macro
 
-    val screenshotUrl: LiveData<String> = Transformations.map(_macro) {
-        it.screenshotUrl
+    fun updateMacro(update: Map<String, Any?>) {
+        macroRepository.update(_macro.value!!.id, update)
     }
 }

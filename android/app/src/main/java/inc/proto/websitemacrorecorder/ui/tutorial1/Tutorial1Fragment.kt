@@ -4,39 +4,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import inc.proto.websitemacrorecorder.R
+import dagger.hilt.android.AndroidEntryPoint
 import inc.proto.websitemacrorecorder.databinding.FragmentTutorial1Binding
-import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
+import inc.proto.websitemacrorecorder.ui.BaseFragment
+import inc.proto.websitemacrorecorder.ui.ext.setOnSingleClickListener
 
-class Tutorial1Fragment : Fragment() {
+@AndroidEntryPoint
+class Tutorial1Fragment : BaseFragment() {
     private lateinit var binding: FragmentTutorial1Binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tutorial1, container, false)
+        binding = FragmentTutorial1Binding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideActionBar()
-        bindViewModel()
+        setListeners()
     }
 
-    private fun hideActionBar() {
-        (activity as AppCompatActivity?)?.supportActionBar?.hide()
-    }
-
-    private fun bindViewModel() {
+    private fun setListeners() {
         binding.buttonContinue.setOnSingleClickListener {
-            findNavController().navigate(Tutorial1FragmentDirections.actionTutorial1FragmentToTutorial2Fragment())
+            findNavController().navigate(
+                Tutorial1FragmentDirections.actionTutorial1FragmentToTutorial2Fragment()
+            )
         }
     }
 }

@@ -1,15 +1,7 @@
 package inc.proto.websitemacrorecorder
 
 import android.app.Application
-import android.content.Context
+import dagger.hilt.android.HiltAndroidApp
 
-class App : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        context = this
-    }
-
-    companion object {
-        lateinit var context: Context
-    }
-}
+@HiltAndroidApp
+class App : Application()

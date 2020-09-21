@@ -1,140 +1,57 @@
 package inc.proto.websitemacrorecorder.ui.edit_events
 
-import android.graphics.Canvas
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.functions.FirebaseFunctionsException
+import dagger.hilt.android.AndroidEntryPoint
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.MacroEvent
-import inc.proto.websitemacrorecorder.repository.MacroRepository
+import inc.proto.websitemacrorecorder.databinding.FragmentEditEventsBinding
+import inc.proto.websitemacrorecorder.factory.AppAdapterFactory
+import inc.proto.websitemacrorecorder.factory.AppCallbackFactory
+import inc.proto.websitemacrorecorder.factory.EditEventsAdapterArgs
+import inc.proto.websitemacrorecorder.factory.EditEventsCallbackArgs
+import inc.proto.websitemacrorecorder.ui.BaseFragment
 import inc.proto.websitemacrorecorder.ui.dialog.edit_events_dialog.EditEventsDialog
-import inc.proto.websitemacrorecorder.util.Helper.objectToMap
-import kotlinx.android.synthetic.main.fragment_edit_events.*
+import inc.proto.websitemacrorecorder.util.TextFormatter
 
-class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
-    private val itemTouchHelper: ItemTouchHelper by lazy {
-        ItemTouchHelper(
-            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-                override fun getDragDirs(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ): Int {
-                    val event = args.macro.events[viewHolder.adapterPosition]
-                    return if (event != null && event.name == "timer") {
-                        ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                    } else {
-                        0
-                    }
-                }
-
-                override fun isItemViewSwipeEnabled(): Boolean {
-                    return true
-                }
-
-                override fun onSelectedChanged(
-                    viewHolder: RecyclerView.ViewHolder?,
-                    actionState: Int
-                ) {
-                    super.onSelectedChanged(viewHolder, actionState)
-                    if (actionState == ACTION_STATE_DRAG) {
-                        viewHolder!!.itemView.alpha = 0.5f
-                    }
-                }
-
-                override fun clearView(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ) {
-                    super.clearView(recyclerView, viewHolder)
-                    viewHolder.itemView.alpha = 1.0f
-                    if (viewHolder.adapterPosition == -1) return
-                    adapter.mergeItem(viewHolder.adapterPosition)
-                }
-
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    val adapter = recyclerView.adapter as EditEventsAdapter
-                    val from = viewHolder.adapterPosition
-                    val to = target.adapterPosition
-                    adapter.moveItem(from, to)
-                    return true
-                }
-
-                override fun onSwiped(
-                    viewHolder: RecyclerView.ViewHolder,
-                    direction: Int
-                ) {
-                    val adapter = recycler_events.adapter as EditEventsAdapter
-                    adapter.removeItem(viewHolder.adapterPosition)
-                }
-
-                override fun onChildDraw(
-                    c: Canvas,
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    dX: Float,
-                    dY: Float,
-                    actionState: Int,
-                    isCurrentlyActive: Boolean
-                ) {
-                    super.onChildDraw(
-                        c,
-                        recyclerView,
-                        viewHolder,
-                        dX,
-                        dY,
-                        actionState,
-                        isCurrentlyActive
-                    )
-                    if (context == null) return
-                    drawBackground(viewHolder.itemView, dX).draw(c)
-                    drawIcon(viewHolder.itemView).draw(c)
-                }
-
-
-                private fun drawBackground(view: View, dX: Float): Drawable {
-                    val color = ContextCompat.getColor(requireContext(), R.color.colorDelete)
-                    val background = ColorDrawable(color)
-                    background.setBounds(view.left, view.top,view.left + dX.toInt(), view.bottom)
-                    return background
-                }
-
-                private fun drawIcon(view: View): Drawable {
-                    val icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete_white_24dp)!!
-                    val height = view.bottom - view.top
-                    val margin = (height - icon.intrinsicHeight) / 2
-                    val left = view.left + margin
-                    val top = view.top + (height - icon.intrinsicHeight) / 2
-                    val right = view.left + (margin + icon.intrinsicWidth)
-                    val bottom = top + icon.intrinsicHeight
-                    icon.setBounds(left, top, right, bottom)
-                    return icon
-                }
-            }
-        )
+@AndroidEntryPoint
+class EditEventsFragment(
+    appAdapterFactory: AppAdapterFactory,
+    appCallbackFactory: AppCallbackFactory,
+    private val textFormatter: TextFormatter
+) : BaseFragment(), EditEventsAdapter.Listener, EditEventsDialog.Listener {
+    companion object {
+        private const val DIALOG_TAG = "add_timer_dialog"
+        private val PATTERN = "^Timeout error occurred position: (\\d+)$".toRegex()
     }
 
-    private val adapter: EditEventsAdapter by lazy {
-        EditEventsAdapter(this, args.macro.events)
+    private val vm by viewModels<EditEventsViewModel>()
+    private val adapter by lazy {
+        val args = EditEventsAdapterArgs(vm.macro.value!!.events, this)
+        appAdapterFactory.instantiate(EditEventsAdapter::class.java.name, args) as EditEventsAdapter
     }
-    private val args: EditEventsFragmentArgs by navArgs()
-    private val macroRepository = MacroRepository()
-    private val pattern = "^Timeout error occurred position: (\\d+)$".toRegex()
+    private val itemTouchHelper by lazy {
+        val args = EditEventsCallbackArgs(0, ItemTouchHelper.RIGHT, vm, adapter)
+        val callback = appCallbackFactory.instantiate(EditEventsCallback::class.java.name, args) as EditEventsCallback
+        ItemTouchHelper(callback)
+    }
+    private lateinit var binding: FragmentEditEventsBinding
+
     private var loading = false
+
+    override fun onStartDragging(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
+    }
+
+    override fun onAddTimer(value: String) {
+        adapter.addItem(MacroEvent(name = "timer", value = value))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -142,77 +59,78 @@ class EditEventsFragment : Fragment(), EditEventsDialog.Listener {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_edit_events, container, false)
+
+        binding = FragmentEditEventsBinding.inflate(inflater, container, false)
+        binding.vm = vm
+        binding.lifecycleOwner = this
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler_events.setHasFixedSize(true)
-        recycler_events.layoutManager = LinearLayoutManager(activity)
-        recycler_events.adapter = adapter
-        itemTouchHelper.attachToRecyclerView(recycler_events)
+
+        binding.recyclerEvents.setHasFixedSize(true)
+        binding.recyclerEvents.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerEvents.adapter = adapter
+
+        itemTouchHelper.attachToRecyclerView(binding.recyclerEvents)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_edit_events, menu)
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_add_timer -> {
-                val dialog = EditEventsDialog()
-                dialog.setListener(this)
-                dialog.show(childFragmentManager, "edit_events_dialog")
-                true
-            }
-            R.id.action_done -> {
-                if (loading || activity == null) return false
-                loading = true
-                progress.visibility = View.VISIBLE
-                itemTouchHelper.attachToRecyclerView(null)
-                val macro = objectToMap(args.macro)
-                macroRepository.screenshot(macro).addOnCompleteListener(requireActivity()) {
-                    itemTouchHelper.attachToRecyclerView(recycler_events)
-                    progress.visibility = View.GONE
-                    loading = false
-                    if (!it.isSuccessful) {
-                        if (activity == null) return@addOnCompleteListener
-                        val exception = it.exception as FirebaseFunctionsException
-                        val root: View = requireActivity().findViewById(R.id.root)
-                        val text = when (exception.code) {
-                            FirebaseFunctionsException.Code.INVALID_ARGUMENT -> root.resources.getString(R.string.error_invalid_argument)
-                            FirebaseFunctionsException.Code.UNAUTHENTICATED -> root.resources.getString(R.string.error_unauthenticated)
-                            FirebaseFunctionsException.Code.UNAVAILABLE -> root.resources.getString(R.string.error_unavailable)
-                            FirebaseFunctionsException.Code.INTERNAL -> root.resources.getString(R.string.error_internal)
-                            FirebaseFunctionsException.Code.DEADLINE_EXCEEDED -> root.resources.getString(R.string.error_deadline_exceeded)
-                            else -> root.resources.getString(R.string.error_unknown)
-                        }
-                        val result = pattern.find(exception.message.toString())
-                        if (result != null) {
-                            val (position) = result.destructured
-                            val message = root.resources.getString(R.string.error_timeout)
-                            adapter.setMessage(position.toInt(), message)
-                        }
-                        Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
-                        return@addOnCompleteListener
-                    }
-                    args.macro.screenshotUrl = it.result!!.data as String
-                    findNavController().navigate(EditEventsFragmentDirections.actionEditEventsFragmentToConfirmFragment(args.macro))
-                }
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            R.id.action_add_timer -> addTimer()
+            R.id.action_done -> screenshot()
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun startDragging(viewHolder: RecyclerView.ViewHolder) {
-        itemTouchHelper.startDrag(viewHolder)
+    private fun addTimer(): Boolean {
+        val dialog = EditEventsDialog(this)
+        dialog.show(childFragmentManager, DIALOG_TAG)
+
+        return true
     }
 
-    override fun onAddTimer(value: String) {
-        adapter.addItem(MacroEvent(name = "timer", value = value))
+    private fun screenshot(): Boolean {
+        if (loading || activity == null) return false
+
+        loading = true
+        binding.progress.visibility = View.VISIBLE
+
+        itemTouchHelper.attachToRecyclerView(null)
+
+        vm.screenshot().addOnCompleteListener(requireActivity()) {
+            binding.progress.visibility = View.GONE
+            loading = false
+
+            itemTouchHelper.attachToRecyclerView(binding.recyclerEvents)
+
+            if (!it.isSuccessful) {
+                val exception = it.exception as FirebaseFunctionsException
+                notify(textFormatter.firebaseFunctionExceptionToMessage(exception))
+
+                val result = PATTERN.find(exception.message.toString())
+                if (result != null) {
+                    val (position) = result.destructured
+                    val message = resources.getString(R.string.error_timeout)
+                    adapter.setMessage(position.toInt(), message)
+                }
+
+                return@addOnCompleteListener
+            }
+
+            vm.macro.value!!.screenshotUrl = it.result!!.data as String
+            findNavController().navigate(
+                EditEventsFragmentDirections.actionEditEventsFragmentToConfirmFragment(vm.macro.value!!)
+            )
+        }
+        return true
     }
 }

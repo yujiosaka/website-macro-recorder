@@ -3,26 +3,28 @@ package inc.proto.websitemacrorecorder.ui.edit_selected_area
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.*
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FieldValue
+import dagger.hilt.android.AndroidEntryPoint
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentEditSelectedAreaBinding
-import inc.proto.websitemacrorecorder.repository.MacroRepository
-import inc.proto.websitemacrorecorder.util.DragRectView
+import inc.proto.websitemacrorecorder.ui.BaseFragment
+import inc.proto.websitemacrorecorder.ui.view.DragRectView
 
-
-class EditSelectedAreaFragment : Fragment(), DragRectView.Listener {
-    private val args: EditSelectedAreaFragmentArgs by navArgs()
-    private val macroRepository = MacroRepository()
-
+@AndroidEntryPoint
+class EditSelectedAreaFragment : BaseFragment(), DragRectView.Listener {
     private lateinit var binding: FragmentEditSelectedAreaBinding
-    private val vm: EditSelectedAreaViewModel by lazy {
-        ViewModelProvider(this, EditSelectedAreaViewModelFactory(args.macro)).get(EditSelectedAreaViewModel::class.java)
+    private val vm by viewModels<EditSelectedAreaViewModel>()
+
+    override fun startDraw() {
+        binding.scrollEditSelectedArea.requestDisallowInterceptTouchEvent(true)
+    }
+
+    override fun endDraw(rect: Rect) {
+        binding.scrollEditSelectedArea.requestDisallowInterceptTouchEvent(false)
+        vm.macro.value!!.setSelectedAreaRect(rect)
+        notify(R.string.notification_area_selected)
     }
 
     override fun onCreateView(
@@ -30,69 +32,62 @@ class EditSelectedAreaFragment : Fragment(), DragRectView.Listener {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_selected_area, container, false)
+
+        binding = FragmentEditSelectedAreaBinding.inflate(inflater, container, false)
         binding.vm = vm
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_edit_selected_area, menu)
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_reset -> {
-                args.macro.selectedAreaRect = null
-                binding.dragRectangle.resetDraw()
-                true
-            }
-            R.id.action_done -> {
-                args.macro.checkSelectedArea = args.macro.checkSelectedArea && args.macro.selectedAreaRect != null
-                macroRepository.update(args.macro.id, mapOf(
-                    "selectedAreaLeft" to args.macro.selectedAreaLeft,
-                    "selectedAreaTop" to args.macro.selectedAreaTop,
-                    "selectedAreaRight" to args.macro.selectedAreaRight,
-                    "selectedAreaBottom" to args.macro.selectedAreaBottom,
-                    "checkSelectedArea" to args.macro.checkSelectedArea,
-                    "updatedAt" to FieldValue.serverTimestamp()
-                ))
-                findNavController().popBackStack()
-                true
-            }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            R.id.action_reset -> reset()
+            R.id.action_done -> save()
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViewModel()
 
-        if (activity == null) return
-        val root: View = requireActivity().findViewById(R.id.root)
-        val text = root.resources.getString(R.string.notification_select_area)
-        Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
+        bindViewModel()
+        notify(resources.getString(R.string.notification_select_area))
     }
 
     private fun bindViewModel() {
         binding.dragRectangle.setListener(this)
-        if (args.macro.selectedAreaRect != null) {
-            binding.dragRectangle.setRect(args.macro.selectedAreaRect!!)
-        }
+        if (!vm.macro.value!!.isAreaSelected()) return
+
+        binding.dragRectangle.setRect(vm.macro.value!!.getSelectedAreaRect()!!)
     }
 
-    override fun startDraw() {
-        binding.scrollEditSelectedArea.requestDisallowInterceptTouchEvent(true)
+    private fun save(): Boolean {
+        vm.macro.value!!.checkSelectedArea = vm.macro.value!!.checkSelectedArea && vm.macro.value!!.isAreaSelected()
+
+        vm.updateMacro(mapOf(
+            "selectedAreaLeft" to vm.macro.value!!.selectedAreaLeft,
+            "selectedAreaTop" to vm.macro.value!!.selectedAreaTop,
+            "selectedAreaRight" to vm.macro.value!!.selectedAreaRight,
+            "selectedAreaBottom" to vm.macro.value!!.selectedAreaBottom,
+            "checkSelectedArea" to vm.macro.value!!.checkSelectedArea,
+            "updatedAt" to FieldValue.serverTimestamp()
+        ))
+
+        findNavController().popBackStack()
+        return true
     }
 
-    override fun endDraw(_rect: Rect) {
-        binding.scrollEditSelectedArea.requestDisallowInterceptTouchEvent(false)
-        args.macro.selectedAreaRect = _rect
-        if (activity == null) return
-        val root: View = requireActivity().findViewById(R.id.root)
-        Snackbar.make(root, R.string.notification_area_selected, Snackbar.LENGTH_SHORT).show()
+    private fun reset(): Boolean {
+        vm.macro.value!!.setSelectedAreaRect(null)
+        binding.dragRectangle.resetDraw()
+
+        return true
     }
 }
