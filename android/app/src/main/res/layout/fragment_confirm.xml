@@ -36,7 +36,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:image="@{ vm.screenshotUrl }" />
+                    app:image="@{ vm.macro.screenshotUrl }" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 

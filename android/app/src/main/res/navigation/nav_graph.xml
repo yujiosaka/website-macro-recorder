@@ -183,9 +183,9 @@
     </fragment>
     <fragment
         android:id="@+id/viewHistoriesFragment"
-        android:name="inc.proto.websitemacrorecorder.ui.view_histories.ViewHistoriesFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.show_histories.ShowHistoriesFragment"
         android:label="@string/view_histories_fragment_label"
-        tools:layout="@layout/fragment_view_histories" >
+        tools:layout="@layout/fragment_show_histories" >
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>
@@ -199,9 +199,9 @@
     </fragment>
     <fragment
         android:id="@+id/viewHistoryFragment"
-        android:name="inc.proto.websitemacrorecorder.ui.view_history.ViewHistoryFragment"
+        android:name="inc.proto.websitemacrorecorder.ui.show_history.ShowHistoryFragment"
         android:label="@string/view_history_fragment_label"
-        tools:layout="@layout/fragment_view_history">
+        tools:layout="@layout/fragment_show_history">
         <argument
             android:name="macro"
             app:argType="inc.proto.websitemacrorecorder.data.Macro"/>

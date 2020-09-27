@@ -5,7 +5,7 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
 
-class Tutorial5ViewModel() : ViewModel() {
+class Tutorial5ViewModel : ViewModel() {
     companion object {
         @JvmStatic
         @BindingAdapter("image")

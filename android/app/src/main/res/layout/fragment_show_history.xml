@@ -6,14 +6,14 @@
     <data>
         <variable
             name="vm"
-            type="inc.proto.websitemacrorecorder.ui.view_history.ViewHistoryViewModel" />
+            type="inc.proto.websitemacrorecorder.ui.show_history.ShowHistoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.view_history.ViewHistoryFragment">
+        tools:context=".ui.show_history.ShowHistoryFragment">
 
         <ScrollView
             android:id="@+id/scroll_confirm"
@@ -38,7 +38,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:image="@{ vm.screenshotUrl }" />
 
-                <inc.proto.websitemacrorecorder.util.DragRectView
+                <inc.proto.websitemacrorecorder.ui.view.DragRectView
                     android:id="@+id/drag_rectangle"
                     android:layout_width="0dp"
                     android:layout_height="0dp"

@@ -1,45 +1,39 @@
 package inc.proto.websitemacrorecorder.ui.tutorial2
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import inc.proto.websitemacrorecorder.R
+import dagger.hilt.android.AndroidEntryPoint
 import inc.proto.websitemacrorecorder.databinding.FragmentTutorial2Binding
-import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
+import inc.proto.websitemacrorecorder.ui.BaseFragment
+import inc.proto.websitemacrorecorder.ui.ext.setOnSingleClickListener
 
-class Tutorial2Fragment : Fragment() {
+@AndroidEntryPoint
+class Tutorial2Fragment : BaseFragment() {
+    private val vm by viewModels<Tutorial2ViewModel>()
     private lateinit var binding: FragmentTutorial2Binding
-    private val vm: Tutorial2ViewModel by lazy {
-        ViewModelProvider(this).get(Tutorial2ViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tutorial2, container, false)
+        binding = FragmentTutorial2Binding.inflate(inflater, container, false)
         binding.vm = vm
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideActionBar()
-        bindViewModel()
+        setListeners()
     }
 
-    private fun hideActionBar() {
-        (activity as AppCompatActivity?)?.supportActionBar?.hide()
-    }
-
-    private fun bindViewModel() {
+    private fun setListeners() {
         binding.buttonContinue.setOnSingleClickListener {
             findNavController().navigate(Tutorial2FragmentDirections.actionTutorial2FragmentToTutorial3Fragment())
         }

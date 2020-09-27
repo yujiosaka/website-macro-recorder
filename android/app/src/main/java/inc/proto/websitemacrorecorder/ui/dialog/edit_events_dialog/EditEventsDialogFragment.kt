@@ -3,45 +3,42 @@ package inc.proto.websitemacrorecorder.ui.dialog.edit_events_dialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.AndroidEntryPoint
 import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.data.MacroEvent
 import inc.proto.websitemacrorecorder.databinding.FragmentEditEventsDialogBinding
 
-class EditEventsDialog : DialogFragment() {
+@AndroidEntryPoint
+class EditEventsDialog(private val listener: Listener) : DialogFragment() {
     interface Listener {
         fun onAddTimer(value: String)
     }
 
-    private val vm: EditEventsDialogViewModel by lazy {
-        ViewModelProvider(this).get(EditEventsDialogViewModel::class.java)
-    }
+    private val vm by viewModels<EditEventsDialogViewModel>()
     private lateinit var binding: FragmentEditEventsDialogBinding
-    private lateinit var listener: Listener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = FragmentEditEventsDialogBinding.inflate(LayoutInflater.from(activity), null, false)
+        val inflater = LayoutInflater.from(activity)
+
+        binding = FragmentEditEventsDialogBinding.inflate(inflater, null, false)
         binding.vm = vm
         binding.lifecycleOwner = this
-        bindViewModel()
-        return AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.text_add_timer))
-            .setView(binding.root)
-            .setPositiveButton(getString(R.string.text_add)) { _, _ ->
-                listener.onAddTimer(vm.seconds.value!!)
-            }
-            .setNegativeButton(getString(R.string.text_close), null)
-            .create()
+
+        return createAlertDialog()
     }
 
-    fun setListener(_listener: Listener) {
-        listener = _listener
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setObservers()
     }
 
-    private fun bindViewModel() {
+    private fun setObservers() {
         vm.seconds.observe(this, Observer {
             try {
                 val intValue = Integer.parseInt(it)
@@ -55,5 +52,16 @@ class EditEventsDialog : DialogFragment() {
                 vm.seconds.value = MacroEvent.DEFAULT_WAIT_VALUE.toString()
             }
         })
+    }
+
+    private fun createAlertDialog(): AlertDialog {
+        return AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.text_add_timer))
+            .setView(binding.root)
+            .setPositiveButton(getString(R.string.text_add)) { _, _ ->
+                listener.onAddTimer(vm.seconds.value!!)
+            }
+            .setNegativeButton(getString(R.string.text_close), null)
+            .create()
     }
 }

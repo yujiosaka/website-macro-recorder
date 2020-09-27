@@ -1,4 +1,4 @@
-package inc.proto.websitemacrorecorder.util
+package inc.proto.websitemacrorecorder.ui.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -34,6 +34,7 @@ class TopCropImageView : AppCompatImageView {
 
     private fun recomputeImgMatrix() {
         if (drawable == null) return
+
         val viewWidth = (width - paddingLeft - paddingRight).toFloat()
         val viewHeight = (height - paddingTop - paddingBottom).toFloat()
         val areaWidth = drawable.intrinsicWidth * viewHeight
@@ -43,6 +44,7 @@ class TopCropImageView : AppCompatImageView {
         } else {
             viewWidth / drawable.intrinsicWidth
         }
+
         imageMatrix.setScale(scale, scale)
     }
 }

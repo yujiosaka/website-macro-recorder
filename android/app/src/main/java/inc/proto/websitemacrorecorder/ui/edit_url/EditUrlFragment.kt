@@ -2,22 +2,20 @@ package inc.proto.websitemacrorecorder.ui.edit_url
 
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import inc.proto.websitemacrorecorder.databinding.FragmentEditUrlBinding
-import inc.proto.websitemacrorecorder.util.setOnSingleClickListener
+import inc.proto.websitemacrorecorder.ui.BaseFragment
+import inc.proto.websitemacrorecorder.ui.ext.setOnSingleClickListener
 
-class EditUrlFragment : Fragment() {
-    private val vm: EditUrlViewModel by lazy {
-        ViewModelProvider(this, EditUrlViewModelFactory(args.macro)).get(EditUrlViewModel::class.java)
-    }
-    private val args: EditUrlFragmentArgs by navArgs()
+@AndroidEntryPoint
+class EditUrlFragment : BaseFragment() {
+    private val vm by viewModels<EditUrlViewModel>()
     private lateinit var binding: FragmentEditUrlBinding
 
     override fun onCreateView(
@@ -28,26 +26,28 @@ class EditUrlFragment : Fragment() {
         binding = FragmentEditUrlBinding.inflate(inflater, container, false)
         binding.vm = vm
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViewModel()
+
+        setListeners()
     }
 
-    private fun bindViewModel() {
+    private fun setListeners() {
         binding.editUrl.setOnEditorActionListener { _, actionId, event ->
-            if (actionId == EditorInfo.IME_NULL &&
-                event.action == KeyEvent.ACTION_DOWN &&
-                binding.editUrl.error == null) {
+            if (actionId == EditorInfo.IME_NULL && event.action == KeyEvent.ACTION_DOWN && vm.isValid.value!!) {
                 binding.buttonStartRecording.performClick()
                 return@setOnEditorActionListener true
             }
             false
         }
         binding.buttonStartRecording.setOnSingleClickListener {
-            findNavController().navigate(EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!))
+            findNavController().navigate(
+                EditUrlFragmentDirections.actionEditUrlFragmentToEditRecordFragment(vm.macro.value!!)
+            )
         }
     }
 }

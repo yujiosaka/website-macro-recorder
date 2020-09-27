@@ -37,9 +37,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:image="@{ vm.screenshotUrl }" />
+                    app:image="@{ vm.macro.screenshotUrl }" />
 
-                <inc.proto.websitemacrorecorder.util.DragRectView
+                <inc.proto.websitemacrorecorder.ui.view.DragRectView
                     android:id="@+id/drag_rectangle"
                     android:layout_width="0dp"
                     android:layout_height="0dp"

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="inc.proto.websitemacrorecorder.ui.MainActivity">
+    tools:context="inc.proto.websitemacrorecorder.ui.main.MainActivity">
     <item
         android:id="@+id/action_reset"
         android:icon="@drawable/ic_remove_white_24dp"

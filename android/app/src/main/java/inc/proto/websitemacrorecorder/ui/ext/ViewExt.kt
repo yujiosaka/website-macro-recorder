@@ -1,8 +1,8 @@
-package inc.proto.websitemacrorecorder.util
+package inc.proto.websitemacrorecorder.ui.ext
 
 import android.view.View
 
-class OnSingleClickListener : View.OnClickListener {
+private class OnSingleClickListener : View.OnClickListener {
     companion object {
         private const val DELAY_MILLIS = 200L
         private var previousClickTimeMillis = 0L
@@ -25,3 +25,12 @@ class OnSingleClickListener : View.OnClickListener {
         onClickListener.onClick(v)
     }
 }
+
+fun View.setOnSingleClickListener(l: View.OnClickListener) {
+    setOnClickListener(OnSingleClickListener(l))
+}
+
+fun View.setOnSingleClickListener(l: (View) -> Unit) {
+    setOnClickListener(OnSingleClickListener(l))
+}
+

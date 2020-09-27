@@ -7,10 +7,15 @@ import inc.proto.websitemacrorecorder.BR
 import java.io.Serializable
 
 class MacroHistory(
+    // Basic
     screenshotUrl: String = "",
+
+    // Execution result
     isEntirePageUpdated: Boolean = false,
     isSelectedAreaUpdated: Boolean = false,
     isFailure: Boolean = false,
+
+    // Date
     executedAt: Timestamp? = null
 ) : Serializable, BaseObservable() {
     @Bindable

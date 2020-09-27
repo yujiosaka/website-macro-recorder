@@ -1,15 +1,13 @@
 package inc.proto.websitemacrorecorder.ui.plan
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import inc.proto.websitemacrorecorder.R
 import inc.proto.websitemacrorecorder.databinding.FragmentPlanBinding
+import inc.proto.websitemacrorecorder.ui.BaseFragment
 
-class PlanFragment : Fragment() {
+class PlanFragment : BaseFragment() {
     private lateinit var binding: FragmentPlanBinding
 
     override fun onCreateView(
@@ -17,8 +15,9 @@ class PlanFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_plan, container, false)
+        binding = FragmentPlanBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+
         return binding.root
     }
 }

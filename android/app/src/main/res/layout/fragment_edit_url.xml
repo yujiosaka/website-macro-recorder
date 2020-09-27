@@ -40,7 +40,7 @@
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:enabled="@{ vm.validUrl }"
+            android:enabled="@{ vm.isValid }"
             android:text="@string/button_start_recording"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="bold"
